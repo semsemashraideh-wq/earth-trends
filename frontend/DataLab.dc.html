@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EarthScope — Data Lab</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Cairo:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.topo{background-image:repeating-radial-gradient(circle at 20% 30%,transparent 0 22px,rgba(27,120,101,.07) 22px 23px),repeating-radial-gradient(circle at 85% 80%,transparent 0 28px,rgba(86,169,210,.07) 28px 29px)}
+</style>
+</helmet>
+
+<div dir="{{dir}}" lang="{{lang}}" style="font-family: {{font}}; color: #1f3a34">
+
+  <!-- header -->
+  <div class="topo" style="position: relative; overflow: hidden; padding: clamp(24px,3.5vw,44px) clamp(20px,3.5vw,44px) 28px; border-radius: 40px 40px 0 0; background: {{headBg}}">
+    <div style="position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 760px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: {{track}}; text-transform: uppercase; color: #1B7865">{{t.eyebrow}} · {{modeName}}</span>
+        <h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 48px); font-weight: 800; color: #174F44; letter-spacing: {{tight}}">{{title}}</h2>
+        <p style="margin: 0; font-size: 17px; line-height: 1.6; color: #4a625c">{{sub}}</p>
+      </div>
+      <sc-if value="{{isLab}}" hint-placeholder-val="{{false}}">
+        <div dir="ltr" style="display: flex; gap: 8px; flex-wrap: wrap">
+          <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #fff; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">GISS</span>
+          <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #fff; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">JPL</span>
+          <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #fff; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">NSIDC</span>
+          <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #fff; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">GML</span>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <div style="padding: 8px clamp(14px,3vw,32px) clamp(20px,3vw,32px); border-radius: 0 0 40px 40px; background: linear-gradient(180deg, #eef7f2 0, #F7F8F2 260px)">
+
+  <!-- ================= YOUNG ================= -->
+  <sc-if value="{{isYoung}}" hint-placeholder-val="{{false}}">
+    <div style="display: flex; flex-direction: column; gap: 22px; padding-top: 14px">
+      <div style="display: flex; gap: 12px; flex-wrap: wrap">
+        <sc-for list="{{tabs}}" as="k" hint-placeholder-count="5">
+          <button onClick="{{k.pick}}" aria-pressed="{{k.on}}" style="display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 12px 18px; border: 0; border-radius: 22px; cursor: pointer; background: #fff; font: inherit; box-shadow: {{k.ring}}; transform: {{k.lift}}; transition: transform .2s, box-shadow .2s">
+            <span style="width: 30px; height: 30px; border-radius: 10px; background: {{k.color}}"></span><b style="color: #174F44; font-size: 15px">{{k.kid}}</b>
+          </button>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 22px">
+        <div style="flex: 999 1 560px; min-width: 0; padding: 28px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap">
+            <h3 style="margin: 0; font-size: 28px; font-weight: 800; color: #174F44">{{cur.kid}}</h3>
+            <span class="num" dir="ltr" style="display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: #FFF3D6; color: #174F44">{{cur.x0}} → {{cur.x1}}</span>
+          </div>
+          <div dir="ltr" onMouseMove="{{onChartMove}}" onMouseLeave="{{onChartLeave}}" style="position: relative">
+            <svg viewBox="{{chart.vb}}" width="100%" role="img" aria-label="{{cur.kid}}" style="display: block; height: auto; overflow: visible">
+              <sc-for list="{{chart.yTicks}}" as="tk" hint-placeholder-count="4"><line x1="56" x2="{{chart.xr}}" y1="{{tk.y}}" y2="{{tk.y}}" stroke="#e8ede6"></line><text x="48" y="{{tk.ty}}" text-anchor="end" font-size="13" fill="#5d726d" font-family="Inter, sans-serif">{{tk.label}}</text></sc-for>
+              <sc-for list="{{chart.xTicks}}" as="tk" hint-placeholder-count="4"><text x="{{tk.x}}" y="{{chart.xl}}" text-anchor="middle" font-size="13" fill="#5d726d" font-family="Inter, sans-serif">{{tk.label}}</text></sc-for>
+              <path d="{{chart.area}}" fill="{{chart.areaFill}}"></path>
+              <sc-for list="{{chart.lines}}" as="l" hint-placeholder-count="1"><path d="{{l.d}}" fill="none" stroke="{{l.color}}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path></sc-for>
+              <sc-for list="{{chart.markers}}" as="m" hint-placeholder-count="12"><circle cx="{{m.cx}}" cy="{{m.cy}}" r="5.5" fill="#fff" stroke="{{m.color}}" stroke-width="2.5"></circle></sc-for>
+              <sc-if value="{{tip.on}}" hint-placeholder-val="{{false}}"><line x1="{{tip.sx}}" x2="{{tip.sx}}" y1="20" y2="{{chart.yb}}" stroke="#174F44" stroke-opacity=".2" stroke-width="1.5"></line></sc-if>
+            </svg>
+            <sc-if value="{{tip.on}}" hint-placeholder-val="{{false}}">
+              <div style="position: absolute; left: {{tip.px}}%; top: {{tip.py}}%; transform: translate(-50%, -115%); pointer-events: none; background: #fff; border-radius: 14px; padding: 9px 12px; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.35); white-space: nowrap; font-family: Inter, sans-serif">
+                <div style="font-size: 11px; font-weight: 700; color: #5d726d">{{tip.year}}</div>
+                <sc-for list="{{tip.rows}}" as="r" hint-placeholder-count="1"><div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: #174F44"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.color}}"></span>{{r.v}}</div></sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <span style="display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; color: #5d726d"><span style="width: 6px; height: 6px; border-radius: 50%; background: #1B7865"></span>{{t.source}}: <b dir="ltr" style="color: #4a625c">{{cur.short}}</b> · {{cur.center}}</span>
+        </div>
+        <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+          <div style="padding: 28px; border-radius: 28px; background: linear-gradient(160deg, #FFF6E0, #FCE9B8); box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #8a5f12">{{t.didYou}}</span>
+            <p style="margin: 10px 0 0; font-size: 19px; line-height: 1.45; color: #174F44; font-weight: 600">{{cur.kidWhy}}</p>
+            <div style="display: flex; gap: 14px; margin-top: 18px">
+              <div style="flex: 1; display: flex; flex-direction: column; padding: 12px 14px; border-radius: 18px; background: #fff">
+                <span class="num" style="font-size: 11px; font-weight: 700; color: #5d726d">{{cur.x0}}</span>
+                <b class="num" dir="ltr" style="font-size: 24px; color: #1B7865; text-align: start">{{cur.firstV}}<small style="font-size: 12px; color: #5d726d; margin-inline-start: 4px">{{cur.unit}}</small></b>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; padding: 12px 14px; border-radius: 18px; background: #fff">
+                <span class="num" style="font-size: 11px; font-weight: 700; color: #5d726d">{{cur.x1}}</span>
+                <b class="num" dir="ltr" style="font-size: 24px; color: #c4563d; text-align: start">{{cur.lastV}}<small style="font-size: 12px; color: #5d726d; margin-inline-start: 4px">{{cur.unit}}</small></b>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 28px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #5d726d">{{t.quiz}}</span>
+            <p style="margin: 10px 0 14px; font-size: 16px; color: #174F44; font-weight: 600">{{quiz.q}}</p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <sc-for list="{{quiz.answers}}" as="a" hint-placeholder-count="3">
+                <button onClick="{{a.pick}}" style="min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 15px; font-weight: 600; color: #174F44; background: {{a.bg}}; box-shadow: {{a.ring}}">{{a.mark}}{{a.label}}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{quiz.answered}}" hint-placeholder-val="{{false}}">
+              <p role="status" style="margin: 12px 0 0; font-weight: 700; color: {{quiz.fbColor}}">{{quiz.feedback}}</p>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ================= EXPLORER ================= -->
+  <sc-if value="{{isEarth}}" hint-placeholder-val="{{true}}">
+    <div style="display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; padding-top: 14px">
+      <div style="flex: 1 1 260px; min-width: 0; padding: 10px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+        <sc-for list="{{tabs}}" as="k" hint-placeholder-count="5">
+          <button onClick="{{k.pick}}" aria-pressed="{{k.on}}" style="width: 100%; display: grid; grid-template-columns: 1fr 74px; gap: 10px; align-items: center; padding: 14px; border: 0; border-radius: 16px; cursor: pointer; text-align: start; font: inherit; background: {{k.listBg}}; transition: background-color .2s">
+            <span style="display: flex; flex-direction: column; gap: 2px">
+              <span style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; color: #174F44"><span style="width: 10px; height: 10px; border-radius: 50%; background: {{k.color}}"></span>{{k.name}}</span>
+              <span class="num" dir="ltr" style="font-size: 12px; color: #5d726d; margin-inline-start: 18px; text-align: start">{{k.latest}}</span>
+            </span>
+            <svg viewBox="0 0 74 28" width="74" height="28" aria-hidden="true" style="overflow: visible"><path d="{{k.spark}}" fill="none" stroke="{{k.color}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="{{k.sx}}" cy="{{k.sy}}" r="3" fill="#fff" stroke="{{k.color}}" stroke-width="2"></circle></svg>
+          </button>
+        </sc-for>
+      </div>
+      <div style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+        <div style="padding: 28px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+          <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 6px">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <h3 style="margin: 0; font-size: 28px; font-weight: 800; color: #174F44">{{cur.name}}</h3>
+              <span style="font-size: 13px; color: #5d726d">{{cur.rangeTxt}}</span>
+            </div>
+            <div style="display: flex; gap: 24px">
+              <div style="display: flex; flex-direction: column; align-items: flex-end">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5d726d">{{t.latest}} · {{cur.x1}}</span>
+                <b class="num" dir="ltr" style="font-size: 30px; color: #174F44">{{cur.lastV}}<small style="font-size: 14px; color: #5d726d; margin-inline-start: 4px">{{cur.unit}}</small></b>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5d726d">{{t.change}}</span>
+                <b class="num" dir="ltr" style="font-size: 30px; color: {{cur.chgColor}}">{{cur.chgArrow}} {{cur.chgAbs}}</b>
+              </div>
+            </div>
+          </div>
+          <div dir="ltr" onMouseMove="{{onChartMove}}" onMouseLeave="{{onChartLeave}}" style="position: relative">
+            <svg viewBox="{{chart.vb}}" width="100%" role="img" aria-label="{{cur.name}}" style="display: block; height: auto; overflow: visible">
+              <sc-for list="{{chart.yTicks}}" as="tk" hint-placeholder-count="5"><line x1="56" x2="{{chart.xr}}" y1="{{tk.y}}" y2="{{tk.y}}" stroke="#e8ede6"></line><text x="48" y="{{tk.ty}}" text-anchor="end" font-size="11" fill="#5d726d" font-family="Inter, sans-serif">{{tk.label}}</text></sc-for>
+              <sc-for list="{{chart.xTicks}}" as="tk" hint-placeholder-count="6"><text x="{{tk.x}}" y="{{chart.xl}}" text-anchor="middle" font-size="11" fill="#5d726d" font-family="Inter, sans-serif">{{tk.label}}</text></sc-for>
+              <sc-if value="{{chart.hasBase}}" hint-placeholder-val="{{false}}"><line x1="56" x2="{{chart.xr}}" y1="{{chart.baseY}}" y2="{{chart.baseY}}" stroke="#4a625c" stroke-opacity=".5" stroke-width="1"></line></sc-if>
+              <path d="{{chart.area}}" fill="{{chart.areaFill}}"></path>
+              <sc-for list="{{chart.lines}}" as="l" hint-placeholder-count="1"><path d="{{l.d}}" fill="none" stroke="{{l.color}}" stroke-width="2.5" stroke-dasharray="{{l.dash}}" stroke-linejoin="round" stroke-linecap="round"></path></sc-for>
+              <path d="{{chart.trend}}" fill="none" stroke="#174F44" stroke-width="2" stroke-dasharray="7 5"></path>
+              <sc-if value="{{tip.on}}" hint-placeholder-val="{{false}}"><line x1="{{tip.sx}}" x2="{{tip.sx}}" y1="20" y2="{{chart.yb}}" stroke="#174F44" stroke-opacity=".2" stroke-width="1.5"></line><circle cx="{{tip.sx}}" cy="{{tip.sy}}" r="5" fill="#fff" stroke="{{cur.color}}" stroke-width="2.5"></circle></sc-if>
+            </svg>
+            <sc-if value="{{tip.on}}" hint-placeholder-val="{{false}}">
+              <div style="position: absolute; left: {{tip.px}}%; top: {{tip.py}}%; transform: translate(-50%, -115%); pointer-events: none; background: #fff; border-radius: 14px; padding: 9px 12px; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.35); white-space: nowrap; font-family: Inter, sans-serif">
+                <div style="font-size: 11px; font-weight: 700; color: #5d726d">{{tip.year}}</div>
+                <sc-for list="{{tip.rows}}" as="r" hint-placeholder-count="1"><div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: #174F44"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.color}}"></span>{{r.v}}</div></sc-for>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 8px; font-size: 12px; color: #4a625c">
+            <div style="display: flex; gap: 16px">
+              <span style="display: flex; align-items: center; gap: 6px"><svg width="22" height="8" aria-hidden="true"><line x1="0" x2="22" y1="4" y2="4" stroke="{{cur.color}}" stroke-width="2.5"></line></svg>{{t.value}}</span>
+              <span style="display: flex; align-items: center; gap: 6px"><svg width="22" height="8" aria-hidden="true"><line x1="0" x2="22" y1="4" y2="4" stroke="#174F44" stroke-width="1.8" stroke-dasharray="5 3"></line></svg>{{t.trend}}</span>
+            </div>
+            <span style="display: flex; align-items: center; gap: 6px; color: #5d726d"><span style="width: 6px; height: 6px; border-radius: 50%; background: #1B7865"></span>{{t.source}}: <b dir="ltr" style="color: #4a625c">{{cur.short}}</b> · {{cur.center}}</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 22px">
+          <div style="padding: 28px; border-radius: 28px; background: #DDF1E7">
+            <span style="font-size: 12px; font-weight: 700; letter-spacing: {{track}}; text-transform: uppercase; color: #1B7865">{{t.explain}}</span>
+            <p style="margin: 10px 0 0; font-size: 16px; line-height: 1.55; color: #174F44">{{cur.why}}</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 28px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #5d726d">{{t.grade}}</span>
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span style="width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; font-size: 22px; background: {{cur.gradeBg}}; color: {{cur.chgColor}}">{{cur.gradeIcon}}</span>
+              <div style="display: flex; flex-direction: column">
+                <b style="font-size: 20px; color: #174F44">{{cur.gradeTxt}}</b>
+                <span class="num" style="font-size: 14px; color: #4a625c"><span dir="ltr">{{st.slopeDec}} {{cur.unit}}</span> {{t.perDecade}}</span>
+              </div>
+            </div>
+            <span style="align-self: flex-start; display: inline-flex; align-items: center; height: 26px; padding: 0 11px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{st.sigBg}}; color: #174F44">{{st.sigTxt}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ================= SCIENTIFIC LAB ================= -->
+  <sc-if value="{{isLab}}" hint-placeholder-val="{{false}}">
+    <div style="display: flex; flex-direction: column; gap: 18px; padding-top: 14px">
+      <!-- control bar -->
+      <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 14px 18px; border-radius: 18px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+        <label style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #5d726d">{{t.indicator}}</span>
+          <select onChange="{{onSelect}}" value="{{sid}}" style="height: 40px; min-width: 220px; padding: 0 10px; border-radius: 10px; border: 1.5px solid #cfdcd3; background: #fff; font: inherit; font-weight: 600; color: #174F44">
+            <sc-for list="{{tabs}}" as="k" hint-placeholder-count="5"><option value="{{k.id}}">{{k.name}} ({{k.unit}})</option></sc-for>
+          </select>
+        </label>
+        <label dir="ltr" style="display: flex; flex-direction: column; gap: 4px; min-width: 220px">
+          <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #5d726d">{{t.range}} · <span class="num">{{r0}}–{{cur.x1}}</span></span>
+          <input type="range" min="{{cur.x0}}" max="{{rMax}}" value="{{r0}}" onChange="{{onRange}}" style="accent-color: #1B7865; width: 100%; height: 28px">
+        </label>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap">
+          <sc-for list="{{toggles}}" as="g" hint-placeholder-count="4">
+            <button role="switch" aria-checked="{{g.on}}" onClick="{{g.flip}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; font: inherit; font-size: 13px; font-weight: 500; color: #174F44">
+              <span style="position: relative; width: 34px; height: 20px; border-radius: 999px; background: {{g.track}}; transition: background-color .2s"><span style="position: absolute; top: 2px; left: {{g.knob}}px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: left .2s"></span></span>{{g.label}}
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: #DDF1E7; margin-inline-start: auto">
+          <button onClick="{{showChart}}" aria-pressed="{{isChart}}" style="height: 36px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: #174F44; background: {{chartBtnBg}}">{{t.chart}}</button>
+          <button onClick="{{showTable}}" aria-pressed="{{isTable}}" style="height: 36px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: #174F44; background: {{tableBtnBg}}">{{t.table}}</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+        <div style="flex: 999 1 600px; min-width: 0; padding: 24px; border-radius: 22px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+          <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <b style="font-size: 17px; color: #174F44">{{labTitle}}</b>
+              <span class="num" style="font-size: 12px; color: #5d726d">{{labSub}}</span>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center">
+              <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5d726d; margin-inline-end: 4px">{{t.compare}}</span>
+              <sc-for list="{{cmpChips}}" as="c" hint-placeholder-count="4">
+                <button onClick="{{c.flip}}" aria-pressed="{{c.on}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 10px; border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 600; background: {{c.bg}}; color: {{c.fg}}; box-shadow: inset 0 0 0 1.5px #e2e8df">
+                  <svg width="16" height="8" aria-hidden="true"><line x1="0" x2="16" y1="4" y2="4" stroke="{{c.stroke}}" stroke-width="2.5" stroke-dasharray="{{c.dash}}"></line></svg>{{c.name}}
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{isChart}}" hint-placeholder-val="{{true}}">
+            <div dir="ltr" onMouseMove="{{onChartMove}}" onMouseLeave="{{onChartLeave}}" style="position: relative">
+              <svg viewBox="{{chart.vb}}" width="100%" role="img" aria-label="{{labTitle}}" style="display: block; height: auto; overflow: visible">
+                <sc-for list="{{chart.yTicks}}" as="tk" hint-placeholder-count="6"><line x1="56" x2="{{chart.xr}}" y1="{{tk.y}}" y2="{{tk.y}}" stroke="#e8ede6"></line><text x="48" y="{{tk.ty}}" text-anchor="end" font-size="11" fill="#5d726d" font-family="Inter, sans-serif">{{tk.label}}</text></sc-for>
+                <sc-for list="{{chart.xTicks}}" as="tk" hint-placeholder-count="8"><text x="{{tk.x}}" y="{{chart.xl}}" text-anchor="middle" font-size="11" fill="#5d726d" font-family="Inter, sans-serif">{{tk.label}}</text></sc-for>
+                <sc-if value="{{chart.hasBase}}" hint-placeholder-val="{{false}}"><line x1="56" x2="{{chart.xr}}" y1="{{chart.baseY}}" y2="{{chart.baseY}}" stroke="#4a625c" stroke-opacity=".5" stroke-width="1"></line></sc-if>
+                <sc-for list="{{chart.bars}}" as="b" hint-placeholder-count="0"><rect x="{{b.x}}" y="{{b.y}}" width="{{b.w}}" height="{{b.h}}" rx="1.5" fill="{{b.fill}}" opacity=".85"></rect></sc-for>
+                <path d="{{chart.ci}}" fill="rgba(23,79,68,.10)"></path>
+                <sc-for list="{{chart.lines}}" as="l" hint-placeholder-count="1"><path d="{{l.d}}" fill="none" stroke="{{l.color}}" stroke-width="{{l.width}}" stroke-dasharray="{{l.dash}}" stroke-linejoin="round" stroke-linecap="round"></path></sc-for>
+                <path d="{{chart.smooth}}" fill="none" stroke="#174F44" stroke-width="2.5"></path>
+                <path d="{{chart.trend}}" fill="none" stroke="#174F44" stroke-width="1.8" stroke-dasharray="6 4"></path>
+                <sc-for list="{{chart.markers}}" as="m" hint-placeholder-count="0"><circle cx="{{m.cx}}" cy="{{m.cy}}" r="3.5" fill="#fff" stroke="{{m.color}}" stroke-width="2"></circle></sc-for>
+                <sc-if value="{{tip.on}}" hint-placeholder-val="{{false}}"><line x1="{{tip.sx}}" x2="{{tip.sx}}" y1="20" y2="{{chart.yb}}" stroke="#174F44" stroke-opacity=".2" stroke-width="1.5"></line></sc-if>
+              </svg>
+              <sc-if value="{{tip.on}}" hint-placeholder-val="{{false}}">
+                <div style="position: absolute; left: {{tip.px}}%; top: {{tip.py}}%; transform: translate(-50%, -115%); pointer-events: none; background: #fff; border-radius: 14px; padding: 9px 12px; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.35); white-space: nowrap; font-family: Inter, sans-serif">
+                  <div style="font-size: 11px; font-weight: 700; color: #5d726d">{{tip.year}}</div>
+                  <sc-for list="{{tip.rows}}" as="r" hint-placeholder-count="1"><div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #174F44"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{r.color}}"></span>{{r.v}}</div></sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display: flex; gap: 18px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: #4a625c">
+              <sc-for list="{{legend}}" as="g" hint-placeholder-count="2"><span style="display: flex; align-items: center; gap: 6px"><svg width="24" height="10" aria-hidden="true"><line x1="0" x2="24" y1="5" y2="5" stroke="{{g.color}}" stroke-width="2.5" stroke-dasharray="{{g.dash}}"></line></svg>{{g.label}}</span></sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{isTable}}" hint-placeholder-val="{{false}}">
+            <div dir="{{dir}}" style="max-height: 420px; overflow: auto; border-radius: 12px; box-shadow: inset 0 0 0 1px #e2e8df">
+              <table class="num" style="width: 100%; border-collapse: collapse; font-size: 13px; font-family: Inter, sans-serif">
+                <thead><tr>
+                  <th style="text-align: start; font-weight: 600; color: #5d726d; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1.5px solid #cfdcd3; position: sticky; top: 0; background: #fff">{{t.year}}</th>
+                  <th style="text-align: start; font-weight: 600; color: #5d726d; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1.5px solid #cfdcd3; position: sticky; top: 0; background: #fff">{{t.value}} ({{cur.unit}})</th>
+                  <th style="text-align: start; font-weight: 600; color: #5d726d; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1.5px solid #cfdcd3; position: sticky; top: 0; background: #fff">{{t.dyy}}</th>
+                  <th style="text-align: start; font-weight: 600; color: #5d726d; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1.5px solid #cfdcd3; position: sticky; top: 0; background: #fff">{{t.resid}}</th>
+                  <th style="text-align: start; font-weight: 600; color: #5d726d; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1.5px solid #cfdcd3; position: sticky; top: 0; background: #fff">{{t.flag}}</th>
+                </tr></thead>
+                <tbody>
+                  <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+                    <tr>
+                      <td style="padding: 9px 12px; border-bottom: 1px solid #eef2ec; color: #1f3a34"><b>{{r.x}}</b></td>
+                      <td style="padding: 9px 12px; border-bottom: 1px solid #eef2ec; color: #1f3a34">{{r.v}}</td>
+                      <td style="padding: 9px 12px; border-bottom: 1px solid #eef2ec; color: {{r.dColor}}">{{r.d}}</td>
+                      <td style="padding: 9px 12px; border-bottom: 1px solid #eef2ec; color: #1f3a34">{{r.res}}</td>
+                      <td style="padding: 9px 12px; border-bottom: 1px solid #eef2ec; color: {{r.flagColor}}; font-weight: {{r.flagWeight}}">{{r.flag}}</td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+          <div style="padding: 22px; border-radius: 22px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #5d726d">{{t.stats}}</span>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px">
+              <sc-for list="{{tiles}}" as="s" hint-placeholder-count="8">
+                <div style="display: flex; flex-direction: column; padding: 13px 15px; border-radius: 14px; background: #F7F8F2">
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #5d726d">{{s.k}}</span>
+                  <b class="num" dir="ltr" style="font-size: 20px; color: #174F44; margin-top: 4px; text-align: start">{{s.v}}</b>
+                  <span class="num" style="font-size: 11.5px; color: #5d726d">{{s.sub}}</span>
+                </div>
+              </sc-for>
+            </div>
+            <span style="display: inline-flex; align-items: center; margin-top: 12px; height: 28px; padding: 0 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: {{st.sigBg}}; color: #174F44">{{st.sigTxt}}</span>
+            <p style="margin: 12px 0 0; font-size: 12px; line-height: 1.55; color: #5d726d"><b style="color: #4a625c">{{t.method}}.</b> {{t.methodTxt}}</p>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 22px; border-radius: 22px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #5d726d">{{t.source}}</span>
+            <b dir="ltr" style="font-size: 14px; color: #174F44; line-height: 1.4; text-align: start">{{cur.source}}</b>
+            <sc-if value="{{cur.nasa}}" hint-placeholder-val="{{true}}"><span aria-label="NASA data source" style="display: inline-flex; align-items: center; align-self: flex-start; gap: 4px; padding: 3px 8px; border-radius: 999px; background: #e3f2fa; color: #174F8A; font-size: 11px; font-weight: 800"><span aria-hidden="true">🛰</span> NASA</span></sc-if>
+            <div class="num" dir="ltr" style="font-size: 12px; color: #4a625c; background: #F7F8F2; padding: 10px 12px; border-radius: 10px; line-height: 1.5; word-break: break-word; text-align: start">{{cite}}</div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button onClick="{{copyCite}}" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: #174F44; background: #fff; box-shadow: inset 0 0 0 1.5px #cfdcd3">{{copyLabel}}</button>
+              <a href="{{cur.url}}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; font-size: 13px; font-weight: 600; color: #174F44; background: #fff; box-shadow: inset 0 0 0 1.5px #cfdcd3; text-decoration: none">↗ {{cur.centerShort}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lang":{"editor":"enum","options":["en","ar"],"default":"en"},"mode":{"editor":"enum","options":["young","earth","lab"],"default":"earth"},"$preview":{"width":1320,"height":1150}}'>
+var GIS = {1960:-.03,1961:.06,1962:.03,1963:.05,1964:-.20,1965:-.11,1966:-.06,1967:-.02,1968:-.08,1969:.05,1970:.03,1971:-.08,1972:.01,1973:.16,1974:-.07,1975:-.01,1976:-.10,1977:.18,1978:.07,1979:.16,1980:.26,1981:.32,1982:.14,1983:.31,1984:.16,1985:.12,1986:.18,1987:.32,1988:.39,1989:.27,1990:.45,1991:.40,1992:.22,1993:.23,1994:.32,1995:.45,1996:.33,1997:.46,1998:.61,1999:.38,2000:.39,2001:.54,2002:.63,2003:.62,2004:.53,2005:.68,2006:.64,2007:.66,2008:.54,2009:.65,2010:.72,2011:.61,2012:.65,2013:.68,2014:.75,2015:.90,2016:1.01,2017:.92,2018:.85,2019:.98,2020:1.01,2021:.85,2022:.89,2023:1.17,2024:1.28};
+var CO2A = [[1960,316.91],[1965,320.04],[1970,325.68],[1975,331.11],[1980,338.76],[1985,346.35],[1990,354.45],[1995,360.82],[2000,369.71],[2005,379.98],[2010,389.90],[2015,401.01],[2020,414.24],[2022,418.56],[2023,421.08],[2024,424.61]];
+var SEAICE = {1979:7.05,1980:7.67,1981:7.14,1982:7.30,1983:7.39,1984:6.81,1985:6.70,1986:7.41,1987:7.28,1988:7.37,1989:7.01,1990:6.14,1991:6.47,1992:7.47,1993:6.40,1994:7.14,1995:6.08,1996:7.58,1997:6.69,1998:6.54,1999:6.12,2000:6.25,2001:6.73,2002:5.83,2003:6.12,2004:5.98,2005:5.50,2006:5.86,2007:4.27,2008:4.69,2009:5.26,2010:4.87,2011:4.56,2012:3.57,2013:5.21,2014:5.22,2015:4.62,2016:4.53,2017:4.82,2018:4.79,2019:4.36,2020:4.00,2021:4.92,2022:4.87,2023:4.37,2024:4.28};
+function interp(y) { for (var i = 0; i < CO2A.length - 1; i++) { var a = CO2A[i], b = CO2A[i + 1]; if (y >= a[0] && y <= b[0]) return a[1] + (b[1] - a[1]) * (y - a[0]) / (b[0] - a[0]); } return CO2A[CO2A.length - 1][1]; }
+function wob(y) { return Math.sin(y * 1.7) * 1.6 + Math.sin(y * .53) * 2.1; }
+function objPts(o) { return Object.keys(o).map(function (k) { return { x: +k, y: o[k] }; }); }
+function range(n, f) { var a = []; for (var i = 0; i < n; i++) a.push(f(i)); return a; }
+
+var SERIES = {
+  temp: { color: "#EE9177", unit: "°C", dec: 2, baseline: "1951–1980", base0: true, dash: "", sphere: "atmosphere",
+    source: "NASA GISS Surface Temperature Analysis (GISTEMP v4)", short: "GISTEMP v4", center: "NASA GISS", url: "https://data.giss.nasa.gov/gistemp/", doi: "10.1029/2018JD029522",
+    pts: objPts(GIS) },
+  co2: { color: "#1B7865", unit: "ppm", dec: 1, baseline: "", dash: "", sphere: "atmosphere",
+    source: "NOAA GML Mauna Loa record · NASA OCO-2 / OCO-3 validation", short: "Mauna Loa + OCO-2", center: "NOAA GML · NASA JPL", url: "https://gml.noaa.gov/ccgg/trends/", doi: "",
+    pts: range(65, function (i) { return { x: 1960 + i, y: +interp(1960 + i).toFixed(2) }; }) },
+  sea: { color: "#56A9D2", unit: "mm", dec: 0, baseline: "1993", dash: "6 4", sphere: "oceans",
+    source: "NASA Global Mean Sea Level · TOPEX/Jason-1/2/3 · Sentinel-6 Michael Freilich", short: "GMSL altimetry", center: "NASA JPL PO.DAAC", url: "https://sealevel.nasa.gov/", doi: "10.5067/GMSLM-TJ152",
+    pts: range(32, function (i) { return { x: 1993 + i, y: +(2.2 * i + .037 * i * i + wob(i)).toFixed(1) }; }) },
+  ice: { color: "#70B8A3", unit: "M km²", dec: 2, baseline: "", dash: "2 3", sphere: "ice",
+    source: "Arctic Sea Ice Minimum Extent · NSIDC Sea Ice Index (NASA-funded, passive microwave)", short: "Sea Ice Index v3", center: "NSIDC DAAC", url: "https://climate.nasa.gov/vital-signs/arctic-sea-ice/", doi: "10.7265/N5K072F8",
+    pts: objPts(SEAICE) },
+  land: { color: "#E0A83E", unit: "Gt", dec: 0, baseline: "2002", dash: "10 4 2 4", sphere: "ice",
+    source: "Greenland Ice Mass Change · GRACE & GRACE-FO", short: "GRACE / GRACE-FO", center: "NASA JPL", url: "https://climate.nasa.gov/vital-signs/ice-sheets/", doi: "10.5067/TEMSC-3JC63",
+    pts: range(23, function (i) { return { x: 2002 + i, y: Math.round(-(i * 265 + (i > 8 ? (i - 8) * 12 : 0)) + wob(i) * 40) }; }) }
+};
+var IDS = ["temp", "co2", "sea", "ice", "land"];
+var SPH = [
+  { id: "atmosphere", color: "#56A9D2", en: "Atmosphere", ar: "الغلاف الجوي" },
+  { id: "water", color: "#2FA59A", en: "Water cycle", ar: "المياه والدورة المائية" },
+  { id: "land", color: "#6FA845", en: "Land surface", ar: "اليابسة والغطاء الأرضي" },
+  { id: "oceans", color: "#2f7fa8", en: "Oceans", ar: "المحيطات" },
+  { id: "ice", color: "#8FB3D6", en: "Snow & ice", ar: "الثلوج والجليد" }
+];
+
+var TXT = {
+ en: {
+  eyebrow: "Step 2 · Data Lab",
+  modes: { young: "Junior Explorer", earth: "Earth Explorer", lab: "Earth Expert" },
+  title: "Data Lab", sub: "Explore NASA climate indicators. Every number links to its source.",
+  youngTitle: "Planet Check-up", youngSub: "Let's look at Earth's health report together!",
+  series: { temp: "Global temperature", co2: "Carbon dioxide", sea: "Sea level", ice: "Arctic sea ice", land: "Greenland ice mass" },
+  seriesKid: { temp: "How warm Earth is", co2: "CO₂ in the air", sea: "How high the oceans are", ice: "Ice at the North Pole", land: "Ice on Greenland" },
+  why: {
+   temp: "Average surface temperature compared with 1951–1980. Small changes in the global average mean big changes in heatwaves and rainfall.",
+   co2: "Carbon dioxide traps heat. Its concentration is higher today than at any point in at least 800,000 years.",
+   sea: "Oceans rise as water warms and expands and as land ice melts into the sea. Measured from space since 1993.",
+   ice: "The smallest area of Arctic Ocean covered by ice each September. Less ice means darker water that absorbs more sunlight.",
+   land: "The total mass of ice lost from Greenland, measured by tiny changes in Earth's gravity." },
+  kidWhy: {
+   temp: "Earth is getting a little warmer each year, like a fever for the planet.",
+   co2: "CO₂ is a gas that works like a cosy blanket. Too much blanket and Earth gets too warm!",
+   sea: "When ice melts and warm water spreads out, the ocean climbs higher up the beach.",
+   ice: "Polar bears need sea ice to hunt. Every September, there is less of it than before.",
+   land: "Greenland is losing a mountain of ice every year, heavy enough to change gravity!" },
+  quiz: {
+   temp: { q: "Since 1960, has Earth become warmer or cooler?", a: ["Warmer", "Cooler", "Same"], c: 0 },
+   co2: { q: "Is there more or less CO₂ in the air than in 1960?", a: ["Less", "More", "Same"], c: 1 },
+   sea: { q: "Are the oceans getting higher or lower?", a: ["Higher", "Lower"], c: 0 },
+   ice: { q: "Is there more ice at the North Pole each September, or less?", a: ["More", "Less"], c: 1 },
+   land: { q: "Is Greenland gaining or losing ice?", a: ["Gaining", "Losing"], c: 1 } },
+  didYou: "Did you know?", quizL: "Quick quiz", correct: "Brilliant! You got it.", tryAgain: "Not quite, try again!",
+  latest: "Latest", change: "Total change", explain: "What does this mean?", grade: "Trend", up: "Rising", down: "Falling", perDecade: "per decade",
+  value: "Value", trend: "Linear trend", source: "Source", baseline: "Baseline",
+  indicator: "Indicator", range: "Time range", smooth: "5-yr mean", uncert: "95% CI", markers: "Markers", table: "Data table", chart: "Chart",
+  copy: "Copy citation", copied: "Copied", stats: "Trend statistics", slope: "Slope", r2: "R²", n: "Observations", min: "Minimum", max: "Maximum",
+  year: "Year", method: "Method", methodTxt: "Ordinary least squares on annual means; 95% confidence interval on slope (±1.96 SE). Mann-Kendall Z by normal approximation, two-sided p. Not adjusted for autocorrelation.",
+  compare: "Compare", normalized: "Normalized (z-score)", normSub: "σ units, per-series mean = 0", below: "below baseline",
+  sen: "Sen's slope", mk: "Mann-Kendall Z", p: "p-value", sig: "Significant at 95%", notSig: "Not significant at 95%",
+  dyy: "Δ y/y", resid: "Residual", flag: "Flag", prelim: "PRELIM", final: "final", annual: "annual",
+  mapQ: "Want to look at one region? Open the map and pick any of the five spheres.", mapCta: "Open the Explore Map"
+ },
+ ar: {
+  eyebrow: "الخطوة 2 · مختبر البيانات",
+  modes: { young: "المستكشف الناشئ", earth: "مستكشف الأرض", lab: "خبير الأرض" },
+  title: "مختبر البيانات", sub: "استكشف مؤشرات المناخ من ناسا. كل رقم مرتبط بمصدره.",
+  youngTitle: "فحص صحة الكوكب", youngSub: "لننظر معًا إلى تقرير صحة الأرض!",
+  series: { temp: "درجة الحرارة العالمية", co2: "ثاني أكسيد الكربون", sea: "مستوى سطح البحر", ice: "جليد القطب الشمالي", land: "كتلة جليد غرينلاند" },
+  seriesKid: { temp: "مدى دفء الأرض", co2: "ثاني أكسيد الكربون في الهواء", sea: "ارتفاع المحيطات", ice: "الجليد في القطب الشمالي", land: "الجليد في غرينلاند" },
+  why: {
+   temp: "متوسط حرارة السطح مقارنة بالفترة 1951–1980. التغيرات الصغيرة في المتوسط العالمي تعني تغيرات كبيرة في موجات الحر والأمطار.",
+   co2: "يحبس ثاني أكسيد الكربون الحرارة. وتركيزه اليوم أعلى من أي وقت مضى منذ 800 ألف عام على الأقل.",
+   sea: "ترتفع المحيطات عندما يسخن الماء ويتمدد وعندما يذوب الجليد البري في البحر. يُقاس من الفضاء منذ 1993.",
+   ice: "أصغر مساحة من المحيط المتجمد الشمالي يغطيها الجليد كل سبتمبر. جليد أقل يعني مياهًا أدكن تمتص ضوء الشمس أكثر.",
+   land: "إجمالي كتلة الجليد المفقودة من غرينلاند، مقاسة بتغيرات دقيقة في جاذبية الأرض." },
+  kidWhy: {
+   temp: "الأرض تزداد دفئًا قليلًا كل عام، مثل حمّى صغيرة للكوكب.",
+   co2: "ثاني أكسيد الكربون غاز يعمل كبطانية دافئة. بطانية أكثر من اللازم تجعل الأرض حارة جدًا!",
+   sea: "عندما يذوب الجليد ويتمدد الماء الدافئ، يصعد المحيط أعلى على الشاطئ.",
+   ice: "تحتاج الدببة القطبية إلى الجليد البحري للصيد. وكل سبتمبر يقل عن السابق.",
+   land: "تفقد غرينلاند جبلًا من الجليد كل عام، ثقيلًا بما يكفي لتغيير الجاذبية!" },
+  quiz: {
+   temp: { q: "منذ عام 1960، هل أصبحت الأرض أدفأ أم أبرد؟", a: ["أدفأ", "أبرد", "كما هي"], c: 0 },
+   co2: { q: "هل في الهواء ثاني أكسيد كربون أكثر أم أقل من عام 1960؟", a: ["أقل", "أكثر", "الكمية نفسها"], c: 1 },
+   sea: { q: "هل ترتفع المحيطات أم تنخفض؟", a: ["ترتفع", "تنخفض"], c: 0 },
+   ice: { q: "هل يزداد الجليد في القطب الشمالي كل سبتمبر أم يقل؟", a: ["يزداد", "يقل"], c: 1 },
+   land: { q: "هل تكسب غرينلاند جليدًا أم تفقده؟", a: ["تكسب", "تفقد"], c: 1 } },
+  didYou: "هل تعلم؟", quizL: "اختبار سريع", correct: "رائع! إجابة صحيحة.", tryAgain: "ليس تمامًا، حاول مرة أخرى!",
+  latest: "الأحدث", change: "التغير الكلي", explain: "ماذا يعني هذا؟", grade: "الاتجاه", up: "صاعد", down: "هابط", perDecade: "لكل عقد",
+  value: "القيمة", trend: "اتجاه خطي", source: "المصدر", baseline: "خط الأساس",
+  indicator: "المؤشر", range: "النطاق الزمني", smooth: "متوسط 5 سنوات", uncert: "فاصل ثقة 95%", markers: "العلامات", table: "جدول البيانات", chart: "رسم بياني",
+  copy: "نسخ الاستشهاد", copied: "تم النسخ", stats: "إحصاءات الاتجاه", slope: "الميل", r2: "R²", n: "عدد المشاهدات", min: "الأدنى", max: "الأعلى",
+  year: "السنة", method: "المنهجية", methodTxt: "انحدار المربعات الصغرى على المتوسطات السنوية؛ فاصل ثقة 95% للميل (±1.96 خطأ معياري). Z مان-كندال بالتقريب الطبيعي وقيمة p ثنائية الطرف. غير معدل للارتباط الذاتي.",
+  compare: "قارن", normalized: "قيم معيارية (z)", normSub: "وحدات σ، متوسط كل سلسلة = 0", below: "تحت خط الأساس",
+  sen: "ميل سِن", mk: "Z مان-كندال", p: "قيمة p", sig: "دالّ عند 95%", notSig: "غير دالّ عند 95%",
+  dyy: "التغير السنوي", resid: "البواقي", flag: "الحالة", prelim: "أولي", final: "نهائي", annual: "سنوي",
+  mapQ: "تريد النظر إلى منطقة واحدة؟ افتح الخريطة واختر أيًا من الأغلفة الخمسة.", mapCta: "افتح خريطة الاستكشاف"
+ }
+};
+
+function niceTicks(min, max, count) {
+  var span = max - min || 1, step0 = span / count, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  var cands = [1, 2, 2.5, 5, 10].map(function (s) { return s * mag; }), step = mag * 10;
+  for (var i = 0; i < cands.length; i++) if (span / cands[i] <= count) { step = cands[i]; break; }
+  var out = []; for (var v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) out.push(+v.toFixed(6)); return out;
+}
+function ols(pts) {
+  var n = pts.length, mx = 0, my = 0; pts.forEach(function (p) { mx += p.x; my += p.y; }); mx /= n; my /= n;
+  var sxx = 0, sxy = 0, syy = 0; pts.forEach(function (p) { sxx += (p.x - mx) * (p.x - mx); sxy += (p.x - mx) * (p.y - my); syy += (p.y - my) * (p.y - my); });
+  var b = sxy / sxx, a = my - b * mx, sse = 0; pts.forEach(function (p) { var r = p.y - (a + b * p.x); sse += r * r; });
+  var s2 = sse / (n - 2), se = Math.sqrt(s2 / sxx);
+  var S = 0, sl = [], i, j;
+  for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) { var d = pts[j].y - pts[i].y; S += d > 0 ? 1 : (d < 0 ? -1 : 0); sl.push(d / (pts[j].x - pts[i].x)); }
+  sl.sort(function (p, q) { return p - q; }); var m = sl.length, sen = m % 2 ? sl[(m - 1) / 2] : (sl[m / 2 - 1] + sl[m / 2]) / 2;
+  var v = n * (n - 1) * (2 * n + 5) / 18, Z = S > 0 ? (S - 1) / Math.sqrt(v) : (S < 0 ? (S + 1) / Math.sqrt(v) : 0);
+  var p = 2 * (1 - .5 * (1 + erf(Math.abs(Z) / Math.SQRT2)));
+  return { slope: b, intercept: a, r2: syy ? 1 - sse / syy : 0, ci: 1.96 * se, n: n, s2: s2, mx: mx, sxx: sxx, Z: Z, p: p, sen: sen };
+}
+function erf(x) { var s = x < 0 ? -1 : 1; x = Math.abs(x); var t = 1 / (1 + .3275911 * x);
+  return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - .284496736) * t + .254829592) * t * Math.exp(-x * x)); }
+function movingAvg(pts, w) { var h = Math.floor(w / 2); return pts.map(function (p, i) { var s = pts.slice(Math.max(0, i - h), i + h + 1), t = 0; s.forEach(function (q) { t += q.y; }); return { x: p.x, y: t / s.length }; }); }
+function zs(pts) { var m = 0; pts.forEach(function (p) { m += p.y; }); m /= pts.length; var sd = 0; pts.forEach(function (p) { sd += (p.y - m) * (p.y - m); }); sd = Math.sqrt(sd / pts.length) || 1; return pts.map(function (p) { return { x: p.x, y: (p.y - m) / sd }; }); }
+function f(v, d) { return v.toFixed(d); }
+function sg(v, d) { return (v > 0 ? "+" : "") + v.toFixed(d); }
+
+function buildChart(list, o) {
+  var W = o.w, H = o.h, pl = 56, pr = 20, pt = 20, pb = 36, all = [];
+  list.forEach(function (s) { all = all.concat(s.pts); });
+  var xs = all.map(function (p) { return p.x; }), ys = all.map(function (p) { return p.y; });
+  var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  if (o.base != null) { y0 = Math.min(y0, o.base); y1 = Math.max(y1, o.base); }
+  var yp = (y1 - y0) * .08 || 1; y0 -= yp; y1 += yp;
+  var X = function (x) { return pl + (x - x0) / (x1 - x0 || 1) * (W - pl - pr); }, Y = function (y) { return pt + (1 - (y - y0) / (y1 - y0 || 1)) * (H - pt - pb); };
+  var path = function (pts) { return pts.map(function (p, i) { return (i ? "L" : "M") + X(p.x).toFixed(1) + " " + Y(p.y).toFixed(1); }).join(""); };
+  var yt = niceTicks(y0, y1, o.kid ? 4 : 6), xt = niceTicks(x0, x1, o.kid ? 4 : 8).filter(function (v) { return Math.abs(v - Math.round(v)) < 1e-9; });
+  var ydec = o.ydec != null ? o.ydec : 1;
+  var c = {
+    vb: "0 0 " + W + " " + H, xr: W - pr, xl: H - 10, yb: H - pb,
+    yTicks: yt.map(function (v) { var y = Y(v); return { y: y.toFixed(1), ty: (y + 4).toFixed(1), label: Math.abs(v) >= 1000 ? Math.round(v).toLocaleString("en") : +v.toFixed(Math.max(0, ydec)) }; }),
+    xTicks: xt.map(function (v) { return { x: X(v).toFixed(1), label: String(v) }; }),
+    lines: list.map(function (s) { return { d: path(s.pts), color: s.color, dash: s.dash || "", width: s.width || 2.5 }; }),
+    area: "", areaFill: "none", markers: [], trend: "", ci: "", smooth: "", bars: [], hasBase: o.base != null, baseY: o.base != null ? Y(o.base).toFixed(1) : 0,
+    X: X, Y: Y, x0: x0, x1: x1, W: W, H: H, pl: pl, pr: pr
+  };
+  if (o.area) { var p0 = list[0].pts; c.area = path(p0) + "L" + X(p0[p0.length - 1].x).toFixed(1) + " " + (H - pb) + "L" + X(p0[0].x).toFixed(1) + " " + (H - pb) + "Z"; c.areaFill = o.area; }
+  if (o.points) list.forEach(function (s) { s.pts.forEach(function (p) { c.markers.push({ cx: X(p.x).toFixed(1), cy: Y(p.y).toFixed(1), color: s.color }); }); });
+  if (o.trend) { var tr = o.trend; c.trend = "M" + X(x0).toFixed(1) + " " + Y(tr.intercept + tr.slope * x0).toFixed(1) + "L" + X(x1).toFixed(1) + " " + Y(tr.intercept + tr.slope * x1).toFixed(1); }
+  if (o.ci && o.trend) {
+    var t2 = o.trend, up = [], dn = [];
+    for (var k = 0; k <= 24; k++) { var xv = x0 + (x1 - x0) * k / 24, yh = t2.intercept + t2.slope * xv, sf = 1.96 * Math.sqrt(t2.s2 * (1 / t2.n + (xv - t2.mx) * (xv - t2.mx) / t2.sxx));
+      up.push(X(xv).toFixed(1) + " " + Y(yh + sf).toFixed(1)); dn.unshift(X(xv).toFixed(1) + " " + Y(yh - sf).toFixed(1)); }
+    c.ci = "M" + up.join("L") + "L" + dn.join("L") + "Z";
+  }
+  if (o.smooth) c.smooth = path(movingAvg(list[0].pts, 5));
+  if (o.bars) { var bw = Math.max(2, (W - pl - pr) / (x1 - x0 + 1) * .62), yb0 = Y(0);
+    c.bars = list[0].pts.map(function (p) { var yv = Y(p.y); return { x: (X(p.x) - bw / 2).toFixed(1), y: Math.min(yv, yb0).toFixed(1), w: bw.toFixed(1), h: Math.abs(yv - yb0).toFixed(1), fill: p.y >= 0 ? "#EE9177" : "#56A9D2" }; });
+    c.lines = []; }
+  return c;
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sid: "temp", ans: null, r0: null, trend: true, ci: true, smooth: false, points: false, view: "chart", cmp: [], copied: false, hy: null };
+  }
+  renderVals() {
+    var s = this.state, self = this;
+    var lang = this.props.lang === "ar" ? "ar" : "en", ar = lang === "ar", t = TXT[lang];
+    var mode = this.props.mode === "young" || this.props.mode === "lab" ? this.props.mode : "earth";
+    var young = mode === "young", lab = mode === "lab";
+    var sid = s.sid, S = SERIES[sid], P = S.pts, F = P[0], L = P[P.length - 1];
+    var name = t.series[sid], kidName = t.seriesKid[sid];
+
+    var pick = function (k) { return function () { self.setState({ sid: k, ans: null, r0: null, cmp: [], hy: null }); }; };
+    var tabs = IDS.map(function (k) {
+      var Q = SERIES[k], pts = Q.pts, on = k === sid, l = pts[pts.length - 1];
+      var xs0 = pts[0].x, xs1 = l.x, mn = Math.min.apply(null, pts.map(function (p) { return p.y; })), mxv = Math.max.apply(null, pts.map(function (p) { return p.y; }));
+      var SX = function (x) { return 3 + (x - xs0) / (xs1 - xs0) * 68; }, SY = function (y) { return 25 - (y - mn) / (mxv - mn || 1) * 22; };
+      return { id: k, name: t.series[k], kid: t.seriesKid[k], color: Q.color, unit: Q.unit, on: on,
+        ring: on ? "0 0 0 3px " + Q.color + ", 0 18px 40px -18px rgba(23,79,68,.25)" : "0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)",
+        lift: on ? "translateY(-2px)" : "none", listBg: on ? "#DDF1E7" : "transparent",
+        latest: (k === "land" ? Math.round(l.y).toLocaleString("en") : f(l.y, Q.dec)) + " " + Q.unit,
+        spark: pts.map(function (p, i) { return (i ? "L" : "M") + SX(p.x).toFixed(1) + " " + SY(p.y).toFixed(1); }).join(""),
+        sx: SX(l.x).toFixed(1), sy: SY(l.y).toFixed(1), pick: pick(k) };
+    });
+
+    // range (lab)
+    var r0 = s.r0 == null ? F.x : s.r0, pts = lab ? P.filter(function (p) { return p.x >= r0; }) : P;
+    var tr = ols(pts), ys = pts.map(function (p) { return p.y; });
+    var dec = S.dec, fmtV = function (v) { return sid === "land" ? Math.round(v).toLocaleString("en") : f(v, dec); };
+    var slopeDec = tr.slope * 10, sigOn = tr.p < .05;
+
+    // chart
+    var chart, list, legend = [], multi = lab && s.cmp.length > 0;
+    if (young) {
+      var p10 = P.filter(function (p) { return p.x % 5 === 0 || p.x === L.x; });
+      list = [{ id: sid, pts: p10, color: S.color }];
+      chart = buildChart(list, { w: 860, h: 340, kid: true, points: true, area: "rgba(238,145,119,.12)", ydec: dec });
+    } else if (!lab) {
+      list = [{ id: sid, pts: P, color: S.color, dash: S.dash }];
+      chart = buildChart(list, { w: 860, h: 360, trend: tr, base: S.base0 ? 0 : null, ydec: dec, area: "none" });
+    } else if (multi) {
+      list = [sid].concat(s.cmp).map(function (k) { var Q = SERIES[k], qp = Q.pts.filter(function (p) { return p.x >= r0; }); return { id: k, pts: zs(qp), raw: qp, color: Q.color, dash: Q.dash, label: t.series[k] }; });
+      chart = buildChart(list, { w: 860, h: 400, base: 0, ydec: 1, points: s.points });
+      legend = list.map(function (q) { return { color: q.color, dash: q.dash, label: q.label }; });
+    } else {
+      var bars = sid === "temp" && !s.smooth;
+      list = [{ id: sid, pts: pts, color: S.color, dash: S.dash }];
+      chart = buildChart(list, { w: 860, h: 400, trend: s.trend ? tr : null, ci: s.ci && s.trend, smooth: s.smooth, points: s.points, bars: bars, base: S.base0 ? 0 : null, ydec: dec });
+      legend = [{ color: S.color, dash: S.dash, label: name }];
+      if (bars) legend.push({ color: "#56A9D2", dash: "", label: t.below });
+      if (s.smooth) legend.push({ color: "#174F44", dash: "", label: t.smooth });
+      if (s.trend) legend.push({ color: "#174F44", dash: "5 3", label: "OLS" + (s.ci ? " ± 95% CI" : "") });
+    }
+
+    // hover
+    var onChartMove = function (e) {
+      var r = e.currentTarget.getBoundingClientRect(), sx = (e.clientX - r.left) / r.width * chart.W;
+      var yr = Math.round(chart.x0 + (sx - chart.pl) / (chart.W - chart.pl - chart.pr) * (chart.x1 - chart.x0));
+      if (yr < chart.x0 || yr > chart.x1) yr = null;
+      if (yr !== self.state.hy) self.setState({ hy: yr });
+    };
+    var onChartLeave = function () { self.setState({ hy: null }); };
+    var tip = { on: false, rows: [] };
+    if (s.hy != null) {
+      var rows = [], firstY = null;
+      list.forEach(function (q, qi) {
+        var idx = -1; for (var i = 0; i < q.pts.length; i++) if (q.pts[i].x === s.hy) { idx = i; break; }
+        if (idx < 0) return; var Q = SERIES[q.id], raw = q.raw ? q.raw[idx].y : q.pts[idx].y;
+        if (firstY == null) firstY = q.pts[idx].y;
+        rows.push({ color: q.color, v: (q.id === "land" ? Math.round(raw).toLocaleString("en") : f(raw, Q.dec)) + " " + Q.unit });
+      });
+      if (rows.length) tip = { on: true, rows: rows, year: String(s.hy), sx: chart.X(s.hy).toFixed(1), sy: chart.Y(firstY).toFixed(1),
+        px: (chart.X(s.hy) / chart.W * 100).toFixed(2), py: (chart.Y(firstY) / chart.H * 100).toFixed(2) };
+    }
+
+    // quiz
+    var Qz = t.quiz[sid];
+    var quiz = { q: Qz.q, answered: s.ans != null, feedback: s.ans === Qz.c ? t.correct : t.tryAgain, fbColor: s.ans === Qz.c ? "#1B7865" : "#b5452f",
+      answers: Qz.a.map(function (a, i) { var picked = s.ans === i, right = i === Qz.c;
+        return { label: a, mark: picked ? (right ? "✓ " : "✕ ") : "", bg: picked ? (right ? "#DDF1E7" : "#fdeee9") : "#fff",
+          ring: picked ? "inset 0 0 0 2px " + (right ? "#1B7865" : "#EE9177") : "inset 0 0 0 1.5px #cfdcd3",
+          pick: function () { self.setState({ ans: i }); } }; }) };
+
+    var up = tr.slope > 0;
+    var cur = {
+      name: name, kid: kidName, color: S.color, unit: S.unit, x0: F.x, x1: L.x,
+      firstV: fmtV(F.y), lastV: (sid === "temp" && L.y > 0 ? "+" : "") + fmtV(L.y),
+      rangeTxt: F.x + "–" + L.x + (S.baseline ? " · " + t.baseline + " " + S.baseline : ""),
+      chgArrow: up ? "▲" : "▼", chgAbs: fmtV(Math.abs(L.y - F.y)), chgColor: up ? "#b5452f" : "#2f7fa8",
+      why: t.why[sid], kidWhy: t.kidWhy[sid], gradeTxt: up ? t.up : t.down, gradeIcon: up ? "↗" : "↘", gradeBg: up ? "#fdeee9" : "#e3f2fa",
+      source: S.source, nasa: /NASA/i.test(S.source + " " + S.center),
+      short: S.short, center: S.center, centerShort: S.center.split(" ")[0], url: S.url
+    };
+    var st = { slopeDec: sg(slopeDec, dec === 0 ? 0 : 2), sigTxt: (sigOn ? t.sig : t.notSig) + " · p " + (tr.p < .001 ? "< 0.001" : "= " + f(tr.p, 3)), sigBg: sigOn ? "#DDF1E7" : "#FFF3D6" };
+
+    var minY = Math.min.apply(null, ys), maxY = Math.max.apply(null, ys);
+    var yearOf = function (v) { for (var i = 0; i < pts.length; i++) if (pts[i].y === v) return String(pts[i].x); return ""; };
+    var sd = dec === 0 ? 1 : 3;
+    var tiles = [
+      { k: t.slope, v: sg(slopeDec, sd), sub: S.unit + " " + t.perDecade },
+      { k: "± 95% CI", v: f(tr.ci * 10, sd), sub: S.unit + " / dec" },
+      { k: t.r2, v: f(tr.r2, 3), sub: "OLS" },
+      { k: t.n, v: String(tr.n), sub: r0 + "–" + L.x },
+      { k: t.min, v: fmtV(minY), sub: yearOf(minY) },
+      { k: t.max, v: fmtV(maxY), sub: yearOf(maxY) },
+      { k: t.mk, v: f(tr.Z, 2), sub: t.p + " " + (tr.p < .001 ? "< 0.001" : f(tr.p, 3)) },
+      { k: t.sen, v: sg(tr.sen * 10, sd), sub: S.unit + " " + t.perDecade }
+    ];
+
+    var tableRows = pts.slice().reverse().map(function (p, i, arr) {
+      var prev = arr[i + 1], d = prev ? p.y - prev.y : null, res = p.y - (tr.intercept + tr.slope * p.x), last = p.x === L.x;
+      return { x: p.x, v: f(p.y, dec), d: d == null ? "—" : sg(d, dec), dColor: d == null ? "#5d726d" : (d > 0 ? "#b5452f" : "#2f7fa8"),
+        res: sg(res, dec + 1), flag: last ? t.prelim : t.final, flagColor: last ? "#8a6413" : "#5d726d", flagWeight: last ? 700 : 400 };
+    });
+
+    var tg = function (key, label) { var on = s[key]; return { label: label, on: on, track: on ? "#1B7865" : "#cfdcd3", knob: on ? 16 : 2,
+      flip: function () { var o = {}; o[key] = !self.state[key]; self.setState(o); } }; };
+    var toggles = [tg("trend", t.trend), tg("ci", t.uncert), tg("smooth", t.smooth), tg("points", t.markers)];
+
+    var cmpChips = IDS.filter(function (k) { return k !== sid; }).map(function (k) { var on = s.cmp.indexOf(k) >= 0, Q = SERIES[k];
+      return { name: t.series[k], on: on, bg: on ? "#174F44" : "#fff", fg: on ? "#fff" : "#174F44", stroke: on ? "#fff" : Q.color, dash: Q.dash,
+        flip: function () { var c = self.state.cmp; self.setState({ cmp: c.indexOf(k) >= 0 ? c.filter(function (x) { return x !== k; }) : c.concat([k]), hy: null }); } }; });
+
+    var cite = S.source + ". " + S.center + ". " + (S.doi ? "doi:" + S.doi + ". " : "") + S.url + " (accessed 2026-11-13).";
+
+    return {
+      t: Object.assign({}, t, { quiz: t.quizL }), lang: lang, dir: ar ? "rtl" : "ltr", arrow: ar ? "←" : "→",
+      font: ar ? "Cairo, Inter, sans-serif" : "Inter, system-ui, sans-serif", track: ar ? "0" : ".14em", tight: ar ? "0" : "-.025em",
+      isYoung: young, isEarth: mode === "earth", isLab: lab, modeName: t.modes[mode],
+      title: young ? t.youngTitle : t.title, sub: young ? t.youngSub : t.sub,
+      headBg: young ? "linear-gradient(180deg,#FFF6E0,#fbf7ea)" : "linear-gradient(180deg,#DDF1E7 0%,#eef7f2 100%)",
+      sid: sid, tabs: tabs, cur: cur, chart: chart, tip: tip, onChartMove: onChartMove, onChartLeave: onChartLeave,
+      quiz: quiz, st: st, tiles: tiles, rows: tableRows, toggles: toggles, cmpChips: cmpChips, legend: legend,
+      r0: r0, rMax: L.x - 10,
+      onRange: function (e) { self.setState({ r0: +e.target.value, hy: null }); },
+      onSelect: function (e) { pick(e.target.value)(); },
+      isChart: s.view === "chart", isTable: s.view === "table",
+      chartBtnBg: s.view === "chart" ? "#fff" : "transparent", tableBtnBg: s.view === "table" ? "#fff" : "transparent",
+      showChart: function () { self.setState({ view: "chart" }); }, showTable: function () { self.setState({ view: "table", hy: null }); },
+      labTitle: multi ? t.normalized : name,
+      labSub: multi ? t.normSub : S.unit + (S.baseline ? " · " + t.baseline + " " + S.baseline : "") + " · " + t.annual + " · n=" + pts.length,
+      cite: cite, copyLabel: s.copied ? "✓ " + t.copied : t.copy,
+      copyCite: function () { try { if (navigator.clipboard) navigator.clipboard.writeText(cite); } catch (err) {} self.setState({ copied: true }); setTimeout(function () { self.setState({ copied: false }); }, 1500); },
+      spheres: SPH.map(function (x) { return { name: x[lang], color: x.color }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

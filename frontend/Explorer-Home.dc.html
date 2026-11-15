@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EarthScope · Earth Explorer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Cairo:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#F7F8F2}
+*{box-sizing:border-box}
+a{color:#1B7865}a:hover{color:#125a4c}
+h1,h2,h3{margin:0;color:#174F44;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+button{font:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid #F2C66D;outline-offset:2px;border-radius:10px}
+.tex{background-image:url(/_blob/ca6cfd01d73e50f195328c8400b23de4)}
+.num{font-variant-numeric:tabular-nums}
+.topo{background-image:repeating-radial-gradient(circle at 20% 30%,transparent 0 22px,rgba(27,120,101,.07) 22px 23px),repeating-radial-gradient(circle at 85% 80%,transparent 0 28px,rgba(86,169,210,.07) 28px 29px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;border:0;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,background-color .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#1B7865;color:#fff;box-shadow:0 10px 24px -10px rgba(27,120,101,.7)}
+.btn-primary:hover{background:#125a4c;color:#fff;transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:#174F44;box-shadow:inset 0 0 0 1.5px #cfdcd3}
+.btn-ghost:hover{color:#174F44;box-shadow:inset 0 0 0 1.5px #70B8A3}
+.btn-sun{background:#F2C66D;color:#174F44}
+.btn-sun:hover{color:#174F44;transform:translateY(-1px)}
+.arr{display:inline-block;transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+[dir=rtl] .arr{transform:scaleX(-1)}
+[dir=rtl] .btn:hover .arr{transform:scaleX(-1) translateX(3px)}
+.lift{transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.lift:hover{transform:translateY(-4px)}
+.navlink{display:inline-flex;align-items:center;height:40px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:500;color:#4a625c;text-decoration:none;transition:background-color .2s,color .2s}
+.navlink:hover{color:#174F44;background:rgba(221,241,231,.8)}
+.navlinks{display:flex}
+@media (max-width:1100px){.navlinks{display:none}}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.92;pointer-events:none;box-shadow:0 10px 30px -10px rgba(86,169,210,.35)}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:55%;height:160%;left:15%;bottom:20%}
+.cloud::after{width:40%;height:120%;right:12%;bottom:25%}
+@media (prefers-reduced-motion:no-preference){
+ .spin{animation:spin 90s linear infinite}
+ .spin-fast{animation:spin 60s linear infinite}
+ .float{animation:floaty 7s ease-in-out infinite}
+ .float2{animation:floaty 8s -3s ease-in-out infinite}
+ .drift{animation:drift 26s ease-in-out infinite alternate}
+ .ping{animation:ping 2.2s ease-out infinite}
+ .blob{animation:blob 18s ease-in-out infinite alternate}
+ .rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+ .rise2{animation:rise .8s .1s cubic-bezier(.2,.8,.2,1) both}
+ .rise3{animation:rise .8s .2s cubic-bezier(.2,.8,.2,1) both}
+}
+@keyframes spin{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(18px)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(112,184,163,.6)}100%{box-shadow:0 0 0 10px rgba(112,184,163,0)}}
+@keyframes blob{0%{border-radius:42% 58% 63% 37%/41% 44% 56% 59%;transform:rotate(0)}100%{border-radius:58% 42% 38% 62%/55% 61% 39% 45%;transform:rotate(12deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.navmob{display:none;gap:4px;overflow-x:auto;padding:0 clamp(16px,4vw,56px) 8px;max-width:1320px;margin:0 auto;scrollbar-width:none}
+@media (max-width:1100px){.navmob{display:flex}}
+.crumbs a{color:#1B7865;text-decoration:none;font-weight:600}
+.crumbs a:hover{text-decoration:underline}
+.tierpill{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:#174F44;text-decoration:none}
+.tierpill:hover{color:#174F44}
+.tmark-row{display:flex;justify-content:center;margin-top:-14px}
+.tmark{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px 0 12px;border-radius:999px;font-size:14px;animation:tbIn .3s cubic-bezier(0.23,1,0.32,1) both}
+.tmark b{font-weight:800}
+.tpv{padding-inline-start:9px;margin-inline-start:1px;border-inline-start:1.5px solid currentColor;font-size:12.5px;font-weight:700;opacity:.85}
+@keyframes tbIn{from{opacity:0;transform:scale(.96)}}
+@media (prefers-reduced-motion:reduce){.tmark{animation:fadeOnly .2s ease-out both}}
+.glegend{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;padding:12px 4px 2px;border-top:1px solid #eef1ec}
+.glegend .gk{margin-inline-end:6px}
+.qlrow{display:flex!important;width:100%}
+.qyrs{margin-inline-start:auto;display:inline-flex;align-items:baseline;gap:6px;font-size:15px;font-weight:800;letter-spacing:0;text-transform:none;color:#174F44}
+.qn{font-size:11px;font-weight:700;color:#5d726d}
+.psl3{position:relative;height:44px;margin-top:6px}
+.pseg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px;padding:3px;border-radius:12px;background:#F2F7F3}
+.pseg button{min-height:30px;padding:0 6px;border:0;border-radius:9px;cursor:pointer;font:inherit;font-size:12px;font-weight:700;color:#4a625c;background:transparent;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
+.pseg button[aria-pressed=true]{background:#fff;color:#174F44;box-shadow:0 1px 2px rgba(23,79,68,.12),0 3px 8px -4px rgba(23,79,68,.3)}
+@media (hover:hover) and (pointer:fine){.pseg button:hover{color:#174F44}}
+.labside{z-index:20}
+.labside.pop-open{overflow:visible;z-index:60}
+.labmain{position:relative;z-index:1}
+.labside .qbar,.labside .qf-place{position:relative}
+.labside.pop-open .qf-place{z-index:61}
+.ppop{position:absolute;z-index:40;top:-8px;max-height:calc(100vh - 150px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;inset-inline-start:calc(100% + 18px);width:min(460px,64vw);display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:#fff;box-shadow:0 24px 60px -18px rgba(10,40,50,.45),0 0 0 1px rgba(23,79,68,.08);animation:popIn .18s cubic-bezier(0.23,1,0.32,1) both;transform-origin:left top}
+[dir=rtl] .ppop{transform-origin:right top}
+.ppop::before{display:none;content:"";position:absolute;top:30px;inset-inline-start:-7px;width:14px;height:14px;background:#fff;transform:rotate(45deg);box-shadow:-1px 1px 0 rgba(23,79,68,.08)}
+.ppop > div:has(> .btn-primary){position:sticky;bottom:-16px;z-index:2;margin:0 -16px -16px;padding:12px 16px;background:#fff;box-shadow:0 -10px 18px -14px rgba(23,79,68,.35)}
+.ppop-h{position:sticky;top:-16px;z-index:2;margin:-16px -16px 0;padding:14px 16px 8px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ppop-h b{font-size:16px;color:#174F44}
+@keyframes popIn{from{opacity:0;transform:scale(.97)}}
+@media (prefers-reduced-motion:reduce){.ppop{animation:fadeOnly .18s ease-out both}}
+@keyframes fadeOnly{from{opacity:0}}
+@media (max-width:900px){.ppop{position:relative;top:auto;inset-inline-start:auto;width:auto;margin-top:8px;max-height:none;overflow:visible}.ppop::before{display:none}}
+.pbig{display:flex;align-items:center;gap:8px;margin-top:2px;font-size:22px;font-weight:800;color:#174F44;letter-spacing:-.01em}
+.pbig svg{color:#70B8A3}
+.psl2{position:relative;height:82px;margin-top:6px}
+.phist{position:absolute;left:11px;right:11px;top:0;height:38px;display:flex;align-items:flex-end;gap:1px}
+.phist span{flex:1 1 0;min-width:1px;border-radius:2px 2px 0 0;transition:background-color .2s ease}
+.ppre{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.pchip{min-height:32px;padding:0 11px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12px;font-weight:700;color:#4a625c;background:#F2F7F3;transition:background-color .2s ease,color .2s ease}
+.pchip[aria-pressed=true]{background:#1B7865;color:#fff}
+@media (hover:hover) and (pointer:fine){.pchip:hover{background:#DDF1E7;color:#174F44}.pchip[aria-pressed=true]:hover{background:#125a4c;color:#fff}}
+.psl{position:relative;height:54px;margin-top:4px}
+.psl input[type=range].rng{height:28px}
+.gstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:8px}
+.gstat{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:14px;background:#F7F8F2}
+.gstat b{font-size:16px;color:#174F44}
+.gk{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.gtools{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.gchip{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 12px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;color:#4a625c;background:#fff;box-shadow:inset 0 0 0 1.5px #e2e8df;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
+.gchip[aria-pressed=true]{color:#174F44;background:#eef7f2;box-shadow:inset 0 0 0 1.5px #70B8A3}
+.gchip[aria-pressed=false] .gsw{opacity:.35}
+.gsw{display:inline-block;width:18px}
+.xttl{display:block;text-align:center;margin-top:-4px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.lablayout{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-top:6px}
+.labside{flex:1 1 300px;max-width:370px;position:sticky;top:128px;max-height:calc(100vh - 144px);overflow:auto;display:flex;flex-direction:column;gap:12px;padding:2px 2px 10px;scrollbar-width:thin}
+.labmain{flex:999 1 560px;min-width:0}
+.labmain > section:first-child{margin-top:0!important}
+.sidettl{display:inline-flex;align-items:center;gap:8px;padding:0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1B7865}
+.labside .qbar{flex-direction:column;flex-wrap:nowrap;padding:8px;gap:0}
+.labside .qf{flex:none!important;padding:12px 14px}
+.labside .qf+.qf::before{inset-inline-start:14px;inset-inline-end:14px;top:0;bottom:auto;width:auto;height:1px}
+.labside .qgo{margin:8px 0 0;min-height:52px;width:100%}
+.labside > p{margin:0 8px!important}
+.labside section[aria-labelledby=rs-title]{padding:18px!important;margin:0!important}
+@media (max-width:900px){.labside{position:static;max-width:none;max-height:none;overflow:visible}}
+.qbar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;padding:8px;border-radius:24px;background:#fff;box-shadow:0 1px 2px rgba(23,79,68,.05),0 18px 40px -18px rgba(23,79,68,.25)}
+.qf{position:relative;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;padding:10px 18px;border-radius:18px;transition:background-color .2s ease}
+.qf:hover,.qf:focus-within{background:#F7F8F2}
+.qf+.qf::before{content:"";position:absolute;inset-inline-start:0;top:18px;bottom:18px;width:1px;background:#e2e8df}
+.qf-place{flex:1.4 1 240px}.qf-par{flex:1.2 1 220px}.qf-per{flex:1 1 200px}
+.ql{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.ql svg{color:#1B7865}
+.qv{display:flex;align-items:center;justify-content:space-between;gap:10px;height:40px;padding:0;border:0;background:transparent;cursor:pointer;font:inherit;font-size:16px;font-weight:700;color:#174F44;text-align:start;min-width:0}
+.qs{font-size:12px;color:#5d726d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qgo{flex:0 0 auto;align-self:stretch;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;margin-inline-start:8px;padding:0 26px;border-radius:18px;background:#1B7865;color:#fff;font-size:15.5px;font-weight:700;text-decoration:none;box-shadow:0 10px 24px -12px rgba(27,120,101,.8);transition:background-color .2s ease,transform .16s cubic-bezier(0.23,1,0.32,1)}
+.qgo:hover{background:#125a4c;color:#fff}
+.qgo:active{transform:scale(.97)}
+@media (max-width:860px){.qgo{flex:1 1 100%;margin:8px 0 0}.qf+.qf::before{display:none}}
+input[type=range].rng{-webkit-appearance:none;appearance:none;position:absolute;left:0;right:0;top:14px;width:100%;height:28px;margin:0;background:transparent;pointer-events:none;z-index:3}
+input[type=range].rng::-webkit-slider-runnable-track{height:28px;background:transparent}
+input[type=range].rng::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:22px;height:22px;margin-top:3px;border-radius:50%;background:#174F44;border:0;box-shadow:0 0 0 3px #fff,0 3px 10px rgba(23,79,68,.45);cursor:ew-resize}
+input[type=range].rng::-moz-range-track{height:28px;background:transparent}
+input[type=range].rng::-moz-range-thumb{pointer-events:auto;width:16px;height:16px;border-radius:50%;background:#174F44;border:3px solid #fff;box-shadow:0 3px 10px rgba(23,79,68,.45);cursor:ew-resize}
+input[type=range].rng:focus-visible{outline:none}
+input[type=range].rng:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px #fff,0 0 0 6px #F2C66D}
+.ptrack input[type=range].yr2::-webkit-slider-thumb{width:22px;height:22px;margin-top:3px;border-radius:50%;background:radial-gradient(circle,#fff 0 3px,#1B7865 3.5px 6px,transparent 6.5px);box-shadow:none}
+.ptrack input[type=range].yr2::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:radial-gradient(circle,#fff 0 3px,#1B7865 3.5px 6px,transparent 6.5px)}
+.locbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.locsearch{position:relative;flex:1 1 300px;min-width:0;max-width:520px}
+.locfield{display:flex;align-items:center;gap:8px;height:46px;padding:0 6px 0 14px;border-radius:14px;background:#F7F8F2;box-shadow:inset 0 0 0 1.5px #dbe5dd;transition:box-shadow .2s ease}
+.locfield:focus-within{box-shadow:inset 0 0 0 2px #1B7865}
+.locsug{position:absolute;top:52px;left:0;right:0;z-index:20;padding:6px;border-radius:14px;background:#fff;box-shadow:0 18px 40px -14px rgba(10,40,50,.45),0 0 0 1px rgba(23,79,68,.08);display:flex;flex-direction:column}
+.loccoord{flex:none;display:inline-flex;align-items:center;gap:7px;height:46px;padding:0 14px;border:0;border-radius:14px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:#174F44}
+.locpin{margin-inline-start:auto;display:flex;align-items:center;gap:10px;min-width:0;max-width:100%;padding:6px 8px 6px 8px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1.5px #dbe5dd}
+.loccoords{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin:-2px 0 12px;padding:12px;border-radius:16px;background:#F7F8F2}
+.loclbl{display:flex;flex-direction:column;gap:4px;font-size:11.5px;font-weight:700;color:#5d726d}
+@media (max-width:640px){.locpin{margin-inline-start:0;flex:1 1 100%}}
+.mstage{position:absolute;inset:0;transform-origin:0 0;transition:transform .32s cubic-bezier(0.23,1,0.32,1)}
+@media (prefers-reduced-motion:reduce){.mstage{transition:none}}
+.sugopt{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:0 10px;border:0;border-radius:10px;background:transparent;cursor:pointer;font:inherit;color:#174F44;text-align:start}
+.sugopt:hover,.sugopt:focus-visible{background:#F2F7F3}
+button[disabled]{opacity:.4;cursor:default!important}
+.prow{display:flex;align-items:center;gap:14px;min-height:56px;min-width:0}
+.plabel{flex:none;width:72px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.pchips{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;min-width:0;padding:4px 2px;scrollbar-width:none}
+.pchips::-webkit-scrollbar{display:none}
+.ptitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px 24px;min-height:76px;margin-bottom:16px}
+.lseg{gap:2px!important;padding:4px!important;border-radius:999px;background:#E9F1EC;max-width:min(620px,52vw)}
+.lopt{flex:none;min-height:40px;padding:0 16px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;color:#174F44;background:transparent;transition:background-color .2s ease,box-shadow .2s ease}
+.lopt[aria-pressed=true]{background:#fff;box-shadow:0 1px 2px rgba(23,79,68,.08),0 4px 12px -6px rgba(23,79,68,.3)}
+@media (hover:hover) and (pointer:fine){.lopt:hover{background:rgba(255,255,255,.6)}.lopt[aria-pressed=true]:hover{background:#fff}}
+@media (max-width:760px){.trow{grid-template-columns:minmax(0,1fr)}.lseg{max-width:100%}}
+@media (max-width:640px){.prow .plabel{display:none}.ptitle{white-space:normal}}
+.gnode{position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:#fff;color:#174F44;box-shadow:0 0 0 6px #fff,inset 0 0 0 2px var(--gc)}
+.gstep:first-child .gnode{background:var(--gc)}
+.gtrack{position:absolute;top:27px;left:16.66%;right:16.66%;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--gc),var(--gt));transform-origin:left center}
+[dir=rtl] .gtrack{background:linear-gradient(270deg,var(--gc),var(--gt));transform-origin:right center}
+@media (max-width:760px){.gsteps{grid-template-columns:minmax(0,1fr)!important}.gtrack{display:none}.gstep{flex-direction:row!important;text-align:start!important}}
+@media (prefers-reduced-motion:no-preference){
+ .gstep{animation:gIn .36s cubic-bezier(0.23,1,0.32,1) both}
+ .gtrack{animation:gLine .6s .12s cubic-bezier(0.23,1,0.32,1) both}
+}
+@media (prefers-reduced-motion:reduce){.gstep{animation:gFade .36s ease-out both}}
+@keyframes gIn{from{opacity:0;transform:translateY(8px)}}
+@keyframes gLine{from{transform:scaleX(0)}}
+@keyframes gFade{from{opacity:0}}
+
+.tab{display:flex;align-items:center;flex:none;min-height:48px;padding:0 14px;font-size:14.5px;text-decoration:none;white-space:nowrap;transition:color .2s,background-color .2s}
+.tab:hover{color:#174F44;background:rgba(221,241,231,.6)}
+.tabs{scrollbar-width:none}
+[dir=rtl] .tab .arr{transform:none!important}
+.audpill{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 16px;padding-inline-start:6px;border-radius:999px;color:#174F44;text-decoration:none;background:#fff;box-shadow:0 1px 2px rgba(23,79,68,.06);transition:transform .2s,box-shadow .2s}
+.audpill:hover{color:#174F44;transform:translateY(-1px);box-shadow:0 1px 2px rgba(23,79,68,.06),0 8px 18px -8px rgba(23,79,68,.3)}
+@media (max-width:1180px){.audlbl{display:none}}
+@media (max-width:900px){.audtxt{display:none!important}.audpill,.tierpill{padding:0 6px!important}}
+</style>
+</helmet>
+
+<div dir="{{dir}}" lang="{{lang}}" style="background: #F7F8F2; color: #1f3a34; font-family: {{font}}; -webkit-font-smoothing: antialiased; overflow: hidden">
+
+<!-- ============ NAV (tier) ============ -->
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(247,248,242,.94); backdrop-filter: blur(14px) saturate(1.4); border-bottom: 1px solid #e2e8df">
+  <div style="max-width: 1320px; margin: 0 auto; padding: 10px clamp(16px,4vw,56px); display: flex; align-items: center; gap: 16px; flex-wrap: nowrap; min-width: 0">
+    <a href="{{tn.href.Home}}" style="display: flex; align-items: center; gap: 10px; text-decoration: none">
+      <span aria-hidden="true" style="position: relative; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #bfe7d6 0, #70B8A3 30%, #1B7865 62%, #2f7fa8 100%); box-shadow: inset -4px -5px 8px rgba(0,0,0,.18), 0 0 0 3px rgba(112,184,163,.25)">
+        <span style="position: absolute; width: 10px; height: 6px; border-radius: 50%; background: #F2C66D; top: 8px; left: 9px; opacity: .9"></span>
+      </span>
+      <span style="display: flex; flex-direction: column; line-height: 1.15">
+        <span style="font-weight: 800; font-size: 19px; color: #174F44; letter-spacing: -.03em">EarthScope</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 11.5px; font-weight: 700; color: #174F44"><span style="display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 50%; background: {{tn.me.tint}}; box-shadow: inset 0 0 0 2px {{tn.me.color}}; color: #174F44"><sc-if value="{{tn.me.isKids}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path><path d="M8.5 11a2.5 2.5 0 0 1 2.5-2.5"></path></svg></sc-if><sc-if value="{{tn.me.isStudents}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10h4"></path><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"></path><path d="M20 21a2 2 0 0 0 2-2v-3.85c0-1.39-2-2.96-2-4.83V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z"></path><path d="M22 16H2"></path><path d="M4 21a2 2 0 0 1-2-2v-3.85c0-1.39 2-2.96 2-4.83V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z"></path><path d="M9 7V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v3"></path></svg></sc-if><sc-if value="{{tn.me.isResearch}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg></sc-if></span>{{tn.me.level}} · {{tn.me.actor}}</span>
+      </span>
+    </a>
+    <div style="margin-inline-start: auto; display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; min-width: 0">
+      <nav aria-label="{{tn.levelLabel}}" style="display: inline-flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: #DDF1E7">
+        <sc-for list="{{tn.tiers}}" as="tr" hint-placeholder-count="3"><a class="tierpill" href="{{tr.href}}" aria-current="{{tr.cur}}" title="{{tr.level}} · {{tr.full}}" style="height: 44px; padding-inline-start: 5px; background: {{tr.bg}}; box-shadow: {{tr.shadow}}"><span style="display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: {{tr.tint}}; box-shadow: inset 0 0 0 2px {{tr.color}}; color: #174F44"><sc-if value="{{tr.isKids}}" hint-placeholder-val="{{false}}"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path><path d="M8.5 11a2.5 2.5 0 0 1 2.5-2.5"></path></svg></sc-if><sc-if value="{{tr.isStudents}}" hint-placeholder-val="{{false}}"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10h4"></path><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"></path><path d="M20 21a2 2 0 0 0 2-2v-3.85c0-1.39-2-2.96-2-4.83V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z"></path><path d="M22 16H2"></path><path d="M4 21a2 2 0 0 1-2-2v-3.85c0-1.39 2-2.96 2-4.83V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z"></path><path d="M9 7V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v3"></path></svg></sc-if><sc-if value="{{tr.isResearch}}" hint-placeholder-val="{{false}}"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg></sc-if></span><span class="audtxt" style="display: flex; flex-direction: column; line-height: 1.1; text-align: start"><span style="font-size: 10.5px; font-weight: 700; color: #5d726d; letter-spacing: .02em">{{tr.level}}</span><span style="font-size: 13.5px; font-weight: 700; white-space: nowrap">{{tr.actor}}</span></span></a></sc-for>
+      </nav>
+      <span style="position: relative; flex: none">
+      <button onClick="{{lm.toggle}}" aria-haspopup="listbox" aria-expanded="{{lm.open}}" aria-label="{{lm.label}}" title="{{lm.label}}" style="display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; cursor: pointer; color: #174F44; background: {{lm.bg}}; box-shadow: inset 0 0 0 1.5px #cfdcd3">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+      </button>
+      <sc-if value="{{lm.open}}" hint-placeholder-val="{{false}}">
+        <div role="listbox" aria-label="{{lm.label}}" style="position: absolute; top: 52px; inset-inline-end: 0; width: 240px; padding: 8px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px #e2e8df, 0 24px 48px -16px rgba(23,79,68,.35); z-index: 60; display: flex; flex-direction: column; gap: 2px">
+          <sc-for list="{{lm.items}}" as="g" hint-placeholder-count="6"><button role="option" aria-selected="{{g.on}}" aria-disabled="{{g.off}}" onClick="{{g.pick}}" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; cursor: {{g.cursor}}; background: {{g.bg}}; color: {{g.fg}}; text-align: start"><span style="display: flex; flex-direction: column; line-height: 1.2"><span style="font-size: 15px; font-weight: 600; font-family: {{g.font}}">{{g.endo}}</span><span style="font-size: 11.5px; color: #5d726d">{{g.sub}}</span></span><span style="font-size: 11px; font-weight: 700; color: #1B7865">{{g.tag}}</span></button></sc-for>
+        </div>
+      </sc-if>
+    </span>
+    </div>
+  </div>
+  <div style="border-top: 1px solid #e2e8df; background: rgba(255,255,255,.7)">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px,4vw,56px); display: flex; align-items: stretch; gap: 8px">
+      <nav class="tabs" aria-label="{{tn.tierName}}" style="flex: 1; min-width: 0; display: flex; align-items: stretch; gap: 2px; overflow-x: auto">
+        <sc-for list="{{tn.links}}" as="nl" hint-placeholder-count="5"><a class="tab" href="{{nl.href}}" aria-current="{{nl.cur}}" style="color: {{nl.fg}}; font-weight: {{nl.fw}}; box-shadow: inset 0 -3px 0 {{nl.line}}">{{nl.label}}</a></sc-for>
+      </nav>
+      <a class="tab" href="{{tn.href.portal}}" style="flex: none; gap: 6px; color: #1B7865; font-weight: 600"><span class="arr" aria-hidden="true" style="display: inline-block; transform: scaleX(-1)">→</span>{{tn.allLabel}}</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="top" style="position: relative; overflow: hidden; background: linear-gradient(180deg, #F7F8F2 0%, #eaf6ef 55%, #DDF1E7 100%)">
+  <div aria-hidden="true" style="position: absolute; width: 720px; height: 720px; border-radius: 50%; inset-inline-end: -120px; top: -260px; background: radial-gradient(circle, rgba(242,198,109,.55) 0, rgba(242,198,109,.18) 35%, rgba(242,198,109,0) 65%)"></div>
+  <div class="blob" aria-hidden="true" style="position: absolute; width: 520px; height: 480px; inset-inline-start: -200px; bottom: -180px; background: radial-gradient(circle at 40% 40%, rgba(112,184,163,.35), rgba(112,184,163,0) 70%)"></div>
+  <div class="topo" aria-hidden="true" style="position: absolute; inset: 0; opacity: .7; -webkit-mask-image: linear-gradient(180deg,#000,transparent 80%); mask-image: linear-gradient(180deg,#000,transparent 80%)"></div>
+
+  <div style="position: relative; max-width: 1320px; margin: 0 auto; padding: 48px clamp(16px,4vw,56px) 120px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(480px, 100%), 1fr)); gap: 32px; align-items: center">
+    <div style="display: flex; flex-direction: column; gap: 26px; z-index: 2">
+      <div class="rise" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+        <span style="display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border-radius: 999px; background: #fff; color: #1B7865; font-size: 12px; font-weight: 700; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">
+          <span class="ping" style="width: 8px; height: 8px; border-radius: 50%; background: #70B8A3"></span>{{t.hero.live}}
+        </span>
+      </div>
+      <h1 class="rise2" style="font-size: clamp(46px, 6vw, 88px); line-height: 1.04; font-weight: 800; letter-spacing: {{tight}}">
+        <span style="display: block">{{heroA}}</span>
+        <span style="display: block; background: linear-gradient(100deg, #1B7865 10%, #56A9D2 90%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: 6px">{{heroB}}</span>
+      </h1>
+      <p class="rise3" style="font-size: clamp(17px, 1.4vw, 20px); line-height: 1.6; max-width: 540px; color: #4a625c">{{heroSub}}</p>
+      <div class="rise3" style="display: flex; gap: 12px; flex-wrap: wrap">
+        <a class="btn btn-primary" href="{{tn.href.hero}}" style="min-height: 56px; padding: 0 28px; font-size: 16px">{{t.hero.cta}} <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#stories" style="min-height: 56px">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M8 5v14l11-7z"></path></svg>
+          {{t.hero.cta2}}
+        </a>
+      </div>
+      <div style="display: flex; gap: 28px; margin-top: 12px; flex-wrap: wrap">
+        <sc-for list="{{heroStats}}" as="st" hint-placeholder-count="3">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span class="num" style="font-size: 28px; font-weight: 800; color: #174F44; letter-spacing: -.02em" dir="ltr">{{st.v}}<span style="font-size: 14px; font-weight: 600; color: #5d726d; margin-inline-start: 4px">{{st.u}}</span></span>
+            <span style="font-size: 13px; color: #5d726d">{{st.label}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- Globe -->
+    <div style="position: relative; display: grid; place-items: center; min-height: 560px">
+      <div aria-hidden="true" style="position: absolute; width: min(640px, 112%); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.9) 0, rgba(221,241,231,.6) 45%, rgba(221,241,231,0) 70%)"></div>
+      <div aria-hidden="true" style="position: absolute; width: min(660px, 118%); aspect-ratio: 1; border-radius: 50%; border: 1.5px dashed rgba(27,120,101,.25); transform: rotateX(68deg) rotateZ(-14deg)"></div>
+      <div class="float" style="position: relative; width: min(480px, 84vw); aspect-ratio: 1">
+        <div aria-hidden="true" style="position: absolute; inset: -6%; border-radius: 50%; background: radial-gradient(circle, rgba(86,169,210,0) 58%, rgba(86,169,210,.30) 66%, rgba(112,184,163,.12) 72%, rgba(247,248,242,0) 78%)"></div>
+        <div role="img" aria-label="{{t.hero.globe}}" style="position: absolute; inset: 0; border-radius: 50%; overflow: hidden; background: #2f7fa8; box-shadow: 0 50px 90px -40px rgba(23,79,68,.55)">
+          <div class="tex spin" style="position: absolute; top: 0; left: 0; height: 100%; width: 400%; background-size: 50% 100%; background-repeat: repeat-x; filter: saturate(1.15) brightness(1.08)"></div>
+          <div style="position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 26%, rgba(255,255,255,.40) 0, rgba(255,255,255,0) 32%), radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 60%, rgba(86,169,210,.45) 100%); box-shadow: inset -40px -36px 80px rgba(10,40,50,.55), inset 12px 10px 30px rgba(255,255,255,.25)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; bottom: -1px; left: 0; width: 100%; height: 80px; display: block"><path d="M0 40 C 200 80 420 80 720 44 S 1200 0 1440 36 L1440 80 L0 80 Z" fill="#F7F8F2"></path></svg>
+</section>
+
+<!-- ============ TOOLKIT (this level's pages) ============ -->
+<section id="toolkit" style="max-width: 1320px; margin: 0 auto; padding: 96px clamp(16px,4vw,56px) 0">
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; max-width: 760px">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: {{track}}; text-transform: uppercase; color: #1B7865">{{tn.kitEyebrow}}</span>
+    <h2 style="font-size: clamp(28px, 3vw, 44px); font-weight: 800; letter-spacing: {{tight}}">{{tn.kitTitle}}</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 18px">
+    <sc-for list="{{tn.cards}}" as="c" hint-placeholder-count="4">
+      <a class="lift" href="{{c.href}}" style="display: flex; flex-direction: column; gap: 12px; padding: 24px; border-radius: 24px; background: #fff; color: inherit; text-decoration: none; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+        <span style="display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: {{c.tint}}; box-shadow: inset 0 0 0 2px {{c.color}}; color: #174F44; font-weight: 800; font-size: 16px">{{c.n}}</span>
+        <h3 style="font-size: 20px; font-weight: 700">{{c.label}}</h3>
+        <p style="font-size: 14.5px; line-height: 1.6; color: #4a625c; flex: 1">{{c.desc}}</p>
+        <span style="display: inline-flex; align-items: center; gap: 6px; color: #1B7865; font-weight: 700; font-size: 14px">{{c.go}} <span class="arr" aria-hidden="true">→</span></span>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<!-- ============ STEP 3 · TREND LAB ============ -->
+<section id="lab" style="max-width: 1320px; margin: 0 auto; padding: 96px clamp(16px,4vw,56px) 0">
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; max-width: 760px">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: {{track}}; text-transform: uppercase; color: #1B7865">{{t.lab.eyebrow}}</span>
+    <h2 style="font-size: clamp(28px, 3vw, 44px); font-weight: 800; letter-spacing: {{tight}}">{{t.lab.title}}</h2>
+  </div>
+  <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 18px">
+    <sc-for list="{{steps}}" as="st" hint-placeholder-count="4">
+      <li style="display: flex; flex-direction: column; gap: 12px; padding: 24px; border-radius: 24px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">
+        <span style="display: flex; align-items: center; justify-content: space-between">
+          <span style="display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: {{st.bg}}; color: #174F44; font-weight: 800; font-size: 16px">{{st.n}}</span>
+        </span>
+        <h3 style="font-size: 19px; font-weight: 700">{{st.title}}</h3>
+        <p style="font-size: 14.5px; line-height: 1.6; color: #4a625c">{{st.body}}</p>
+      </li>
+    </sc-for>
+  </ol>
+
+</section>
+
+<!-- ============ DEMO CASES ============ -->
+<section id="stories" style="max-width: 1320px; margin: 0 auto; padding: 96px clamp(16px,4vw,56px) 0">
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; max-width: 760px">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: {{track}}; text-transform: uppercase; color: #1B7865">{{t.stories.eyebrow}}</span>
+    <h2 style="font-size: clamp(28px, 3vw, 44px); font-weight: 800; letter-spacing: {{tight}}">{{t.stories.title}}</h2>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 22px">
+    <sc-for list="{{places}}" as="p" hint-placeholder-count="3">
+      <a class="lift" href="{{p.href}}" style="display: flex; flex-direction: column; padding: 10px; border-radius: 28px; text-decoration: none; color: inherit; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+        <div class="tex" style="position: relative; height: 200px; border-radius: 20px; background-size: {{p.zoom}} auto; background-position: {{p.pos}}; filter: saturate(1.15) brightness(1.05)">
+          <span style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(255,255,255,.92); color: #174F44"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{p.color}}"></span>{{p.sphere}}</span>
+          <span style="position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: #F2C66D; transform: translate(-50%,-50%); box-shadow: 0 0 0 4px rgba(255,255,255,.85), 0 0 0 12px rgba(242,198,109,.3)"></span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 18px 14px 14px; flex: 1">
+          <span style="font-size: 13px; font-weight: 700; color: #1B7865">{{p.name}} · {{p.tag}}</span>
+          <h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">{{p.q}}</h3>
+          <p style="font-size: 14.5px; line-height: 1.6; color: #4a625c">{{p.blurb}}</p>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 12px">
+            <span dir="ltr" style="font-size: 12px; color: #5d726d">{{p.inst}}</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; color: #1B7865; font-weight: 700; font-size: 14px">{{t.stories.watch}} <span class="arr" aria-hidden="true">→</span></span>
+          </div>
+        </div>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section style="max-width: 1320px; margin: 0 auto; padding: 96px clamp(16px,4vw,56px) 0">
+  <div style="position: relative; overflow: hidden; border-radius: 40px; padding: clamp(32px,5vw,72px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); align-items: center; gap: 32px; background: linear-gradient(120deg, #1B7865 0%, #2b8f7a 45%, #56A9D2 100%)">
+    <div aria-hidden="true" style="position: absolute; width: 420px; height: 420px; border-radius: 50%; inset-inline-end: -80px; top: -160px; background: radial-gradient(circle, rgba(242,198,109,.6), rgba(242,198,109,0) 65%)"></div>
+    <div style="position: relative; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="color: #fff; font-size: clamp(30px, 3.4vw, 50px); font-weight: 800; letter-spacing: {{tight}}">{{t.cta.title}}</h2>
+      <p style="color: #e2f4ec; font-size: 18px; line-height: 1.6; max-width: 520px">{{t.cta.sub}}</p>
+      <div><a class="btn btn-sun" href="{{tn.href.hero}}" style="min-height: 56px; padding: 0 28px; font-size: 16px">{{t.hero.cta}} <span class="arr" aria-hidden="true">→</span></a></div>
+    </div>
+    <div style="position: relative; justify-self: center; width: min(260px, 70vw); aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: #2f7fa8; box-shadow: 0 40px 70px -30px rgba(10,40,50,.6)" aria-hidden="true">
+      <div class="tex spin-fast" style="position: absolute; top: 0; left: 0; height: 100%; width: 400%; background-size: 50% 100%; background-repeat: repeat-x; filter: saturate(1.15) brightness(1.08)"></div>
+      <div style="position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 26%, rgba(255,255,255,.4) 0, rgba(255,255,255,0) 32%); box-shadow: inset -24px -20px 50px rgba(10,40,50,.55)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer style="position: relative; margin-top: 120px; background: #174F44; color: #d9ece4">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; top: -59px; left: 0; width: 100%; height: 60px; display: block"><path d="M0 60 C 240 10 480 0 720 22 S 1200 60 1440 14 L1440 60 Z" fill="#174F44"></path></svg>
+  <div style="max-width: 1320px; margin: 0 auto; padding: 56px clamp(16px,4vw,56px) 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 40px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <span style="font-weight: 800; font-size: 19px; color: #fff; letter-spacing: -.03em">EarthScope</span>
+      <p style="color: #c4ddd3; max-width: 360px; line-height: 1.6">{{t.footer.tag}}</p>
+      <p style="color: #c4ddd3; font-size: 13px; line-height: 1.6; max-width: 420px">{{t.footer.disc}}</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{footLinks}}" as="fl" hint-placeholder-count="6"><a href="{{fl.href}}" style="color: #d9ece4; text-decoration: none; font-size: 14px">{{fl.label}}</a></sc-for>
+    </div>
+    <div dir="ltr" style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #c4ddd3; text-align: start">
+      <span style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #a9cfc1">NASA Earthdata · GES DISC</span>
+      <span>MODIS · OMI · AIRS</span><span>GPM IMERG</span><span>MERRA-2 · GLDAS</span><span>GISTEMP v4</span>
+    </div>
+  </div>
+  <div style="max-width: 1320px; margin: 0 auto; padding: 18px clamp(16px,4vw,56px) 28px; border-top: 1px solid rgba(255,255,255,.12); font-size: 12.5px; color: #a9cfc1">{{t.footer.made}}</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4700}}'>
+var GIS = {1960:-.03,1961:.06,1962:.03,1963:.05,1964:-.20,1965:-.11,1966:-.06,1967:-.02,1968:-.08,1969:.05,1970:.03,1971:-.08,1972:.01,1973:.16,1974:-.07,1975:-.01,1976:-.10,1977:.18,1978:.07,1979:.16,1980:.26,1981:.32,1982:.14,1983:.31,1984:.16,1985:.12,1986:.18,1987:.32,1988:.39,1989:.27,1990:.45,1991:.40,1992:.22,1993:.23,1994:.32,1995:.45,1996:.33,1997:.46,1998:.61,1999:.38,2000:.39,2001:.54,2002:.63,2003:.62,2004:.53,2005:.68,2006:.64,2007:.66,2008:.54,2009:.65,2010:.72,2011:.61,2012:.65,2013:.68,2014:.75,2015:.90,2016:1.01,2017:.92,2018:.85,2019:.98,2020:1.01,2021:.85,2022:.89,2023:1.17,2024:1.28};
+
+function trendStats() {
+  var xs = [], ys = [];
+  for (var k in GIS) { xs.push(+k); ys.push(GIS[k]); }
+  var n = xs.length, mx = 0, my = 0, i, j;
+  for (i = 0; i < n; i++) { mx += xs[i]; my += ys[i]; }
+  mx /= n; my /= n;
+  var sxx = 0, sxy = 0;
+  for (i = 0; i < n; i++) { sxx += (xs[i] - mx) * (xs[i] - mx); sxy += (xs[i] - mx) * (ys[i] - my); }
+  var b = sxy / sxx, a = my - b * mx, sse = 0;
+  for (i = 0; i < n; i++) { var r = ys[i] - (a + b * xs[i]); sse += r * r; }
+  var se = Math.sqrt(sse / (n - 2) / sxx);
+  var S = 0;
+  for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) S += ys[j] > ys[i] ? 1 : (ys[j] < ys[i] ? -1 : 0);
+  var v = n * (n - 1) * (2 * n + 5) / 18;
+  var Z = S > 0 ? (S - 1) / Math.sqrt(v) : (S < 0 ? (S + 1) / Math.sqrt(v) : 0);
+  return { xs: xs, ys: ys, n: n, a: a, b: b, se: se, S: S, Z: Z };
+}
+var ST = trendStats();
+
+function buildChart() {
+  var X = function (yr) { return 44 + (yr - 1960) / 64 * 586; };
+  var Y = function (v) { return 200 - (v + 0.3) / 1.7 * 185; };
+  var line = "", i;
+  for (i = 0; i < ST.n; i++) line += (i ? " L" : "M") + X(ST.xs[i]).toFixed(1) + " " + Y(ST.ys[i]).toFixed(1);
+  var area = line + " L" + X(2024).toFixed(1) + " 200 L" + X(1960).toFixed(1) + " 200 Z";
+  var trend = "M" + X(1960).toFixed(1) + " " + Y(ST.a + ST.b * 1960).toFixed(1) + " L" + X(2024).toFixed(1) + " " + Y(ST.a + ST.b * 2024).toFixed(1);
+  var yTicks = [-0.25, 0, 0.5, 1.0].map(function (v) { var y = Y(v); return { y: y.toFixed(1), ty: (y + 4).toFixed(1), label: (v > 0 ? "+" : "") + v.toFixed(v === -0.25 ? 2 : 1) + "°" }; });
+  var xTicks = [1960, 1980, 2000, 2020].map(function (yr) { return { x: X(yr).toFixed(1), label: String(yr) }; });
+  return { line: line, area: area, trend: trend, yTicks: yTicks, xTicks: xTicks, lastX: X(2024).toFixed(1), lastY: Y(1.28).toFixed(1) };
+}
+var CHART = buildChart();
+
+var TXT = {
+ en: {
+  brandSub: "Earth System Trend Detection", otherLang: "العربية",
+  nav: { datalab: "Data Lab", journey: "Journeys", spheres: "Explore Map",lab: "Trend Lab", stories: "Demo cases", sources: "Data sources" },
+  modes: { young: "Junior Detective", earth: "Earth Explorer", lab: "Earth Expert" },
+  modeShort: { young: "Junior", earth: "Explorer", lab: "Expert" },
+  modeFor: { young: "Kids · ages 8–13", earth: "School students", lab: "Experts · university · research" },
+  modeDesc: {
+   young: "Playful journeys, friendly guides and quick quizzes. Is it going up or down, and is it for real?",
+   earth: "Clear maps, plain-language definitions and a guided first trend test on the places you know.",
+   lab: "Full variable catalog, regional time series, Sen's slope, Mann-Kendall and t-tests, confidence intervals and CSV export." },
+  hero: {
+   live: "Live from orbit", eyebrow: "NASA Space Apps · Earth science data",
+   a: { young: "Our Planet", earth: "Every Change", lab: "Every Change" },
+   b: { young: "Is Alive!", earth: "Tells a Story.", lab: "Tells a Story." },
+   sub: {
+    young: "Fly around Earth with real NASA satellites and become a data detective: what is changing, where, and is it for real?",
+    earth: "Pick a variable measured by NASA satellites or models, choose a region, and find out what is changing, where, how fast, and whether the trend is significant.",
+    lab: "Select variables from MODIS, OMI, AIRS, GPM, MERRA-2 and GLDAS, build regional daily or monthly time series, and test trends for significance." },
+   cta: "Start investigating", cta2: "Watch a demo case",
+   globe: "Rotating Earth from NASA Blue Marble imagery",
+   trendLabel: "Global temperature trend", decade: "decade", signif: "Significant · p < 0.001",
+   sats: "Instruments behind the data" },
+  stats: { temp: "Global temperature vs 1951–1980", co2: "Carbon dioxide", sea: "Sea level since 1993" },
+  statsKid: { temp: "How warm Earth is", co2: "CO₂ in the air", sea: "How high the oceans are" },
+  pick: { eyebrow: "Step 1 · Choose your journey", title: "One planet. Three ways to explore it.", choose: "Start here", active: "Current mode" },
+  sph: {
+   eyebrow: "Step 2 · Choose where to start",
+   title: "Explore everything, or begin with one of Earth's five spheres.",
+   allFive: "All 5 spheres", fullTitle: "Full exploration",
+   full: {
+    young: "Fly over the whole planet and tap anything that looks interesting: air, water, land, oceans or ice.",
+    earth: "Answer a few questions about what and where you want to study, and get suggested variables that may be trending.",
+    lab: "Search the full variable catalog across missions and models, filter by sphere, temporal resolution and period, and draw any region." },
+   orOne: "Or start from one sphere",
+   variables: "variables", where: "Good places to look", vars: "Variables you can investigate",
+   kicker: "Earth sphere", fullKicker: "All spheres", go: "Investigate this sphere", goFull: "Start full exploration" },
+  lab: {
+   eyebrow: "Step 3 · Become a data detective", title: "From a question to evidence in four steps",
+   steps: [
+    { title: "Ask", body: "Answer a few short questions about what you want to investigate and where." },
+    { title: "Select", body: "Pick a variable and a region: a city, a desert, a rain forest, a tidal estuary or the air above a big city." },
+    { title: "Visualize", body: "Build a daily or monthly time series long enough for statistical analysis." },
+    { title: "Test", body: "Measure the rate of change and check significance with Mann-Kendall, a t-test or confidence intervals." } ],
+   example: "Example case", exTitle: "Global surface temperature anomaly, 1960–2024",
+   toggle: "Trend line", verdict: "Significant rising trend",
+   explain: {
+    young: "Earth is getting warmer, and the pattern is much too steady to be luck. Case solved, detective!",
+    earth: "Temperature is rising by about {slope} °C every ten years. The Mann-Kendall test says a trend this steady is very unlikely to happen by chance.",
+    lab: "OLS slope on annual means with a 95% confidence interval (±1.96 SE). Mann-Kendall S with normal-approximation Z; no tie or autocorrelation correction." },
+   rows: { slope: "Slope / decade", ci: "95% CI", z: "Mann-Kendall Z", p: "p-value", n: "Years (n)", s: "MK statistic S" },
+   source: "Source: NASA GISS Surface Temperature Analysis (GISTEMP v4)",
+   c1t: "Same process, opposite trends", c1b: "A variable can rise in one region and fall in another, even when one process drives both. Where matters as much as what.",
+   c2t: "Not significant yet? Still a clue.", c2b: "A trend is worth noting before it passes a test. Sometimes it only needs a longer record to become significant." },
+  stories: { eyebrow: "Demo cases", title: "Watch a case being solved, step by step", watch: "Watch demo" },
+  src: { eyebrow: "Data sources", title: "Built on NASA instruments and models", sat: "Satellite instrument", model: "Model" },
+  cta: { title: "Ready to start your investigation?", sub: "Pick a journey, choose a sphere and let the data show you what is changing." },
+  footer: { tag: "A living window on a changing planet.", disc: "An independent educational project for the NASA Space Apps Challenge. It uses NASA data but is not endorsed by NASA.", made: "Made for curious people everywhere · © 2026 EarthScope · [TEAM NAME]" }
+ },
+ ar: {
+  brandSub: "رصد اتجاهات نظام الأرض", otherLang: "English",
+  nav: { datalab: "مختبر البيانات", journey: "الرحلات", spheres: "استكشف الخريطة",lab: "مختبر الاتجاهات", stories: "حالات توضيحية", sources: "مصادر البيانات" },
+  modes: { young: "المحقق الناشئ", earth: "مستكشف الأرض", lab: "خبير الأرض" },
+  modeShort: { young: "ناشئ", earth: "مستكشف", lab: "خبير" },
+  modeFor: { young: "أطفال · من 8 إلى 13 عامًا", earth: "طلاب المدارس", lab: "خبراء · جامعات · باحثون" },
+  modeDesc: {
+   young: "رحلات مرحة ومرشدون ودودون واختبارات سريعة. هل يرتفع أم ينخفض، وهل هو حقيقي؟",
+   earth: "خرائط واضحة وتعريفات بلغة بسيطة وأول اختبار اتجاه موجَّه على أماكن تعرفها.",
+   lab: "فهرس كامل للمتغيرات وسلاسل زمنية إقليمية وميل سِن واختباري مان-كندال وt وفترات الثقة وتصدير CSV." },
+  hero: {
+   live: "مباشر من المدار", eyebrow: "ناسا Space Apps · بيانات علوم الأرض",
+   a: { young: "كوكبنا", earth: "كل تغيير", lab: "كل تغيير" },
+   b: { young: "حيّ!", earth: "يروي قصة.", lab: "يروي قصة." },
+   sub: {
+    young: "حلّق حول الأرض مع أقمار ناسا الحقيقية وكن محققًا في البيانات: ما الذي يتغير، وأين، وهل التغيّر حقيقي؟",
+    earth: "اختر متغيرًا تقيسه أقمار ناسا أو تنتجه نماذجها، وحدّد منطقة، واكتشف ما الذي يتغير وأين وبأي سرعة، وهل الاتجاه دالّ إحصائيًا.",
+    lab: "اختر متغيرات من MODIS وOMI وAIRS وGPM وMERRA-2 وGLDAS، وأنشئ سلاسل زمنية يومية أو شهرية لمنطقتك، واختبر دلالة الاتجاه." },
+   cta: "ابدأ التحقيق", cta2: "شاهد حالة توضيحية",
+   globe: "الأرض تدور من صور ناسا للرخامة الزرقاء",
+   trendLabel: "اتجاه درجة الحرارة العالمية", decade: "عقد", signif: "دالّ إحصائيًا · p < 0.001",
+   sats: "الأجهزة التي تقف وراء البيانات" },
+  stats: { temp: "الحرارة العالمية مقارنة بـ 1951–1980", co2: "ثاني أكسيد الكربون", sea: "مستوى البحر منذ 1993" },
+  statsKid: { temp: "مدى دفء الأرض", co2: "ثاني أكسيد الكربون في الهواء", sea: "ارتفاع المحيطات" },
+  pick: { eyebrow: "الخطوة 1 · اختر رحلتك", title: "كوكب واحد. ثلاث طرق لاستكشافه.", choose: "ابدأ هنا", active: "الوضع الحالي" },
+  sph: {
+   eyebrow: "الخطوة 2 · اختر من أين تبدأ",
+   title: "استكشف كل شيء، أو ابدأ بأحد أغلفة الأرض الخمسة.",
+   allFive: "الأغلفة الخمسة", fullTitle: "استكشاف شامل",
+   full: {
+    young: "طِر فوق الكوكب كله واضغط على أي شيء يثير اهتمامك: الهواء أو الماء أو اليابسة أو المحيطات أو الجليد.",
+    earth: "أجب عن بضعة أسئلة حول ماذا تريد أن تدرس وأين، واحصل على متغيرات مقترحة قد تُظهر اتجاهًا.",
+    lab: "ابحث في فهرس المتغيرات الكامل عبر البعثات والنماذج، وصفِّ حسب الغلاف والدقة الزمنية والفترة، وارسم أي منطقة." },
+   orOne: "أو ابدأ من غلاف واحد",
+   variables: "متغيرات", where: "أماكن جيدة للبحث", vars: "متغيرات يمكنك التحقيق فيها",
+   kicker: "غلاف من أغلفة الأرض", fullKicker: "كل الأغلفة", go: "حقّق في هذا الغلاف", goFull: "ابدأ الاستكشاف الشامل" },
+  lab: {
+   eyebrow: "الخطوة 3 · كن محققًا في البيانات", title: "من سؤال إلى دليل في أربع خطوات",
+   steps: [
+    { title: "اسأل", body: "أجب عن بضعة أسئلة قصيرة حول ما تريد التحقيق فيه وأين." },
+    { title: "اختر", body: "اختر متغيرًا ومنطقة: مدينة أو صحراء أو غابة مطيرة أو مصبًّا مدّيًا أو الهواء فوق مدينة كبيرة." },
+    { title: "اعرض", body: "أنشئ سلسلة زمنية يومية أو شهرية طويلة بما يكفي للتحليل الإحصائي." },
+    { title: "اختبر", body: "احسب معدل التغيّر وتحقّق من دلالته باختبار مان-كندال أو اختبار t أو فترات الثقة." } ],
+   example: "حالة توضيحية", exTitle: "شذوذ حرارة سطح الأرض العالمي، 1960–2024",
+   toggle: "خط الاتجاه", verdict: "اتجاه صاعد دالّ إحصائيًا",
+   explain: {
+    young: "الأرض تزداد دفئًا، والنمط ثابت جدًا بحيث لا يمكن أن يكون صدفة. حُلّت القضية أيها المحقق!",
+    earth: "ترتفع الحرارة بنحو {slope} درجة مئوية كل عشر سنوات. ويخبرنا اختبار مان-كندال أن اتجاهًا بهذا الثبات يصعب جدًا أن يحدث بالصدفة.",
+    lab: "ميل المربعات الصغرى على المتوسطات السنوية مع فترة ثقة 95% (±1.96 خطأ معياري). إحصاء مان-كندال S مع Z بالتقريب الطبيعي، دون تصحيح للقيم المتساوية أو الارتباط الذاتي." },
+   rows: { slope: "الميل / عقد", ci: "فترة الثقة 95%", z: "Z مان-كندال", p: "قيمة p", n: "السنوات (n)", s: "إحصاء S" },
+   source: "المصدر: تحليل ناسا GISS لحرارة السطح (GISTEMP v4)",
+   c1t: "العملية نفسها، واتجاهات متعاكسة", c1b: "قد يرتفع متغيّر في منطقة وينخفض في أخرى، حتى عندما تقف وراءهما العملية نفسها. المكان مهم بقدر أهمية المتغيّر.",
+   c2t: "ليس دالًّا بعد؟ ما زال دليلًا.", c2b: "الاتجاه يستحق الملاحظة حتى قبل أن يجتاز الاختبار. أحيانًا يحتاج فقط إلى سجل بيانات أطول." },
+  stories: { eyebrow: "حالات توضيحية", title: "شاهد حلّ قضية خطوة بخطوة", watch: "شاهد العرض" },
+  src: { eyebrow: "مصادر البيانات", title: "مبنية على أجهزة ناسا ونماذجها", sat: "جهاز على قمر صناعي", model: "نموذج" },
+  cta: { title: "مستعد لبدء تحقيقك؟", sub: "اختر رحلتك، وحدّد غلافًا، ودع البيانات تُريك ما الذي يتغير." },
+  footer: { tag: "نافذة حيّة على كوكب يتغيّر.", disc: "مشروع تعليمي مستقل لتحدي ناسا Space Apps. يستخدم بيانات ناسا لكنه غير معتمد منها.", made: "صُنع لكل فضولي في كل مكان · © 2026 EarthScope · [اسم الفريق]" }
+ }
+};
+
+var MODES = [
+ { id: "young", color: "#F2C66D", art: "linear-gradient(150deg,#FFF3D6 0%,#F2C66D 100%)" },
+ { id: "earth", color: "#70B8A3", art: "linear-gradient(150deg,#e6f5ee 0%,#70B8A3 100%)" },
+ { id: "lab", color: "#56A9D2", art: "linear-gradient(150deg,#e3f2fa 0%,#56A9D2 100%)" }
+];
+
+function V(en, ar, kidEn, kidAr, inst) { return { en: en, ar: ar, kidEn: kidEn, kidAr: kidAr, inst: inst }; }
+
+var SPHERES = [
+ { id: "atmosphere", color: "#56A9D2", lat: 33, lon: 35, zoom: 4, tint: "linear-gradient(180deg, rgba(200,230,255,.45), rgba(200,230,255,0) 70%)",
+   name: { en: "Atmosphere", ar: "الغلاف الجوي" },
+   regions: { en: ["Air above a big city", "Eastern Mediterranean"], ar: ["الهواء فوق مدينة كبيرة", "شرق البحر المتوسط"] },
+   vars: [ V("Temperature", "درجة الحرارة", "How hot or cold", "كم الجو حار أو بارد", "AIRS · MERRA-2"),
+           V("Humidity", "الرطوبة", "How damp the air is", "كم الهواء رطب", "AIRS · MERRA-2"),
+           V("Wind", "الرياح", "How fast the air moves", "سرعة حركة الهواء", "MERRA-2"),
+           V("Air pressure", "الضغط الجوي", "How hard the air pushes", "قوة ضغط الهواء", "MERRA-2"),
+           V("Clouds", "الغيوم", "Clouds in the sky", "الغيوم في السماء", "MODIS · AIRS"),
+           V("Air pollutants", "ملوثات الهواء", "Dirty air", "الهواء الملوَّث", "OMI · MERRA-2"),
+           V("Atmospheric gases", "الغازات الجوية", "Gases like ozone", "غازات مثل الأوزون", "OMI · AIRS") ],
+   desc: {
+    young: { en: "The blanket of air around Earth. Is it getting warmer? Is the air getting cleaner or dirtier?", ar: "غطاء الهواء الذي يلفّ الأرض. هل يصبح أدفأ؟ هل يصبح الهواء أنظف أم أكثر تلوثًا؟" },
+    earth: { en: "The layer of gases surrounding Earth. Follow temperature, humidity, wind, clouds and pollution over the years and see which way they move.", ar: "طبقة الغازات المحيطة بالأرض. تتبّع الحرارة والرطوبة والرياح والغيوم والتلوث عبر السنين، واكتشف اتجاه تغيّرها." },
+    lab: { en: "Surface and profile air temperature, specific humidity, winds, sea-level pressure, cloud fraction, aerosol optical depth, NO₂ and total-column ozone.", ar: "حرارة الهواء عند السطح وعلى المستويات المختلفة، الرطوبة النوعية، الرياح، الضغط عند سطح البحر، نسبة الغطاء الغيمي، العمق البصري للهباء الجوي، NO₂ والأوزون الكلي." } } },
+ { id: "water", color: "#2FA59A", lat: 14, lon: 2, zoom: 4, tint: "linear-gradient(180deg, rgba(47,165,154,.18), rgba(47,165,154,0) 70%)",
+   name: { en: "Water cycle", ar: "المياه والدورة المائية" },
+   regions: { en: ["The Sahel", "Nile basin"], ar: ["منطقة الساحل", "حوض النيل"] },
+   vars: [ V("Rainfall", "الأمطار", "Rain", "المطر", "GPM IMERG"),
+           V("Evaporation", "التبخر", "Water rising into the air", "الماء يصعد إلى الهواء", "GLDAS · MERRA-2"),
+           V("Soil moisture", "رطوبة التربة", "How wet the ground is", "كم التربة مبللة", "GLDAS"),
+           V("Surface water", "المياه السطحية", "Lakes and rivers", "البحيرات والأنهار", "GLDAS · MODIS"),
+           V("Water storage", "تخزين المياه", "Water saved in the land", "الماء المخزَّن في الأرض", "GLDAS"),
+           V("Drought & floods", "الجفاف والفيضانات", "Too dry or too wet", "جاف جدًا أو مبلل جدًا", "GPM · GLDAS") ],
+   desc: {
+    young: { en: "Where water goes: rain falls, puddles dry up and rivers flow. Is your place getting wetter or drier?", ar: "رحلة الماء: يهطل المطر، تجفّ البرك، وتجري الأنهار. هل تصبح منطقتك أكثر رطوبة أم أكثر جفافًا؟" },
+    earth: { en: "Water moving between sky, land and sea. Track rainfall, evaporation and soil moisture to spot droughts and floods building up.", ar: "حركة الماء بين السماء واليابسة والبحر. تتبّع الأمطار والتبخر ورطوبة التربة لترصد الجفاف والفيضانات قبل تفاقمها." },
+    lab: { en: "Precipitation rate, evapotranspiration, layered soil moisture, runoff, terrestrial water storage and drought indices.", ar: "معدل الهطول، التبخر-النتح، رطوبة التربة حسب الطبقات، الجريان السطحي، مخزون المياه الأرضي ومؤشرات الجفاف." } } },
+ { id: "land", color: "#6FA845", lat: -4, lon: -62, zoom: 4, tint: "linear-gradient(180deg, rgba(111,168,69,.12), rgba(111,168,69,0) 70%)",
+   name: { en: "Land surface", ar: "اليابسة والغطاء الأرضي" },
+   regions: { en: ["Amazon rain forest", "Edge of the Sahara"], ar: ["غابات الأمازون المطيرة", "أطراف الصحراء الكبرى"] },
+   vars: [ V("Land surface temperature", "حرارة سطح الأرض", "How hot the ground is", "كم سطح الأرض حار", "MODIS"),
+           V("Vegetation", "الغطاء النباتي", "Green plants", "النباتات الخضراء", "MODIS NDVI · EVI"),
+           V("Land use", "استخدامات الأراضي", "Farms, cities and forests", "مزارع ومدن وغابات", "MODIS land cover"),
+           V("Agricultural drought", "الجفاف الزراعي", "Thirsty farms", "مزارع عطشى", "GLDAS · MODIS"),
+           V("Land degradation", "تدهور الأراضي", "Tired, worn-out land", "أرض متعبة ومنهكة", "MODIS") ],
+   desc: {
+    young: { en: "The ground we live on: forests, fields, deserts and cities. Are plants getting greener or browner?", ar: "الأرض التي نعيش عليها: غابات وحقول وصحارى ومدن. هل تصبح النباتات أكثر خضرة أم تذبل؟" },
+    earth: { en: "Earth's land and what covers it. See how ground temperature, plant health and land use change from season to season and year to year.", ar: "يابسة الأرض وما يغطيها. شاهد كيف تتغيّر حرارة سطح الأرض وصحة النباتات واستخدامات الأراضي من موسم لآخر ومن سنة لأخرى." },
+    lab: { en: "Day and night land surface temperature, NDVI and EVI, land-cover class change, agricultural drought indicators and degradation signals.", ar: "حرارة سطح الأرض نهارًا وليلًا، مؤشرا NDVI وEVI، تغيّر أصناف الغطاء الأرضي، مؤشرات الجفاف الزراعي وعلامات تدهور الأراضي." } } },
+ { id: "oceans", color: "#2f7fa8", lat: -18, lon: 147, zoom: 4, tint: "linear-gradient(180deg, rgba(47,127,168,.12), rgba(47,127,168,0) 70%)",
+   name: { en: "Oceans", ar: "المحيطات" },
+   regions: { en: ["Great Barrier Reef", "A tidal estuary"], ar: ["الحاجز المرجاني العظيم", "مصبّ نهر مدّي"] },
+   vars: [ V("Sea surface temperature", "حرارة سطح البحر", "How warm the sea is", "كم البحر دافئ", "MODIS · MERRA-2"),
+           V("Salinity", "الملوحة", "How salty the sea is", "كم البحر مالح", "SMAP"),
+           V("Sea level", "مستوى سطح البحر", "How high the sea is", "ارتفاع البحر", "Satellite altimetry"),
+           V("Ocean color", "لون المحيط", "Tiny sea plants", "النباتات البحرية الدقيقة", "MODIS chlorophyll-a"),
+           V("Currents", "التيارات", "Rivers inside the sea", "أنهار داخل البحر", "Satellite altimetry") ],
+   desc: {
+    young: { en: "The big blue seas that cover most of our planet. Is the water getting warmer? Is the sea rising?", ar: "البحار الزرقاء الكبيرة التي تغطي معظم كوكبنا. هل يصبح الماء أدفأ؟ هل يرتفع البحر؟" },
+    earth: { en: "Oceans store heat and carry it around the planet. Watch sea temperature, sea level and ocean color, a sign of tiny plant life, change over time.", ar: "تخزّن المحيطات الحرارة وتنقلها حول الكوكب. راقب تغيّر حرارة البحر ومستواه ولونه، وهو مؤشر على الكائنات النباتية الدقيقة، عبر الزمن." },
+    lab: { en: "Sea surface temperature, sea surface salinity, sea-level anomaly, chlorophyll-a concentration and surface current velocity.", ar: "حرارة سطح البحر، ملوحة سطح البحر، شذوذ مستوى سطح البحر، تركيز الكلوروفيل-أ وسرعة التيارات السطحية." } } },
+ { id: "ice", color: "#8FB3D6", lat: 75, lon: -40, zoom: 3, tint: "linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0) 70%)",
+   name: { en: "Snow & ice", ar: "الثلوج والجليد" },
+   regions: { en: ["Arctic Ocean", "Himalaya"], ar: ["المحيط المتجمد الشمالي", "الهيمالايا"] },
+   vars: [ V("Snow cover", "الغطاء الثلجي", "Snow on the ground", "الثلج على الأرض", "MODIS"),
+           V("Sea ice", "الجليد البحري", "Ice floating on the sea", "جليد يطفو على البحر", "AMSR · MODIS"),
+           V("Glaciers", "الأنهار الجليدية", "Rivers of ice", "أنهار من الجليد", "ICESat-2 · GRACE-FO"),
+           V("Ice thickness", "سماكة الجليد", "How thick the ice is", "سماكة الجليد", "ICESat-2") ],
+   desc: {
+    young: { en: "The frozen parts of Earth: snow on mountains and ice at the poles. Is there more ice or less?", ar: "الأجزاء المتجمّدة من الأرض: الثلج على الجبال والجليد عند القطبين. هل يزداد الجليد أم يقل؟" },
+    earth: { en: "Snow and ice reflect sunlight and help keep the planet cool. Measure how far they spread and how thick they are, season after season.", ar: "يعكس الثلج والجليد أشعة الشمس ويساعدان على تبريد الكوكب. قِس مدى انتشارهما وسماكتهما موسمًا بعد موسم." },
+    lab: { en: "Fractional snow cover, snow water equivalent, sea-ice extent and concentration, glacier area and ice thickness.", ar: "نسبة الغطاء الثلجي، مكافئ الماء في الثلج، امتداد الجليد البحري وتركيزه، مساحة الأنهار الجليدية وسماكة الجليد." } } }
+];
+
+var PLACES = [
+ { id: "arctic", lat: 78, lon: -40, zoom: 3, sphere: "ice", inst: "AMSR · MODIS",
+   en: { name: "Arctic Ocean", tag: "Sea ice", q: "Is Arctic sea ice getting smaller?", blurb: "September sea ice has shrunk by about 12% per decade since satellites began watching in 1979." },
+   ar: { name: "المحيط المتجمد الشمالي", tag: "الجليد البحري", q: "هل يتقلّص الجليد البحري في القطب الشمالي؟", blurb: "تقلص جليد سبتمبر بنحو 12% لكل عقد منذ بدء الرصد بالأقمار الصناعية عام 1979." } },
+ { id: "amazon", lat: -4, lon: -62, zoom: 6, sphere: "land", inst: "MODIS NDVI",
+   en: { name: "Amazon Basin", tag: "Forests", q: "Is the rain forest getting less green?", blurb: "The world's largest rainforest breathes for the planet. MODIS tracks every season of greening and loss." },
+   ar: { name: "حوض الأمازون", tag: "الغابات", q: "هل تفقد الغابة المطيرة اخضرارها؟", blurb: "أكبر غابة مطيرة في العالم تتنفس من أجل الكوكب. يتتبع MODIS كل موسم من الاخضرار والفقد." } },
+ { id: "sahel", lat: 14, lon: 2, zoom: 6, sphere: "water", inst: "GPM IMERG",
+   en: { name: "The Sahel", tag: "Rainfall", q: "Is rain returning to the Sahel?", blurb: "A belt of grassland where GPM sees rain return in some years and fail in others." },
+   ar: { name: "منطقة الساحل", tag: "الأمطار", q: "هل يعود المطر إلى منطقة الساحل؟", blurb: "حزام من الأراضي العشبية يرى فيه GPM عودة المطر في بعض السنوات وغيابه في أخرى." } },
+ { id: "himalaya", lat: 29, lon: 86, zoom: 6, sphere: "ice", inst: "MODIS snow cover",
+   en: { name: "Himalaya", tag: "Glaciers", q: "Is snow cover on the water towers of Asia changing?", blurb: "The water towers of Asia feed rivers for nearly two billion people." },
+   ar: { name: "الهيمالايا", tag: "الأنهار الجليدية", q: "هل يتغيّر الغطاء الثلجي على أبراج المياه في آسيا؟", blurb: "«أبراج المياه في آسيا» تغذي أنهارًا لنحو ملياري إنسان." } },
+ { id: "gbr", lat: -18, lon: 147, zoom: 6, sphere: "oceans", inst: "MODIS SST",
+   en: { name: "Great Barrier Reef", tag: "Ocean heat", q: "Is the water around the reef warming?", blurb: "Marine heatwaves bleach corals. Sea surface temperature is measured daily from orbit." },
+   ar: { name: "الحاجز المرجاني العظيم", tag: "حرارة المحيط", q: "هل تزداد حرارة المياه حول الشعاب؟", blurb: "موجات الحر البحرية تبيّض الشعاب المرجانية. تُقاس حرارة سطح البحر يوميًا من المدار." } },
+ { id: "nile", lat: 30, lon: 31.2, zoom: 6, sphere: "atmosphere", inst: "OMI NO₂",
+   en: { name: "Nile Delta & Cairo", tag: "Air quality", q: "Is the air above a big city getting cleaner?", blurb: "Fertile farmland meets one of Africa's largest cities, where OMI maps nitrogen dioxide from space every day." },
+   ar: { name: "دلتا النيل والقاهرة", tag: "جودة الهواء", q: "هل يصبح الهواء فوق مدينة كبيرة أنظف؟", blurb: "أراضٍ زراعية خصبة تلتقي بإحدى أكبر مدن أفريقيا، حيث يرسم OMI خرائط ثاني أكسيد النيتروجين يوميًا من الفضاء." } }
+];
+
+var SOURCES = [
+ { code: "MODIS", sat: true, full: "Moderate Resolution Imaging Spectroradiometer", en: "Land, vegetation, ocean color, snow and fire, seen daily from Terra and Aqua.", ar: "اليابسة والنباتات ولون المحيط والثلوج والحرائق، تُرى يوميًا من القمرين Terra وAqua." },
+ { code: "OMI", sat: true, full: "Ozone Monitoring Instrument", en: "Ozone and air pollutants such as nitrogen dioxide, from the Aura satellite.", ar: "الأوزون وملوثات الهواء مثل ثاني أكسيد النيتروجين، من القمر Aura." },
+ { code: "AIRS", sat: true, full: "Atmospheric Infrared Sounder", en: "Air temperature and humidity through the depth of the atmosphere.", ar: "حرارة الهواء ورطوبته عبر طبقات الغلاف الجوي." },
+ { code: "GPM", sat: true, full: "Global Precipitation Measurement", en: "Rain and snowfall around the globe, every half hour.", ar: "الأمطار والثلوج حول العالم كل نصف ساعة." },
+ { code: "MERRA-2", sat: false, full: "Modern-Era Retrospective analysis for Research and Applications, v2", en: "A global reanalysis that blends observations into a consistent record of the atmosphere since 1980.", ar: "إعادة تحليل عالمية تدمج الأرصاد في سجل متّسق للغلاف الجوي منذ 1980." },
+ { code: "GLDAS", sat: false, full: "Global Land Data Assimilation System", en: "Soil moisture, evaporation, runoff and snow on land.", ar: "رطوبة التربة والتبخر والجريان السطحي والثلوج على اليابسة." }
+];
+
+function crop(lat, lon) { return ((lon + 180) / 360 * 100).toFixed(1) + "% " + ((90 - lat) / 180 * 100).toFixed(1) + "%"; }
+
+/* ===== EarthScope site structure (shared by every page) ===== */
+var ES_TIERS = {
+ kids: { mode: "young", prefix: "Kids", color: "#F2C66D", tint: "#FFF3D6", ring: "#F2C66D", hero: "Home",
+   name: { en: "Junior Detective", ar: "المحقق الناشئ" }, short: { en: "Junior", ar: "ناشئ" },
+   forWho: { en: "Kids · ages 8–13", ar: "أطفال · من 8 إلى 13 عامًا" } },
+ explorer: { mode: "earth", prefix: "Explorer", color: "#70B8A3", tint: "#eef7f2", ring: "#70B8A3", hero: "Map",
+   name: { en: "Earth Explorer", ar: "مستكشف الأرض" }, short: { en: "Explorer", ar: "مستكشف" },
+   forWho: { en: "School students", ar: "طلاب المدارس" } },
+ lab: { mode: "lab", prefix: "Lab", color: "#56A9D2", tint: "#e3f2fa", ring: "#56A9D2", hero: "TrendLab",
+   name: { en: "Earth Expert", ar: "خبير الأرض" }, short: { en: "Expert", ar: "خبير" },
+   forWho: { en: "Experts · university · research", ar: "خبراء · جامعات · باحثون" } }
+};
+var ES_ORDER = ["kids", "explorer", "lab"];
+var ES_ACTOR = {
+ kids: { n: 1, actor: { en: "Kids", ar: "الأطفال" } },
+ explorer: { n: 2, actor: { en: "Students", ar: "الطلاب" } },
+ lab: { n: 3, actor: { en: "Researchers", ar: "الباحثون" } }
+};
+function esActor(id, lang) {
+  var T = ES_TIERS[id], A = ES_ACTOR[id];
+  return { isKids: id === "kids", isStudents: id === "explorer", isResearch: id === "lab",
+    actor: T.name[lang], short: T.short[lang], level: (lang === "ar" ? "المستوى " : "Level ") + A.n, full: T.name[lang], forWho: T.forWho[lang],
+    color: T.color, tint: T.tint };
+}
+function esWith(a, b) { var o = {}, k; for (k in a) o[k] = a[k]; for (k in b) o[k] = b[k]; return o; }
+var ES_MODE_TIER = { young: "kids", earth: "explorer", lab: "lab" };
+var ES_PAGES = ["Home", "Map", "TrendLab", "DataLab", "Sources"];
+/* Junior Detective has its own three worlds */
+var ES_PAGES_BY = { kids: ["Home"], explorer: ES_PAGES, lab: ES_PAGES };
+var ES_PAGE_MAP = {};
+function esMapPage(page, toTier) { return ES_PAGES_BY[toTier].indexOf(page) >= 0 ? page : (ES_PAGE_MAP[page] || "Home"); }
+var ES_LABELS = {
+ en: {
+  kids: { Home: "Missions", Map: "Explore Map", TrendLab: "Trend Lab", DataLab: "Data Lab", Sources: "Data Sources" },
+  explorer: { Home: "Home", Map: "Explore Map", TrendLab: "Trend Lab", DataLab: "Data Lab", Sources: "Data Sources" },
+  lab: { Home: "Overview", Map: "Map Explorer", TrendLab: "Trend Lab", DataLab: "Data Lab", Sources: "Data Catalog" } },
+ ar: {
+  kids: { Home: "المهمات", Map: "استكشف الخريطة", TrendLab: "مختبر الاتجاهات", DataLab: "مختبر البيانات", Sources: "مصادر البيانات" },
+  explorer: { Home: "الرئيسية", Map: "استكشف الخريطة", TrendLab: "مختبر الاتجاهات", DataLab: "مختبر البيانات", Sources: "مصادر البيانات" },
+  lab: { Home: "نظرة عامة", Map: "مستكشف الخرائط", TrendLab: "مختبر الاتجاهات", DataLab: "مختبر البيانات", Sources: "فهرس البيانات" } }
+};
+var ES_DESC = {
+ en: {
+  kids: { Map: "Pick a picture of Earth and visit places on a colorful map.", TrendLab: "Pick a place, make your guess, and see if the line goes up or down.", DataLab: "Look closely at one clue with simple charts.", Sources: "Meet the satellites that watch our planet every day." },
+  explorer: { Map: "Explore NASA layers on an interactive map, play through the years and compare places.", TrendLab: "Build a time series for a place and test whether its trend is significant.", DataLab: "Investigate one variable at a time with guided charts and definitions.", Sources: "Learn what each satellite and model measures, and how." },
+  lab: { Map: "Pin any coordinate or region, set windows and anomalies, then send it to the Trend Lab.", TrendLab: "Full research settings: tests, α, autocorrelation, aggregation, baselines and export.", DataLab: "Series inspection, multi-variable comparison, confidence intervals and data export.", Sources: "Product catalog with resolution, record length, archive and access methods." } },
+ ar: {
+  kids: { Map: "اختر صورة للأرض وزُر الأماكن على خريطة ملوّنة.", TrendLab: "اختر مكانًا، وخمّن، وشاهد هل يصعد الخط أم ينزل.", DataLab: "انظر عن قرب إلى دليل واحد برسوم بسيطة.", Sources: "تعرّف على الأقمار الصناعية التي تراقب كوكبنا كل يوم." },
+  explorer: { Map: "استكشف طبقات ناسا على خريطة تفاعلية، وشغّل السنوات وقارن بين الأماكن.", TrendLab: "ابنِ سلسلة زمنية لمكان ما واختبر هل اتجاهها ذو دلالة إحصائية.", DataLab: "تعمّق في متغيّر واحد في كل مرة مع رسوم وتعريفات موجّهة.", Sources: "تعرّف على ما يقيسه كل قمر صناعي ونموذج، وكيف يقيسه." },
+  lab: { Map: "حدّد أي إحداثية أو منطقة، واضبط النوافذ الزمنية والشذوذ، ثم أرسلها إلى مختبر الاتجاهات.", TrendLab: "إعدادات بحثية كاملة: الاختبارات، α، الارتباط الذاتي، التجميع، فترات الأساس والتصدير.", DataLab: "فحص السلاسل، مقارنة متعددة المتغيرات، فترات الثقة وتصدير البيانات.", Sources: "فهرس المنتجات مع الدقة وطول السجل والأرشيف وطرق الوصول." } }
+};
+var ES_UI = {
+ en: { all: "All journeys", level: "Audience level", other: "العربية", go: "Open", sep: "›",
+   kit: { kids: ["Your missions", "Three worlds to explore"], explorer: ["Your toolkit", "Everything you need to investigate a change"], lab: ["Workspace", "Tools for a full trend analysis"] },
+   foot: "An independent educational project for the NASA Space Apps Challenge. It uses NASA data but is not endorsed by NASA." },
+ ar: { all: "كل الرحلات", level: "مستوى المستخدم", other: "English", go: "افتح", sep: "‹",
+   kit: { kids: ["مهامك", "ثلاثة عوالم لتستكشفها"], explorer: ["أدواتك", "كل ما تحتاجه لتتحقق من التغيّر"], lab: ["مساحة العمل", "أدوات لتحليل اتجاه كامل"] },
+   foot: "مشروع تعليمي مستقل لتحدي ناسا Space Apps. يستخدم بيانات ناسا لكنه غير معتمد منها." }
+};
+function esFile(tier, page) { return ES_TIERS[tier].prefix + "-" + page + ".dc.html"; }
+function esMerge(a, b) {
+  if (!b || typeof b !== "object" || Array.isArray(b)) return b === undefined ? a : b;
+  var o = {}, k;
+  for (k in a) o[k] = a[k];
+  for (k in b) o[k] = (a && typeof a[k] === "object" && !Array.isArray(a[k])) ? esMerge(a[k], b[k]) : b[k];
+  return o;
+}
+function tierNav(tier, page, lang) {
+  var T = ES_TIERS[tier], L = ES_LABELS[lang][tier], U = ES_UI[lang], h = "#l=" + lang, ar = lang === "ar";
+  var href = {};
+  var PG = ES_PAGES_BY[tier];
+  PG.forEach(function (p) { href[p] = esFile(tier, p) + h; });
+  href.hero = href[T.hero]; href.portal = "Main.dc.html" + h;
+  var links = PG.map(function (p) {
+    var on = p === page;
+    return { label: L[p], href: href[p], cur: on ? "page" : "false", bg: on ? "#DDF1E7" : "transparent", fg: on ? "#174F44" : "#4a625c", fw: on ? "700" : "500", line: on ? T.color : "transparent" };
+  });
+  var tiers = ES_ORDER.map(function (id) {
+    var on = id === tier, X = ES_TIERS[id];
+    return esWith(esActor(id, lang), { label: X.short[lang], href: esFile(id, esMapPage(page, id)) + h, cur: on ? "page" : "false",
+      bg: on ? "#fff" : "transparent", shadow: on ? "0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)" : "none" });
+  });
+  var cards = PG.slice(1).map(function (p, i) {
+    return { n: String(i + 1), label: L[p], desc: ES_DESC[lang][tier][p], href: href[p], tint: T.tint, color: T.color, go: U.go };
+  });
+  var foot = PG.map(function (p) { return { label: L[p], href: href[p] }; });
+  foot.unshift({ label: U.all, href: href.portal });
+  return { me: esActor(tier, lang), whoLabel: ar ? "من أنت؟" : "Who are you?", tier: tier, mode: T.mode, links: links, tiers: tiers, href: href, cards: cards, foot: foot,
+    color: T.color, tint: T.tint, ring: T.ring, tierName: T.name[lang], forWho: T.forWho[lang], pageName: L[page], notHome: page !== "Home",
+    allLabel: U.all, levelLabel: U.level, otherLang: U.other, sep: U.sep, footNote: U.foot,
+    kitEyebrow: U.kit[tier][0], kitTitle: U.kit[tier][1],
+    otherFont: ar ? "Inter, sans-serif" : "Cairo, sans-serif" };
+}
+function esLangFromHash(def) {
+  try { var m = /[#&]l=(en|ar)/.exec((typeof window !== "undefined" && window.location && window.location.hash) || ""); if (m) return m[1]; } catch (e) {}
+  return def;
+}
+var ES_LANGS = [
+ { id: "en", endo: "English", en: "English", ar: "الإنجليزية", ok: true }, { id: "ar", endo: "العربية", en: "Arabic", ar: "العربية", ok: true },
+ { id: "fr", endo: "Français", en: "French", ar: "الفرنسية" }, { id: "es", endo: "Español", en: "Spanish", ar: "الإسبانية" },
+ { id: "tr", endo: "Türkçe", en: "Turkish", ar: "التركية" }, { id: "zh", endo: "中文", en: "Chinese", ar: "الصينية" }
+];
+function esLangMenu(self, lang) {
+  var open = !!self.state.langMenu, ar = lang === "ar";
+  return { open: open, label: ar ? "اللغة" : "Language", bg: open ? "#DDF1E7" : "#fff",
+    toggle: function () { self.setState({ langMenu: !self.state.langMenu }); },
+    items: ES_LANGS.map(function (g) {
+      var on = g.id === lang;
+      return { endo: g.endo, sub: g[lang], on: on, off: !g.ok, tag: on ? "✓" : (g.ok ? "" : (ar ? "قريبًا" : "Soon")),
+        bg: on ? "#DDF1E7" : "transparent", fg: g.ok ? "#174F44" : "#6f817c", cursor: g.ok ? "pointer" : "default",
+        font: g.id === "ar" ? "Cairo, sans-serif" : "Inter, sans-serif",
+        pick: function () { if (g.ok) self.setState({ lang: g.id, langMenu: false }); } };
+    }) };
+}
+function extendVals(self, v) {
+  v.tn = tierNav(ES_TIER, ES_PAGE, self.state.lang === "ar" ? "ar" : "en");
+  v.lm = esLangMenu(self, self.state.lang === "ar" ? "ar" : "en");
+  if (typeof pageExtra === "function") pageExtra(self, v);
+  return v;
+}
+
+
+var HOME_OVR = {
+ kids: {
+  en: { hero: { cta: "Start my mission", cta2: "See a mystery" },
+   lab: { eyebrow: "Detective training", title: "Solve an Earth mystery in four steps",
+    steps: [ { title: "Wonder", body: "Pick a question, like: is the Arctic ice getting smaller?" },
+     { title: "Choose", body: "Pick a picture of Earth and a place you want to visit." },
+     { title: "Look", body: "Watch the line go up or down over many, many years." },
+     { title: "Decide", body: "Is it a real change or just a wiggle? Make your detective call!" } ] },
+   stories: { eyebrow: "Mysteries", title: "Earth mysteries waiting for you", watch: "Solve it" },
+   cta: { title: "Ready for your first mission?", sub: "Grab your detective badge, pick a place on the map and find out what is changing." },
+   footer: { tag: "A friendly window on our changing planet." } },
+  ar: { hero: { cta: "ابدأ مهمتي", cta2: "شاهد لغزًا" },
+   lab: { eyebrow: "تدريب المحققين", title: "حُلّ لغزًا عن الأرض في أربع خطوات",
+    steps: [ { title: "تساءل", body: "اختر سؤالًا، مثل: هل يصغر جليد القطب الشمالي؟" },
+     { title: "اختر", body: "اختر صورة للأرض ومكانًا تريد زيارته." },
+     { title: "انظر", body: "شاهد الخط يصعد أو ينزل عبر سنوات كثيرة جدًا." },
+     { title: "احكم", body: "هل هو تغيّر حقيقي أم مجرد تمايل؟ أصدر حكمك أيها المحقق!" } ] },
+   stories: { eyebrow: "ألغاز", title: "ألغاز عن الأرض بانتظارك", watch: "حُلّ اللغز" },
+   cta: { title: "هل أنت جاهز لمهمتك الأولى؟", sub: "احمل شارة المحقق، واختر مكانًا على الخريطة، واكتشف ما الذي يتغيّر." },
+   footer: { tag: "نافذة ودودة على كوكبنا المتغيّر." } } },
+ lab: {
+  en: { hero: { cta: "Open Trend Lab", cta2: "Reference cases" },
+   lab: { eyebrow: "Research workflow", title: "From hypothesis to a reproducible result",
+    steps: [ { title: "Hypothesis", body: "State the variable, domain, period and the expected direction of change." },
+     { title: "Dataset", body: "Choose products and versions, set the spatial domain and temporal resolution, and check coverage and gaps." },
+     { title: "Series", body: "Aggregate with area weighting, remove the seasonal cycle and apply a missing-data rule." },
+     { title: "Inference", body: "Run Mann-Kendall or Sen's slope with autocorrelation correction, report confidence intervals and export the recipe with the data." } ] },
+   stories: { eyebrow: "Reference cases", title: "Worked cases with documented methods", watch: "Open case" },
+   cta: { title: "Start an analysis", sub: "Open the Trend Lab with full research settings, or pull series from the Data Lab." } },
+  ar: { hero: { cta: "افتح مختبر الاتجاهات", cta2: "حالات مرجعية" },
+   lab: { eyebrow: "مسار البحث", title: "من الفرضية إلى نتيجة قابلة لإعادة الإنتاج",
+    steps: [ { title: "الفرضية", body: "حدّد المتغيّر والنطاق والفترة واتجاه التغيّر المتوقع." },
+     { title: "البيانات", body: "اختر المنتجات وإصداراتها، وحدّد النطاق المكاني والدقة الزمنية، وتحقّق من التغطية والفجوات." },
+     { title: "السلسلة", body: "اجمع البيانات بأوزان المساحة، وأزل الدورة الموسمية، وطبّق قاعدة للبيانات المفقودة." },
+     { title: "الاستدلال", body: "طبّق مان-كندال أو ميل سين مع تصحيح الارتباط الذاتي، وأبلغ عن فترات الثقة، وصدّر الوصفة مع البيانات." } ] },
+   stories: { eyebrow: "حالات مرجعية", title: "حالات محلولة بمنهجيات موثّقة", watch: "افتح الحالة" },
+   cta: { title: "ابدأ تحليلًا", sub: "افتح مختبر الاتجاهات بإعدادات بحثية كاملة، أو اسحب السلاسل من مختبر البيانات." } } }
+};
+function pageExtra(self, v) {
+  var lang = v.lang, o = HOME_OVR[ES_TIER] && HOME_OVR[ES_TIER][lang];
+  if (o) {
+    v.t = esMerge(v.t, o);
+    var stepBg = ["#DDF1E7", "#e3f2fa", "#FFF3D6", "#fde6de"];
+    v.steps = v.t.lab.steps.map(function (st, i) { return { n: String(i + 1), title: st.title, body: st.body, bg: stepBg[i] }; });
+  }
+  var ids = PLACES.slice(0, 3).map(function (p) { return p.id; });
+  v.places = v.places.map(function (p, i) { p.href = esFile(ES_TIER, esMapPage("Map", ES_TIER)) + "#p=" + ids[i] + "&l=" + lang; return p; });
+  v.footLinks = v.tn.foot;
+}
+
+var ES_TIER = "explorer", ES_PAGE = "Home";
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: "en", mode: "earth", path: "sphere", sphere: "atmosphere", showTrend: true };
+    this.state.lang = esLangFromHash(this.state.lang);
+  }
+  renderVals() { return extendVals(this, this.baseVals()); }
+  baseVals() {
+    var s = this.state, self = this;
+    var lang = s.lang, ar = lang === "ar", t = TXT[lang], mode = s.mode;
+    var shadowOff = "0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)";
+
+    var modes = MODES.map(function (m) {
+      var on = mode === m.id;
+      return {
+        id: m.id, color: m.color, art: m.art, on: on,
+        short: t.modeShort[m.id], name: t.modes[m.id], forWho: t.modeFor[m.id], desc: t.modeDesc[m.id],
+        isYoung: m.id === "young", isEarth: m.id === "earth", isLab: m.id === "lab",
+        segBg: on ? "#fff" : "transparent",
+        segShadow: on ? "0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)" : "none",
+        cardShadow: on ? "0 0 0 3px " + m.color + ", 0 30px 80px -30px rgba(23,79,68,.35)" : shadowOff,
+        badge: on ? t.pick.active : t.pick.choose,
+        badgeBg: on ? m.color : "#F7F8F2",
+        pick: function () { self.setState({ mode: m.id }); }
+      };
+    });
+
+    var spheres = SPHERES.map(function (x) {
+      var on = s.path === "sphere" && s.sphere === x.id;
+      return {
+        id: x.id, color: x.color, name: x.name[lang], on: on,
+        count: x.vars.length + " " + t.sph.variables,
+        zoom: (x.zoom * 100) + "%", pos: crop(x.lat, x.lon), tint: x.tint,
+        shadow: on ? "0 0 0 3px " + x.color + ", 0 24px 50px -24px rgba(23,79,68,.4)" : shadowOff,
+        pick: function () { self.setState({ path: "sphere", sphere: x.id }); }
+      };
+    });
+
+    var detail;
+    if (s.path === "full") {
+      detail = {
+        kicker: t.sph.fullKicker, name: t.sph.fullTitle, color: "#F2C66D",
+        desc: t.sph.full[mode], cta: t.sph.goFull,
+        regions: SPHERES.map(function (x) { return x.regions[lang][0]; }),
+        vars: SPHERES.map(function (x) {
+          return { name: x.name[lang], sub: x.vars.length + " " + t.sph.variables, showSub: true, subDir: ar ? "rtl" : "ltr" };
+        })
+      };
+    } else {
+      var sp = SPHERES.filter(function (x) { return x.id === s.sphere; })[0];
+      detail = {
+        kicker: t.sph.kicker, name: sp.name[lang], color: sp.color,
+        desc: sp.desc[mode][lang], cta: t.sph.go, regions: sp.regions[lang],
+        vars: sp.vars.map(function (v) {
+          if (mode === "young") return { name: ar ? v.kidAr : v.kidEn, sub: "", showSub: false, subDir: "ltr" };
+          if (mode === "lab") return { name: ar ? v.ar : v.en, sub: v.inst, showSub: true, subDir: "ltr" };
+          return { name: ar ? v.ar : v.en, sub: ar ? v.kidAr : v.kidEn, showSub: true, subDir: ar ? "rtl" : "ltr" };
+        })
+      };
+    }
+
+    var stepBg = ["#DDF1E7", "#e3f2fa", "#FFF3D6", "#fde6de"];
+    var steps = t.lab.steps.map(function (st, i) { return { n: String(i + 1), title: st.title, body: st.body, bg: stepBg[i] }; });
+
+    var slope = (ST.b * 10).toFixed(2);
+    var ci = (1.96 * ST.se * 10).toFixed(2);
+    var statRows = [
+      { k: t.lab.rows.slope, v: "+" + slope + " °C" },
+      { k: t.lab.rows.ci, v: "± " + ci + " °C" },
+      { k: t.lab.rows.z, v: ST.Z.toFixed(2) },
+      { k: t.lab.rows.p, v: "< 0.001" }
+    ];
+    if (mode === "lab") {
+      statRows.push({ k: t.lab.rows.s, v: String(ST.S) });
+      statRows.push({ k: t.lab.rows.n, v: String(ST.n) });
+    }
+    if (mode === "young") statRows = statRows.slice(0, 2);
+
+    var places = PLACES.map(function (p) {
+      var sp = SPHERES.filter(function (x) { return x.id === p.sphere; })[0];
+      var c = p[lang];
+      return {
+        name: c.name, tag: c.tag, q: c.q, blurb: c.blurb, inst: p.inst,
+        sphere: sp.name[lang], color: sp.color,
+        zoom: (p.zoom * 100) + "%", pos: crop(p.lat, p.lon),
+        pick: function () { self.setState({ path: "sphere", sphere: p.sphere }); }
+      };
+    });
+
+    var sources = SOURCES.map(function (x) {
+      return { code: x.code, full: x.full, what: x[lang], kind: x.sat ? t.src.sat : t.src.model, kindBg: x.sat ? "#e3f2fa" : "#FFF3D6" };
+    });
+
+    var statLabels = mode === "young" ? t.statsKid : t.stats;
+    var heroStats = [
+      { v: "+1.28", u: "°C", label: statLabels.temp },
+      { v: "424.6", u: "ppm", label: statLabels.co2 },
+      { v: "+101", u: "mm", label: statLabels.sea }
+    ];
+
+    var fullOn = s.path === "full";
+    return {
+      t: t, lang: lang, mode: mode, dir: ar ? "rtl" : "ltr",
+      font: ar ? "Cairo, Inter, sans-serif" : "Inter, system-ui, sans-serif",
+      otherFont: ar ? "Inter, sans-serif" : "Cairo, sans-serif",
+      track: ar ? "0" : ".14em", tight: ar ? "0" : "-.025em",
+      toggleLang: function () { self.setState({ lang: ar ? "en" : "ar" }); },
+      heroA: t.hero.a[mode], heroB: t.hero.b[mode], heroSub: t.hero.sub[mode], heroStats: heroStats,
+      modes: modes, spheres: spheres, detail: detail, steps: steps,
+      fullOn: fullOn, fullDesc: t.sph.full[mode],
+      fullShadow: fullOn ? "0 0 0 3px #F2C66D, 0 24px 50px -24px rgba(23,79,68,.4)" : shadowOff,
+      fullBadge: fullOn ? t.pick.active : t.pick.choose, fullBadgeBg: fullOn ? "#F2C66D" : "#F7F8F2",
+      pickFull: function () { self.setState({ path: "full" }); },
+      stats: { slope: slope }, chart: CHART, statRows: statRows,
+      labExplain: t.lab.explain[mode].replace("{slope}", slope),
+      showTrend: s.showTrend,
+      trendBtnBg: s.showTrend ? "#174F44" : "#DDF1E7", trendBtnFg: s.showTrend ? "#fff" : "#174F44",
+      toggleTrend: function () { self.setState({ showTrend: !s.showTrend }); },
+      places: places.slice(0, 3), sources: sources
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EarthScope · Junior Detective · Missions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Cairo:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#F7F8F2}
+*{box-sizing:border-box}
+a{color:#1B7865}a:hover{color:#125a4c}
+h1,h2,h3{margin:0;color:#174F44;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+button{font:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid #F2C66D;outline-offset:2px;border-radius:10px}
+.tex{background-image:url(/_blob/ca6cfd01d73e50f195328c8400b23de4)}
+.num{font-variant-numeric:tabular-nums}
+.topo{background-image:repeating-radial-gradient(circle at 20% 30%,transparent 0 22px,rgba(27,120,101,.07) 22px 23px),repeating-radial-gradient(circle at 85% 80%,transparent 0 28px,rgba(86,169,210,.07) 28px 29px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;border:0;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,background-color .2s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#1B7865;color:#fff;box-shadow:0 10px 24px -10px rgba(27,120,101,.7)}
+.btn-primary:hover{background:#125a4c;color:#fff;transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:#174F44;box-shadow:inset 0 0 0 1.5px #cfdcd3}
+.btn-ghost:hover{color:#174F44;box-shadow:inset 0 0 0 1.5px #70B8A3}
+.btn-sun{background:#F2C66D;color:#174F44}
+.btn-sun:hover{color:#174F44;transform:translateY(-1px)}
+.arr{display:inline-block;transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+[dir=rtl] .arr{transform:scaleX(-1)}
+[dir=rtl] .btn:hover .arr{transform:scaleX(-1) translateX(3px)}
+.lift{transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.lift:hover{transform:translateY(-4px)}
+.navlink{display:inline-flex;align-items:center;height:40px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:500;color:#4a625c;text-decoration:none;transition:background-color .2s,color .2s}
+.navlink:hover{color:#174F44;background:rgba(221,241,231,.8)}
+.navlinks{display:flex}
+@media (max-width:1100px){.navlinks{display:none}}
+.cloud{position:absolute;background:#fff;border-radius:999px;opacity:.92;pointer-events:none;box-shadow:0 10px 30px -10px rgba(86,169,210,.35)}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:55%;height:160%;left:15%;bottom:20%}
+.cloud::after{width:40%;height:120%;right:12%;bottom:25%}
+@media (prefers-reduced-motion:no-preference){
+ .spin{animation:spin 90s linear infinite}
+ .spin-fast{animation:spin 60s linear infinite}
+ .float{animation:floaty 7s ease-in-out infinite}
+ .float2{animation:floaty 8s -3s ease-in-out infinite}
+ .drift{animation:drift 26s ease-in-out infinite alternate}
+ .ping{animation:ping 2.2s ease-out infinite}
+ .blob{animation:blob 18s ease-in-out infinite alternate}
+ .rise{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+ .rise2{animation:rise .8s .1s cubic-bezier(.2,.8,.2,1) both}
+ .rise3{animation:rise .8s .2s cubic-bezier(.2,.8,.2,1) both}
+}
+@keyframes spin{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(18px)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(112,184,163,.6)}100%{box-shadow:0 0 0 10px rgba(112,184,163,0)}}
+@keyframes blob{0%{border-radius:42% 58% 63% 37%/41% 44% 56% 59%;transform:rotate(0)}100%{border-radius:58% 42% 38% 62%/55% 61% 39% 45%;transform:rotate(12deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.navmob{display:none;gap:4px;overflow-x:auto;padding:0 clamp(16px,4vw,56px) 8px;max-width:1320px;margin:0 auto;scrollbar-width:none}
+@media (max-width:1100px){.navmob{display:flex}}
+.crumbs a{color:#1B7865;text-decoration:none;font-weight:600}
+.crumbs a:hover{text-decoration:underline}
+.tierpill{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;color:#174F44;text-decoration:none}
+.tierpill:hover{color:#174F44}
+.tmark-row{display:flex;justify-content:center;margin-top:-14px}
+.tmark{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px 0 12px;border-radius:999px;font-size:14px;animation:tbIn .3s cubic-bezier(0.23,1,0.32,1) both}
+.tmark b{font-weight:800}
+.tpv{padding-inline-start:9px;margin-inline-start:1px;border-inline-start:1.5px solid currentColor;font-size:12.5px;font-weight:700;opacity:.85}
+@keyframes tbIn{from{opacity:0;transform:scale(.96)}}
+@media (prefers-reduced-motion:reduce){.tmark{animation:fadeOnly .2s ease-out both}}
+.glegend{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;padding:12px 4px 2px;border-top:1px solid #eef1ec}
+.glegend .gk{margin-inline-end:6px}
+.qlrow{display:flex!important;width:100%}
+.qyrs{margin-inline-start:auto;display:inline-flex;align-items:baseline;gap:6px;font-size:15px;font-weight:800;letter-spacing:0;text-transform:none;color:#174F44}
+.qn{font-size:11px;font-weight:700;color:#5d726d}
+.psl3{position:relative;height:44px;margin-top:6px}
+.pseg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px;padding:3px;border-radius:12px;background:#F2F7F3}
+.pseg button{min-height:30px;padding:0 6px;border:0;border-radius:9px;cursor:pointer;font:inherit;font-size:12px;font-weight:700;color:#4a625c;background:transparent;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
+.pseg button[aria-pressed=true]{background:#fff;color:#174F44;box-shadow:0 1px 2px rgba(23,79,68,.12),0 3px 8px -4px rgba(23,79,68,.3)}
+@media (hover:hover) and (pointer:fine){.pseg button:hover{color:#174F44}}
+.labside{z-index:20}
+.labside.pop-open{overflow:visible;z-index:60}
+.labmain{position:relative;z-index:1}
+.labside .qbar,.labside .qf-place{position:relative}
+.labside.pop-open .qf-place{z-index:61}
+.ppop{position:absolute;z-index:40;top:-8px;max-height:calc(100vh - 150px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;inset-inline-start:calc(100% + 18px);width:min(460px,64vw);display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:#fff;box-shadow:0 24px 60px -18px rgba(10,40,50,.45),0 0 0 1px rgba(23,79,68,.08);animation:popIn .18s cubic-bezier(0.23,1,0.32,1) both;transform-origin:left top}
+[dir=rtl] .ppop{transform-origin:right top}
+.ppop::before{display:none;content:"";position:absolute;top:30px;inset-inline-start:-7px;width:14px;height:14px;background:#fff;transform:rotate(45deg);box-shadow:-1px 1px 0 rgba(23,79,68,.08)}
+.ppop > div:has(> .btn-primary){position:sticky;bottom:-16px;z-index:2;margin:0 -16px -16px;padding:12px 16px;background:#fff;box-shadow:0 -10px 18px -14px rgba(23,79,68,.35)}
+.ppop-h{position:sticky;top:-16px;z-index:2;margin:-16px -16px 0;padding:14px 16px 8px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ppop-h b{font-size:16px;color:#174F44}
+@keyframes popIn{from{opacity:0;transform:scale(.97)}}
+@media (prefers-reduced-motion:reduce){.ppop{animation:fadeOnly .18s ease-out both}}
+@keyframes fadeOnly{from{opacity:0}}
+@media (max-width:900px){.ppop{position:relative;top:auto;inset-inline-start:auto;width:auto;margin-top:8px;max-height:none;overflow:visible}.ppop::before{display:none}}
+.pbig{display:flex;align-items:center;gap:8px;margin-top:2px;font-size:22px;font-weight:800;color:#174F44;letter-spacing:-.01em}
+.pbig svg{color:#70B8A3}
+.psl2{position:relative;height:82px;margin-top:6px}
+.phist{position:absolute;left:11px;right:11px;top:0;height:38px;display:flex;align-items:flex-end;gap:1px}
+.phist span{flex:1 1 0;min-width:1px;border-radius:2px 2px 0 0;transition:background-color .2s ease}
+.ppre{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.pchip{min-height:32px;padding:0 11px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12px;font-weight:700;color:#4a625c;background:#F2F7F3;transition:background-color .2s ease,color .2s ease}
+.pchip[aria-pressed=true]{background:#1B7865;color:#fff}
+@media (hover:hover) and (pointer:fine){.pchip:hover{background:#DDF1E7;color:#174F44}.pchip[aria-pressed=true]:hover{background:#125a4c;color:#fff}}
+.psl{position:relative;height:54px;margin-top:4px}
+.psl input[type=range].rng{height:28px}
+.gstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:8px}
+.gstat{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:14px;background:#F7F8F2}
+.gstat b{font-size:16px;color:#174F44}
+.gk{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.gtools{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.gchip{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 12px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;color:#4a625c;background:#fff;box-shadow:inset 0 0 0 1.5px #e2e8df;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
+.gchip[aria-pressed=true]{color:#174F44;background:#eef7f2;box-shadow:inset 0 0 0 1.5px #70B8A3}
+.gchip[aria-pressed=false] .gsw{opacity:.35}
+.gsw{display:inline-block;width:18px}
+.xttl{display:block;text-align:center;margin-top:-4px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.lablayout{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-top:6px}
+.labside{flex:1 1 300px;max-width:370px;position:sticky;top:128px;max-height:calc(100vh - 144px);overflow:auto;display:flex;flex-direction:column;gap:12px;padding:2px 2px 10px;scrollbar-width:thin}
+.labmain{flex:999 1 560px;min-width:0}
+.labmain > section:first-child{margin-top:0!important}
+.sidettl{display:inline-flex;align-items:center;gap:8px;padding:0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1B7865}
+.labside .qbar{flex-direction:column;flex-wrap:nowrap;padding:8px;gap:0}
+.labside .qf{flex:none!important;padding:12px 14px}
+.labside .qf+.qf::before{inset-inline-start:14px;inset-inline-end:14px;top:0;bottom:auto;width:auto;height:1px}
+.labside .qgo{margin:8px 0 0;min-height:52px;width:100%}
+.labside > p{margin:0 8px!important}
+.labside section[aria-labelledby=rs-title]{padding:18px!important;margin:0!important}
+@media (max-width:900px){.labside{position:static;max-width:none;max-height:none;overflow:visible}}
+.qbar{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;padding:8px;border-radius:24px;background:#fff;box-shadow:0 1px 2px rgba(23,79,68,.05),0 18px 40px -18px rgba(23,79,68,.25)}
+.qf{position:relative;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;padding:10px 18px;border-radius:18px;transition:background-color .2s ease}
+.qf:hover,.qf:focus-within{background:#F7F8F2}
+.qf+.qf::before{content:"";position:absolute;inset-inline-start:0;top:18px;bottom:18px;width:1px;background:#e2e8df}
+.qf-place{flex:1.4 1 240px}.qf-par{flex:1.2 1 220px}.qf-per{flex:1 1 200px}
+.ql{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.ql svg{color:#1B7865}
+.qv{display:flex;align-items:center;justify-content:space-between;gap:10px;height:40px;padding:0;border:0;background:transparent;cursor:pointer;font:inherit;font-size:16px;font-weight:700;color:#174F44;text-align:start;min-width:0}
+.qs{font-size:12px;color:#5d726d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qgo{flex:0 0 auto;align-self:stretch;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;margin-inline-start:8px;padding:0 26px;border-radius:18px;background:#1B7865;color:#fff;font-size:15.5px;font-weight:700;text-decoration:none;box-shadow:0 10px 24px -12px rgba(27,120,101,.8);transition:background-color .2s ease,transform .16s cubic-bezier(0.23,1,0.32,1)}
+.qgo:hover{background:#125a4c;color:#fff}
+.qgo:active{transform:scale(.97)}
+@media (max-width:860px){.qgo{flex:1 1 100%;margin:8px 0 0}.qf+.qf::before{display:none}}
+input[type=range].rng{-webkit-appearance:none;appearance:none;position:absolute;left:0;right:0;top:14px;width:100%;height:28px;margin:0;background:transparent;pointer-events:none;z-index:3}
+input[type=range].rng::-webkit-slider-runnable-track{height:28px;background:transparent}
+input[type=range].rng::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:22px;height:22px;margin-top:3px;border-radius:50%;background:#174F44;border:0;box-shadow:0 0 0 3px #fff,0 3px 10px rgba(23,79,68,.45);cursor:ew-resize}
+input[type=range].rng::-moz-range-track{height:28px;background:transparent}
+input[type=range].rng::-moz-range-thumb{pointer-events:auto;width:16px;height:16px;border-radius:50%;background:#174F44;border:3px solid #fff;box-shadow:0 3px 10px rgba(23,79,68,.45);cursor:ew-resize}
+input[type=range].rng:focus-visible{outline:none}
+input[type=range].rng:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px #fff,0 0 0 6px #F2C66D}
+.ptrack input[type=range].yr2::-webkit-slider-thumb{width:22px;height:22px;margin-top:3px;border-radius:50%;background:radial-gradient(circle,#fff 0 3px,#1B7865 3.5px 6px,transparent 6.5px);box-shadow:none}
+.ptrack input[type=range].yr2::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:radial-gradient(circle,#fff 0 3px,#1B7865 3.5px 6px,transparent 6.5px)}
+.locbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+.locsearch{position:relative;flex:1 1 300px;min-width:0;max-width:520px}
+.locfield{display:flex;align-items:center;gap:8px;height:46px;padding:0 6px 0 14px;border-radius:14px;background:#F7F8F2;box-shadow:inset 0 0 0 1.5px #dbe5dd;transition:box-shadow .2s ease}
+.locfield:focus-within{box-shadow:inset 0 0 0 2px #1B7865}
+.locsug{position:absolute;top:52px;left:0;right:0;z-index:20;padding:6px;border-radius:14px;background:#fff;box-shadow:0 18px 40px -14px rgba(10,40,50,.45),0 0 0 1px rgba(23,79,68,.08);display:flex;flex-direction:column}
+.loccoord{flex:none;display:inline-flex;align-items:center;gap:7px;height:46px;padding:0 14px;border:0;border-radius:14px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:#174F44}
+.locpin{margin-inline-start:auto;display:flex;align-items:center;gap:10px;min-width:0;max-width:100%;padding:6px 8px 6px 8px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1.5px #dbe5dd}
+.loccoords{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin:-2px 0 12px;padding:12px;border-radius:16px;background:#F7F8F2}
+.loclbl{display:flex;flex-direction:column;gap:4px;font-size:11.5px;font-weight:700;color:#5d726d}
+@media (max-width:640px){.locpin{margin-inline-start:0;flex:1 1 100%}}
+.mstage{position:absolute;inset:0;transform-origin:0 0;transition:transform .32s cubic-bezier(0.23,1,0.32,1)}
+@media (prefers-reduced-motion:reduce){.mstage{transition:none}}
+.sugopt{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:0 10px;border:0;border-radius:10px;background:transparent;cursor:pointer;font:inherit;color:#174F44;text-align:start}
+.sugopt:hover,.sugopt:focus-visible{background:#F2F7F3}
+button[disabled]{opacity:.4;cursor:default!important}
+.prow{display:flex;align-items:center;gap:14px;min-height:56px;min-width:0}
+.plabel{flex:none;width:72px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5d726d}
+.pchips{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;min-width:0;padding:4px 2px;scrollbar-width:none}
+.pchips::-webkit-scrollbar{display:none}
+.ptitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px 24px;min-height:76px;margin-bottom:16px}
+.lseg{gap:2px!important;padding:4px!important;border-radius:999px;background:#E9F1EC;max-width:min(620px,52vw)}
+.lopt{flex:none;min-height:40px;padding:0 16px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;color:#174F44;background:transparent;transition:background-color .2s ease,box-shadow .2s ease}
+.lopt[aria-pressed=true]{background:#fff;box-shadow:0 1px 2px rgba(23,79,68,.08),0 4px 12px -6px rgba(23,79,68,.3)}
+@media (hover:hover) and (pointer:fine){.lopt:hover{background:rgba(255,255,255,.6)}.lopt[aria-pressed=true]:hover{background:#fff}}
+@media (max-width:760px){.trow{grid-template-columns:minmax(0,1fr)}.lseg{max-width:100%}}
+@media (max-width:640px){.prow .plabel{display:none}.ptitle{white-space:normal}}
+.gnode{position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:#fff;color:#174F44;box-shadow:0 0 0 6px #fff,inset 0 0 0 2px var(--gc)}
+.gstep:first-child .gnode{background:var(--gc)}
+.gtrack{position:absolute;top:27px;left:16.66%;right:16.66%;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--gc),var(--gt));transform-origin:left center}
+[dir=rtl] .gtrack{background:linear-gradient(270deg,var(--gc),var(--gt));transform-origin:right center}
+@media (max-width:760px){.gsteps{grid-template-columns:minmax(0,1fr)!important}.gtrack{display:none}.gstep{flex-direction:row!important;text-align:start!important}}
+@media (prefers-reduced-motion:no-preference){
+ .gstep{animation:gIn .36s cubic-bezier(0.23,1,0.32,1) both}
+ .gtrack{animation:gLine .6s .12s cubic-bezier(0.23,1,0.32,1) both}
+}
+@media (prefers-reduced-motion:reduce){.gstep{animation:gFade .36s ease-out both}}
+@keyframes gIn{from{opacity:0;transform:translateY(8px)}}
+@keyframes gLine{from{transform:scaleX(0)}}
+@keyframes gFade{from{opacity:0}}
+
+.tab{display:flex;align-items:center;flex:none;min-height:48px;padding:0 14px;font-size:14.5px;text-decoration:none;white-space:nowrap;transition:color .2s,background-color .2s}
+.tab:hover{color:#174F44;background:rgba(221,241,231,.6)}
+.tabs{scrollbar-width:none}
+[dir=rtl] .tab .arr{transform:none!important}
+.audpill{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 16px;padding-inline-start:6px;border-radius:999px;color:#174F44;text-decoration:none;background:#fff;box-shadow:0 1px 2px rgba(23,79,68,.06);transition:transform .2s,box-shadow .2s}
+.audpill:hover{color:#174F44;transform:translateY(-1px);box-shadow:0 1px 2px rgba(23,79,68,.06),0 8px 18px -8px rgba(23,79,68,.3)}
+@media (max-width:1180px){.audlbl{display:none}}
+@media (max-width:900px){.audtxt{display:none!important}.audpill,.tierpill{padding:0 6px!important}}
+
+/* ===== Junior Detective missions ===== */
+button:disabled{cursor:not-allowed}
+.kimg{background-size:cover;background-position:center;background-color:#DDF1E7}
+.im-arctic{background-image:url(/_blob/45ba1ac6d042a693e9cfbecea76688a3)}
+.im-amazon{background-image:url(/_blob/9d8d0d5b08829ecea450dc50eb4152c9)}
+.im-sahel{background-image:url(/_blob/6db30e6cde564c310b0ffb670b4d6a2c)}
+.im-himalaya{background-image:url(/_blob/dc6142cd47f1038e273abaf126cad9d8)}
+.im-gbr{background-image:url(/_blob/71549adabfb5530b75dbe0ca912c132f)}
+.im-nile{background-image:url(/_blob/479591deadb194f68ebf3e217ee30631)}
+.im-heat{background-image:url(/_blob/4b13e61b12e9dbffe6ccbdee51d29611)}
+.im-rain{background-image:url(/_blob/14557c95cc13fe83c927e6deb28cb895)}
+.im-ice{background-image:url(/_blob/e8f2d971cf00a5e3fff2d11c8e3e7c05)}
+.im-plants{background-image:url(/_blob/282c1f2c804092a49e2977d2ce1000f4)}
+.im-sea{background-image:url(/_blob/ee057da000ff65b4221bdbe017e072e0)}
+.kg-2,.kg-3,.kg-4,.kg-5,.kg-album{display:grid;gap:22px}
+.kg-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kg-3,.kg-album{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kg-4{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.kg-5{grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.kg-album{gap:12px}
+.kwork{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:24px;align-items:start}
+@media (max-width:1000px){.kg-5{grid-template-columns:repeat(3,minmax(0,1fr))}.kg-4{grid-template-columns:repeat(2,minmax(0,1fr))}.kg-2,.kwork{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:700px){.kg-5,.kg-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.kg-3,.kg-4{grid-template-columns:minmax(0,1fr)}.kg-album{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:no-preference){
+ .kcard{transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+ .kdrawA{animation:kFadeA .9s ease-out both}
+ .kdrawB{animation:kFadeB .9s ease-out both}
+ .kscan{animation:kScan 1.4s ease-out infinite}
+ .kscan2{animation:kScan 1.4s .5s ease-out infinite}
+ .kpin{animation:kPin .5s cubic-bezier(.2,1.4,.4,1) both}
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.kcard:hover{transform:translateY(-5px)}}
+@keyframes kFadeA{from{opacity:0}}
+@keyframes kFadeB{from{opacity:0}}
+@keyframes kScan{from{transform:scale(.35);opacity:1}to{transform:scale(1.12);opacity:0}}
+@keyframes kPin{from{transform:rotate(-45deg) translate(40px,-40px);opacity:0}}
+</style>
+</helmet>
+
+<div dir="{{dir}}" lang="{{lang}}" style="min-height: 100vh; background: #F7F8F2; color: #1f3a34; font-family: {{font}}; -webkit-font-smoothing: antialiased">
+<!-- ============ NAV (tier) ============ -->
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(247,248,242,.94); backdrop-filter: blur(14px) saturate(1.4); border-bottom: 1px solid #e2e8df">
+  <div style="max-width: 1320px; margin: 0 auto; padding: 10px clamp(16px,4vw,56px); display: flex; align-items: center; gap: 16px; flex-wrap: nowrap; min-width: 0">
+    <a href="{{tn.href.Home}}" style="display: flex; align-items: center; gap: 10px; text-decoration: none">
+      <span aria-hidden="true" style="position: relative; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #bfe7d6 0, #70B8A3 30%, #1B7865 62%, #2f7fa8 100%); box-shadow: inset -4px -5px 8px rgba(0,0,0,.18), 0 0 0 3px rgba(112,184,163,.25)">
+        <span style="position: absolute; width: 10px; height: 6px; border-radius: 50%; background: #F2C66D; top: 8px; left: 9px; opacity: .9"></span>
+      </span>
+      <span style="display: flex; flex-direction: column; line-height: 1.15">
+        <span style="font-weight: 800; font-size: 19px; color: #174F44; letter-spacing: -.03em">EarthScope</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 11.5px; font-weight: 700; color: #174F44"><span style="display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 50%; background: {{tn.me.tint}}; box-shadow: inset 0 0 0 2px {{tn.me.color}}; color: #174F44"><sc-if value="{{tn.me.isKids}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path><path d="M8.5 11a2.5 2.5 0 0 1 2.5-2.5"></path></svg></sc-if><sc-if value="{{tn.me.isStudents}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10h4"></path><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"></path><path d="M20 21a2 2 0 0 0 2-2v-3.85c0-1.39-2-2.96-2-4.83V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z"></path><path d="M22 16H2"></path><path d="M4 21a2 2 0 0 1-2-2v-3.85c0-1.39 2-2.96 2-4.83V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z"></path><path d="M9 7V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v3"></path></svg></sc-if><sc-if value="{{tn.me.isResearch}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg></sc-if></span>{{tn.me.level}} · {{tn.me.actor}}</span>
+      </span>
+    </a>
+    <div style="margin-inline-start: auto; display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; min-width: 0">
+      <nav aria-label="{{tn.levelLabel}}" style="display: inline-flex; align-items: center; gap: 2px; padding: 4px; border-radius: 999px; background: #DDF1E7">
+        <sc-for list="{{tn.tiers}}" as="tr" hint-placeholder-count="3"><a class="tierpill" href="{{tr.href}}" aria-current="{{tr.cur}}" title="{{tr.level}} · {{tr.full}}" style="height: 44px; padding-inline-start: 5px; background: {{tr.bg}}; box-shadow: {{tr.shadow}}"><span style="display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: {{tr.tint}}; box-shadow: inset 0 0 0 2px {{tr.color}}; color: #174F44"><sc-if value="{{tr.isKids}}" hint-placeholder-val="{{false}}"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path><path d="M8.5 11a2.5 2.5 0 0 1 2.5-2.5"></path></svg></sc-if><sc-if value="{{tr.isStudents}}" hint-placeholder-val="{{false}}"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10h4"></path><path d="M19 7V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3"></path><path d="M20 21a2 2 0 0 0 2-2v-3.85c0-1.39-2-2.96-2-4.83V8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2z"></path><path d="M22 16H2"></path><path d="M4 21a2 2 0 0 1-2-2v-3.85c0-1.39 2-2.96 2-4.83V8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2z"></path><path d="M9 7V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v3"></path></svg></sc-if><sc-if value="{{tr.isResearch}}" hint-placeholder-val="{{false}}"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg></sc-if></span><span class="audtxt" style="display: flex; flex-direction: column; line-height: 1.1; text-align: start"><span style="font-size: 10.5px; font-weight: 700; color: #5d726d; letter-spacing: .02em">{{tr.level}}</span><span style="font-size: 13.5px; font-weight: 700; white-space: nowrap">{{tr.actor}}</span></span></a></sc-for>
+      </nav>
+      <span style="position: relative; flex: none">
+      <button onClick="{{lm.toggle}}" aria-haspopup="listbox" aria-expanded="{{lm.open}}" aria-label="{{lm.label}}" title="{{lm.label}}" style="display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; cursor: pointer; color: #174F44; background: {{lm.bg}}; box-shadow: inset 0 0 0 1.5px #cfdcd3">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+      </button>
+      <sc-if value="{{lm.open}}" hint-placeholder-val="{{false}}">
+        <div role="listbox" aria-label="{{lm.label}}" style="position: absolute; top: 52px; inset-inline-end: 0; width: 240px; padding: 8px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px #e2e8df, 0 24px 48px -16px rgba(23,79,68,.35); z-index: 60; display: flex; flex-direction: column; gap: 2px">
+          <sc-for list="{{lm.items}}" as="g" hint-placeholder-count="6"><button role="option" aria-selected="{{g.on}}" aria-disabled="{{g.off}}" onClick="{{g.pick}}" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; cursor: {{g.cursor}}; background: {{g.bg}}; color: {{g.fg}}; text-align: start"><span style="display: flex; flex-direction: column; line-height: 1.2"><span style="font-size: 15px; font-weight: 600; font-family: {{g.font}}">{{g.endo}}</span><span style="font-size: 11.5px; color: #5d726d">{{g.sub}}</span></span><span style="font-size: 11px; font-weight: 700; color: #1B7865">{{g.tag}}</span></button></sc-for>
+        </div>
+      </sc-if>
+    </span>
+    </div>
+  </div>
+</header>
+<main style="max-width: 1320px; margin: 0 auto; padding: 32px clamp(16px,4vw,56px) 0">
+
+<!-- ================= HUB ================= -->
+<sc-if value="{{hub.on}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between">
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 640px">
+      <span style="align-self: flex-start; display: inline-flex; align-items: center; height: 36px; padding: 0 16px; border-radius: 999px; background: #F2C66D; color: #174F44; font-size: 15px; font-weight: 700">{{hub.hi}}</span>
+      <h1 style="font-size: clamp(38px, 5vw, 68px); font-weight: 800; line-height: 1.02; letter-spacing: {{tight}}">{{hub.title}}</h1>
+      <p style="font-size: 19px; line-height: 1.55; color: #4a625c">{{hub.sub}}</p>
+    </div>
+    <div style="padding: 16px 20px; border-radius: 26px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+      <span style="font-size: 12px; font-weight: 700; color: #4a625c">{{hub.badgesL}}</span>
+      <div role="img" aria-label="{{hub.badgesL}}" style="display: flex; gap: 8px; margin-top: 10px">
+        <sc-for list="{{hub.badges}}" as="bd" hint-placeholder-count="5"><span style="display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; background: {{bd.bg}}; color: {{bd.fg}}; box-shadow: {{bd.ring}}">★</span></sc-for>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="kg-3">
+    <sc-for list="{{hub.missions}}" as="mi" hint-placeholder-count="3">
+      <button class="kcard" onClick="{{mi.go}}" style="display: flex; flex-direction: column; padding: 0; border: 0; text-align: start; cursor: pointer; border-radius: 34px; background: #fff; overflow: hidden; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+        <span class="kimg {{mi.img}}" style="position: relative; display: block; width: 100%; height: 230px">
+          <span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(23,79,68,.6))"></span>
+          <span class="num" style="position: absolute; top: 18px; inset-inline-start: 18px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 18px; background: {{mi.color}}; color: #174F44; font-weight: 800; font-size: 24px">{{mi.n}}</span>
+          <span style="position: absolute; bottom: 18px; inset-inline-start: 22px; inset-inline-end: 22px; color: #fff; font-size: 30px; font-weight: 800; line-height: 1.08">{{mi.title}}</span>
+        </span>
+        <span style="display: flex; flex-direction: column; gap: 16px; flex: 1; padding: 20px 24px 24px">
+          <span style="font-size: 17px; line-height: 1.45; color: #174F44">{{mi.desc}}</span>
+          <span style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{mi.steps}}" as="st" hint-placeholder-count="4"><span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #F7F8F2; color: #4a625c; font-size: 12.5px; font-weight: 700"><span class="num" style="color: #1B7865">{{st.n}}</span>{{st.label}}</span></sc-for>
+          </span>
+          <span class="btn btn-primary" style="align-self: flex-start; margin-top: auto; min-height: 52px">{{hub.start}} <span class="arr" aria-hidden="true">→</span></span>
+        </span>
+      </button>
+    </sc-for>
+  </div>
+
+  <section style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: {{track}}; text-transform: uppercase; color: #1B7865">{{hub.loop.eyebrow}}</span>
+    <h2 style="font-size: clamp(26px, 3vw, 38px); font-weight: 800; letter-spacing: {{tight}}">{{hub.loop.title}}</h2>
+    <ol class="kg-4" style="list-style: none; margin: 14px 0 0; padding: 0">
+      <sc-for list="{{hub.loop.steps}}" as="ls" hint-placeholder-count="4">
+        <li style="display: flex; flex-direction: column; gap: 8px; padding: 20px 20px 22px; border-radius: 28px; background: {{ls.bg}}">
+          <span class="num" aria-hidden="true" style="display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: #fff; color: #174F44; font-weight: 800; font-size: 20px">{{ls.n}}</span>
+          <b style="font-size: 22px; color: #174F44">{{ls.t}}</b>
+          <p style="font-size: 15.5px; line-height: 1.45; color: #174F44">{{ls.b}}</p>
+        </li>
+      </sc-for>
+    </ol>
+  </section>
+
+  <div class="kg-2">
+    <section style="padding: 24px 26px; border-radius: 32px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px">
+        <h2 style="font-size: 26px; font-weight: 800">{{hub.album.title}}</h2>
+        <span class="num" style="display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 999px; background: #FFF3D6; color: #174F44; font-size: 14px; font-weight: 700">{{hub.album.count}}</span>
+      </div>
+      <p style="font-size: 16px; line-height: 1.5; margin-top: 6px; color: #4a625c">{{hub.album.text}}</p>
+      <ul class="kg-album" style="list-style: none; margin: 16px 0 0; padding: 0">
+        <sc-for list="{{hub.album.stickers}}" as="sk" hint-placeholder-count="6">
+          <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; border-radius: 22px; text-align: center; background: {{sk.bg}}">
+            <sc-if value="{{sk.got}}" hint-placeholder-val="{{false}}">
+              <span aria-hidden="true" style="position: relative; display: inline-block; width: 60px; height: 60px; border-radius: 50%; background: {{sk.tint}}; box-shadow: inset 0 0 0 4px {{sk.color}}">
+                <span style="position: absolute; top: 36%; left: 28%; width: 12%; height: 16%; border-radius: 50%; background: #174F44"></span>
+                <span style="position: absolute; top: 36%; right: 28%; width: 12%; height: 16%; border-radius: 50%; background: #174F44"></span>
+                <span style="position: absolute; left: 35%; top: 58%; width: 30%; height: 14%; border: 3px solid #174F44; border-top: 0; border-radius: 0 0 40px 40px"></span>
+              </span>
+            </sc-if>
+            <sc-if value="{{sk.notGot}}" hint-placeholder-val="{{true}}">
+              <span aria-hidden="true" style="display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: #fff; border: 2px dashed #b9cbc2; color: #5d726d; font-weight: 800; font-size: 22px">?</span>
+            </sc-if>
+            <b style="font-size: 15px; color: #174F44">{{sk.name}}</b>
+            <span style="font-size: 12.5px; color: #4a625c">{{sk.place}}</span>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section style="padding: 24px 26px; border-radius: 32px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+      <h2 style="font-size: 26px; font-weight: 800">{{hub.dict.title}}</h2>
+      <p style="font-size: 16px; line-height: 1.5; margin-top: 6px; color: #4a625c">{{hub.dict.hint}}</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px">
+        <sc-for list="{{hub.dict.words}}" as="dw" hint-placeholder-count="5">
+          <button onClick="{{dw.pick}}" aria-pressed="{{dw.on}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 14px 0 8px; border: 0; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 15px; background: {{dw.bg}}; color: {{dw.fg}}; box-shadow: {{dw.ring}}">
+            <span style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #fff; color: #1B7865">
+              <svg width="24" height="24" viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{dw.icon}}"></path></svg>
+            </span>{{dw.w}}
+          </button>
+        </sc-for>
+      </div>
+      <div aria-live="polite" style="display: flex; flex-direction: column; gap: 6px; margin-top: 14px; padding: 18px 20px; border-radius: 24px; background: #e3f2fa">
+        <b style="font-size: 22px; color: #174F44">{{hub.dict.cur.w}}</b>
+        <p style="font-size: 16px; line-height: 1.5; color: #174F44">{{hub.dict.cur.says}}</p>
+        <p style="font-size: 16px; line-height: 1.5; color: #174F44; background: #fff; border-radius: 16px; padding: 10px 14px"><b>{{hub.dict.like}}</b> {{hub.dict.cur.like}}</p>
+      </div>
+    </section>
+  </div>
+</div>
+</sc-if>
+
+
+<!-- ================= MISSION ================= -->
+<sc-if value="{{ms.on}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+  <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px">
+    <div style="display: flex; align-items: center; gap: 14px">
+      <button class="btn btn-ghost" onClick="{{ms.exit}}" aria-label="{{ms.hubL}}" style="width: 52px; min-height: 52px; padding: 0">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>
+      </button>
+      <div style="display: flex; flex-direction: column">
+        <span style="font-size: 12px; font-weight: 700; color: #4a625c">{{ms.hubL}}</span>
+        <b style="font-size: 26px; color: #174F44">{{ms.title}}</b>
+      </div>
+    </div>
+    <ol aria-label="{{ms.title}}" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; list-style: none; margin: 0; padding: 0">
+      <sc-for list="{{ms.steps}}" as="tr" hint-placeholder-count="4">
+        <li style="display: flex; align-items: center; gap: 8px">
+          <span class="num" style="display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%; font-weight: 800; font-size: 16px; background: {{tr.bg}}; color: {{tr.fg}}; box-shadow: {{tr.ring}}">{{tr.dot}}</span>
+          <span style="font-weight: 700; font-size: 15px; color: {{tr.lbl}}">{{tr.label}}</span>
+        </li>
+      </sc-for>
+    </ol>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-radius: 22px; background: #DDF1E7">
+    <span aria-hidden="true" style="position: relative; flex: none; width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff 0, #FFF3D6 35%, #F2C66D 100%)">
+      <span style="position: absolute; top: 36%; left: 28%; width: 13%; height: 20%; border-radius: 50%; background: #174F44"></span>
+      <span style="position: absolute; top: 36%; right: 28%; width: 13%; height: 20%; border-radius: 50%; background: #174F44"></span>
+      <span style="position: absolute; left: 36%; top: 60%; width: 28%; height: 14%; border-radius: 0 0 40px 40px; background: #174F44"></span>
+    </span>
+    <p style="font-size: 15.5px; line-height: 1.45; color: #174F44"><b>{{ms.novaName}}:</b> {{ms.nova}}</p>
+  </div>
+
+  <sc-if value="{{ms.head.on}}" hint-placeholder-val="{{false}}">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h2 style="font-size: clamp(28px, 3vw, 40px); font-weight: 800; letter-spacing: {{tight}}">{{ms.head.q}}</h2>
+      <p style="font-size: 18px; line-height: 1.5; color: #4a625c">{{ms.head.sub}}</p>
+    </div>
+    <sc-if value="{{ms.showCards}}" hint-placeholder-val="{{true}}">
+    <div class="{{ms.cardsCls}}">
+      <sc-for list="{{ms.cards}}" as="pc" hint-placeholder-count="5">
+        <button class="kcard" onClick="{{pc.pick}}" aria-pressed="{{pc.on}}" aria-disabled="{{pc.off}}" style="position: relative; display: flex; flex-direction: column; padding: 0; border: 0; text-align: start; border-radius: 28px; background: #fff; overflow: hidden; color: #174F44; cursor: {{pc.cursor}}; opacity: {{pc.opacity}}; filter: {{pc.filter}}; box-shadow: {{pc.ring}}">
+          <span class="kimg {{pc.img}}" style="position: relative; display: block; width: 100%; height: 160px; background-size: {{pc.zoom}}; background-position: {{pc.pos}}">
+            <sc-if value="{{pc.hasTag}}" hint-placeholder-val="{{false}}"><span style="position: absolute; top: 12px; inset-inline-start: 12px; display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 999px; background: #174F44; color: #fff; font-size: 13px; font-weight: 700">{{pc.tag}}</span></sc-if>
+            <sc-if value="{{pc.on}}" hint-placeholder-val="{{false}}"><span aria-hidden="true" style="position: absolute; top: 10px; inset-inline-end: 10px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #174F44; color: #fff; font-weight: 800; font-size: 20px; box-shadow: 0 0 0 4px #fff">✓</span></sc-if>
+          </span>
+          <span style="display: block; padding: 14px 16px 16px">
+            <b style="display: block; font-size: 19px; line-height: 1.2; color: #174F44">{{pc.title}}</b>
+            <span style="display: block; margin-top: 6px; font-size: 14.5px; line-height: 1.4; color: #4a625c">{{pc.sub}}</span>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+      <sc-if value="{{ms.back.on}}" hint-placeholder-val="{{false}}"><button class="btn btn-ghost" onClick="{{ms.back.go}}">{{ms.back.label}}</button></sc-if>
+      <sc-if value="{{ms.homeChange.on}}" hint-placeholder-val="{{false}}"><button class="btn btn-ghost" onClick="{{ms.homeChange.go}}">{{ms.homeChange.label}}</button></sc-if>
+      <sc-if value="{{ms.make.on}}" hint-placeholder-val="{{false}}"><button class="btn btn-primary" onClick="{{ms.make.go}}" disabled="{{ms.make.off}}" style="min-height: 56px; padding: 0 30px; font-size: 17px; opacity: {{ms.make.opacity}}">{{ms.make.label}} <span class="arr" aria-hidden="true">→</span></button></sc-if>
+    </div>
+    </sc-if>
+    <sc-if value="{{ms.geo.on}}" hint-placeholder-val="{{false}}">
+      <section aria-live="polite" style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px; padding: 28px; border-radius: 34px; background: #FFF6E0; box-shadow: inset 0 0 0 2px #F2C66D">
+        <span aria-hidden="true" style="position: relative; flex: none; width: 200px; height: 200px">
+          <span class="kimg tex" style="position: absolute; inset: 0; border-radius: 50%; background-size: {{ms.geo.zoom}}; background-position: {{ms.geo.pos}}; box-shadow: 0 0 0 5px #fff, 0 0 0 9px #F2C66D"></span>
+          <sc-if value="{{ms.geo.isScan}}" hint-placeholder-val="{{false}}">
+            <span class="kscan" style="position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 6px rgba(23,79,68,.55)"></span>
+            <span class="kscan2" style="position: absolute; inset: 28%; border-radius: 50%; box-shadow: inset 0 0 0 5px #174F44"></span>
+          </sc-if>
+          <sc-if value="{{ms.geo.isFound}}" hint-placeholder-val="{{false}}">
+            <span class="kpin" style="position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 56px; height: 56px; margin: -44px 0 0 -28px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: #174F44; box-shadow: 0 0 0 4px #fff">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F2C66D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg)"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>
+            </span>
+          </sc-if>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 360px; min-width: 0">
+          <h3 style="font-size: clamp(24px, 2.6vw, 34px); font-weight: 800">{{ms.geo.title}}</h3>
+          <p style="font-size: 17.5px; line-height: 1.5; color: #174F44">{{ms.geo.text}}</p>
+          <p style="display: flex; align-items: center; gap: 8px; font-size: 14.5px; line-height: 1.4; color: #4a625c"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: none"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>{{ms.geo.privacy}}</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px">
+            <sc-if value="{{ms.geo.isAsk}}" hint-placeholder-val="{{false}}">
+              <button class="btn btn-primary" onClick="{{ms.geo.locate}}" style="min-height: 56px; padding: 0 28px; font-size: 17px">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><circle cx="12" cy="12" r="8"></circle><path d="M12 1v3M12 20v3M1 12h3M20 12h3"></path></svg>{{ms.geo.locateL}}</button>
+              <button class="btn btn-ghost" onClick="{{ms.geo.manual}}" style="min-height: 56px">{{ms.geo.manualL}}</button>
+              <button class="btn btn-ghost" onClick="{{ms.geo.cancel}}" style="min-height: 56px">{{ms.geo.cancelL}}</button>
+            </sc-if>
+            <sc-if value="{{ms.geo.isFound}}" hint-placeholder-val="{{false}}">
+              <button class="btn btn-primary" onClick="{{ms.geo.confirm}}" style="min-height: 56px; padding: 0 28px; font-size: 17px">{{ms.geo.yesL}} <span class="arr" aria-hidden="true">→</span></button>
+              <button class="btn btn-ghost" onClick="{{ms.geo.manual}}" style="min-height: 56px">{{ms.geo.noL}}</button>
+            </sc-if>
+            <sc-if value="{{ms.geo.isManual}}" hint-placeholder-val="{{false}}">
+              <button class="btn btn-ghost" onClick="{{ms.geo.cancel}}" style="min-height: 48px">{{ms.geo.cancelL}}</button>
+            </sc-if>
+          </div>
+        </div>
+      </section>
+      <sc-if value="{{ms.geo.isManual}}" hint-placeholder-val="{{false}}">
+        <div class="kg-3">
+          <sc-for list="{{ms.geo.list}}" as="hr" hint-placeholder-count="9">
+            <button class="kcard" onClick="{{hr.pick}}" style="display: flex; flex-direction: column; padding: 0; border: 0; text-align: start; cursor: pointer; border-radius: 28px; background: #fff; overflow: hidden; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12), inset 0 0 0 2px #edf1ea">
+              <span class="kimg tex" style="display: block; width: 100%; height: 140px; background-size: 560%; background-position: {{hr.pos}}"></span>
+              <b style="display: block; padding: 14px 18px 16px; font-size: 19px; line-height: 1.25; color: #174F44">{{hr.name}}</b>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </sc-if>
+  </sc-if>
+
+  <sc-if value="{{ms.work}}" hint-placeholder-val="{{false}}">
+    <sc-if value="{{ms.vs.on}}" hint-placeholder-val="{{false}}">
+      <div class="kg-2">
+        <sc-for list="{{ms.vs.items}}" as="vs" hint-placeholder-count="2">
+          <div style="display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 28px; background: #fff; box-shadow: {{vs.ring}}">
+            <span class="kimg {{vs.img}}" style="flex: none; width: 90px; height: 72px; border-radius: 20px; background-size: {{vs.zoom}}; background-position: {{vs.pos}}"></span>
+            <div style="display: flex; flex-direction: column; flex: 1; min-width: 0">
+              <span style="display: flex; align-items: center; gap: 8px"><span aria-hidden="true" style="flex: none; width: 30px; height: 6px; border-radius: 3px; background: {{vs.color}}"></span><b style="font-size: 20px; color: #174F44">{{vs.tag}} · {{vs.name}}</b></span>
+              <span class="num" style="margin-top: 4px; font-size: 24px; font-weight: 800; color: {{vs.ink}}">{{vs.delta}}</span>
+            </div>
+            <sc-if value="{{vs.win}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 999px; background: #174F44; color: #fff; font-size: 13px; font-weight: 700">★ {{vs.winL}}</span></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <div class="kwork">
+      <div style="display: flex; flex-direction: column; gap: 18px; min-width: 0">
+        <sc-for list="{{ms.charts}}" as="ch" hint-placeholder-count="1">
+          <div style="padding: 22px 22px 16px; border-radius: 34px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 10px">
+              <sc-if value="{{ch.hasBadge}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 999px; background: {{ch.badgeBg}}; color: #174F44; font-size: 13px; font-weight: 700">{{ch.badge}}</span></sc-if>
+              <div style="display: flex; flex-direction: column"><b style="font-size: 22px; color: #174F44">{{ch.title}}</b><span style="font-size: 15px; color: #5d726d">{{ch.sub}}</span></div>
+            </div>
+            <div dir="ltr" style="position: relative">
+            <svg viewBox="0 0 780 340" width="100%" role="img" aria-label="{{ch.aria}}" style="display: block; height: auto; overflow: visible">
+              <sc-for list="{{ch.bands}}" as="bn" hint-placeholder-count="0"><rect x="{{bn.x}}" y="24" width="22" height="272" rx="11" fill="#F2C66D" opacity=".4"></rect></sc-for>
+              <sc-for list="{{ch.yt}}" as="tk" hint-placeholder-count="4">
+                <line x1="62" x2="630" y1="{{tk.y}}" y2="{{tk.y}}" stroke="#e6ece4" stroke-width="1.5"></line>
+              </sc-for>
+              <sc-if value="{{ch.hasZero}}" hint-placeholder-val="{{false}}"><line x1="62" x2="630" y1="{{ch.zeroY}}" y2="{{ch.zeroY}}" stroke="#174F44" stroke-opacity=".5" stroke-width="2"></line></sc-if>
+              <sc-for list="{{ch.series}}" as="sr" hint-placeholder-count="1">
+                <path class="{{sr.anim}}" d="{{sr.d}}" pathLength="1" fill="none" stroke="{{sr.color}}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <sc-for list="{{sr.pts}}" as="pt" hint-placeholder-count="0"><circle cx="{{pt.x}}" cy="{{pt.y}}" r="5" fill="#fff" stroke="{{sr.color}}" stroke-width="3"></circle></sc-for>
+                <sc-if value="{{sr.hasTrend}}" hint-placeholder-val="{{false}}"><line x1="{{sr.tx1}}" y1="{{sr.ty1}}" x2="{{sr.tx2}}" y2="{{sr.ty2}}" stroke="#174F44" stroke-width="3" stroke-dasharray="10 7" stroke-linecap="round"></line></sc-if>
+                <line x1="{{sr.ex}}" x2="644" y1="{{sr.ey}}" y2="{{sr.ly}}" stroke="{{sr.color}}" stroke-width="2"></line>
+              </sc-for>
+            </svg>
+            <sc-for list="{{ch.yt}}" as="yl" hint-placeholder-count="4"><span class="num" aria-hidden="true" style="position: absolute; left: 0; width: 6.6%; top: {{yl.top}}; transform: translateY(-50%); text-align: right; font-size: clamp(10px, 1.5vw, 14px); font-weight: 600; line-height: 1; color: #5d726d">{{yl.label}}</span></sc-for>
+            <sc-for list="{{ch.xt}}" as="xl" hint-placeholder-count="6"><span class="num" aria-hidden="true" style="position: absolute; left: {{xl.left}}; top: 91%; transform: translateX(-50%); font-size: clamp(10px, 1.5vw, 14px); font-weight: 700; line-height: 1; color: #4a625c">{{xl.label}}</span></sc-for>
+            <sc-for list="{{ch.series}}" as="el" hint-placeholder-count="1"><span aria-hidden="true" style="position: absolute; left: 82.6%; width: 17.2%; top: {{el.top}}; transform: translateY(-50%); display: block; padding: 7px 10px; border-radius: 999px; background: #174F44; color: #fff; font-size: clamp(9px, 1.3vw, 13px); font-weight: 700; line-height: 1.2; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{el.label}}</span></sc-for>
+            </div>
+            <sc-if value="{{ch.hasLegend}}" hint-placeholder-val="{{false}}">
+              <div style="display: flex; flex-wrap: wrap; gap: 18px; margin-top: 4px; font-size: 14px; color: #4a625c">
+                <span style="display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 30px; border-top: 3px dashed #174F44"></span>{{ch.trendL}}</span>
+                <sc-if value="{{ch.hasBands}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 8px"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 7px; background: #F2C66D; opacity: .7"></span>{{ch.bandL}}</span></sc-if>
+              </div>
+            </sc-if>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px">
+              <span style="font-size: 13px; color: #4a625c">{{ch.src}}</span>
+              <button class="btn btn-ghost" onClick="{{ch.replay}}" style="min-height: 44px">↻ {{ch.replayL}}</button>
+            </div>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{ms.stripes.on}}" hint-placeholder-val="{{false}}">
+          <figure style="margin: 0; display: flex; flex-direction: column; gap: 8px; padding: 20px 24px; border-radius: 30px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <figcaption style="font-size: 12px; font-weight: 700; color: #4a625c">{{ms.stripes.label}}</figcaption>
+            <div dir="ltr" role="img" aria-label="{{ms.stripes.aria}}" style="display: flex; height: 56px; border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(23,79,68,.12)">
+              <sc-for list="{{ms.stripes.cells}}" as="sc" hint-placeholder-count="25"><span title="{{sc.t}}" style="flex: 1; background: {{sc.bg}}"></span></sc-for>
+            </div>
+            <div dir="ltr" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 700; color: #4a625c">
+              <span class="num">{{ms.stripes.a}}</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 4px; background: {{ms.stripes.lowC}}; box-shadow: inset 0 0 0 1px rgba(23,79,68,.2)"></span>{{ms.stripes.low}}<span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 4px; margin-inline-start: 8px; background: {{ms.stripes.highC}}; box-shadow: inset 0 0 0 1px rgba(23,79,68,.2)"></span>{{ms.stripes.high}}</span>
+              <span class="num">{{ms.stripes.b}}</span>
+            </div>
+          </figure>
+        </sc-if>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+        <sc-if value="{{ms.kase.on}}" hint-placeholder-val="{{false}}">
+          <div style="overflow: hidden; border-radius: 30px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)">
+            <span class="kimg {{ms.kase.img}}" style="display: block; height: 130px"></span>
+            <div style="padding: 16px 20px 20px"><b style="display: block; font-size: 20px; color: #174F44">{{ms.kase.title}}</b><p style="margin-top: 6px; font-size: 15.5px; line-height: 1.5; color: #4a625c">{{ms.kase.sub}}</p></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ms.q.on}}" hint-placeholder-val="{{false}}">
+          <div style="padding: 18px 22px; border-radius: 26px; background: #fff; font-size: 18px; font-weight: 600; line-height: 1.45; color: #174F44; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">{{ms.q.text}}</div>
+        </sc-if>
+
+        <sc-if value="{{ms.choices.on}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{ms.choices.list}}" as="co" hint-placeholder-count="3">
+              <button onClick="{{co.pick}}" aria-pressed="{{co.on}}" style="display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 10px 18px; border: 0; border-radius: 24px; cursor: pointer; text-align: start; font-weight: 800; font-size: 18px; color: #174F44; background: {{co.bg}}; box-shadow: {{co.ring}}">
+                <span aria-hidden="true" style="display: grid; place-items: center; flex: none; width: 46px; height: 46px; border-radius: 16px; font-size: 24px; font-weight: 800; background: {{co.tint}}; color: {{co.ink}}">{{co.icon}}</span>{{co.label}}
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ms.sure.on}}" hint-placeholder-val="{{false}}">
+          <fieldset style="margin: 0; padding: 16px 18px; border: 0; border-radius: 24px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">
+            <legend style="float: left; width: 100%; padding: 0; margin-bottom: 10px; font-weight: 800; font-size: 17px; color: #174F44">{{ms.sure.q}}</legend>
+            <div style="clear: both; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+              <sc-for list="{{ms.sure.opts}}" as="so" hint-placeholder-count="3">
+                <button onClick="{{so.pick}}" aria-pressed="{{so.on}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 64px; border: 0; border-radius: 18px; cursor: pointer; font-weight: 700; font-size: 14px; color: #174F44; background: {{so.bg}}; box-shadow: {{so.ring}}">
+                  <span aria-hidden="true" style="display: inline-flex; align-items: flex-end; gap: 3px; height: 22px"><span style="width: 7px; height: 8px; border-radius: 3px; background: {{so.b1}}"></span><span style="width: 7px; height: 14px; border-radius: 3px; background: {{so.b2}}"></span><span style="width: 7px; height: 20px; border-radius: 3px; background: {{so.b3}}"></span></span>{{so.label}}
+                </button>
+              </sc-for>
+            </div>
+          </fieldset>
+        </sc-if>
+
+        <sc-if value="{{ms.check.on}}" hint-placeholder-val="{{false}}">
+          <button class="btn btn-primary" onClick="{{ms.check.go}}" disabled="{{ms.check.off}}" style="min-height: 56px; font-size: 17px; opacity: {{ms.check.opacity}}">{{ms.check.label}} <span class="arr" aria-hidden="true">→</span></button>
+          <p style="font-size: 14px; color: #5d726d">{{ms.check.hint}}</p>
+        </sc-if>
+
+        <div aria-live="polite">
+          <sc-if value="{{ms.soft.on}}" hint-placeholder-val="{{false}}"><p style="padding: 16px 20px; border-radius: 24px; background: #fdeee9; font-size: 16px; font-weight: 600; line-height: 1.45; color: #174F44">{{ms.soft.text}}</p></sc-if>
+        </div>
+
+        <sc-if value="{{ms.link.on}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)">
+            <span style="font-size: 12px; font-weight: 700; color: #4a625c">{{ms.link.label}}</span>
+            <div dir="ltr" aria-hidden="true" style="position: relative; height: 22px; border-radius: 11px; background: linear-gradient(90deg, #56A9D2, #e6ece4 35%, #e6ece4 65%, #1B7865)">
+              <span style="position: absolute; top: 50%; left: {{ms.link.pos}}; width: 34px; height: 34px; border-radius: 50%; background: #fff; transform: translate(-50%, -50%); box-shadow: 0 0 0 4px #174F44"></span>
+            </div>
+            <div dir="ltr" style="display: flex; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 700; color: #4a625c"><span>{{ms.link.opp}}</span><span>{{ms.link.none}}</span><span>{{ms.link.tog}}</span></div>
+            <b style="font-size: 20px; color: #174F44">{{ms.link.verdict}}</b>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ms.next.on}}" hint-placeholder-val="{{false}}">
+          <button class="btn btn-primary" onClick="{{ms.next.go}}" style="min-height: 56px; font-size: 17px">{{ms.next.label}} <span class="arr" aria-hidden="true">→</span></button>
+        </sc-if>
+
+        <sc-if value="{{ms.res.on}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="padding: 26px 28px; border-radius: 32px; background: {{ms.res.bg}}">
+            <span style="font-size: 13px; font-weight: 700; color: #125a4c">✓ {{ms.res.kicker}}</span>
+            <h3 style="margin: 8px 0 6px; font-size: 30px; font-weight: 800">{{ms.res.title}}</h3>
+            <p style="font-size: 16px; line-height: 1.5; color: #174F44">{{ms.res.text}}</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ms.verdict.on}}" hint-placeholder-val="{{false}}">
+          <div role="status" style="display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border-radius: 28px; background: #fff; box-shadow: 0 1px 2px rgba(23,79,68,.06), inset 0 0 0 2px #e6ece4">
+            <span style="font-size: 12px; font-weight: 700; color: #4a625c">{{ms.verdict.label}}</span>
+            <b style="font-size: 24px; font-weight: 800; line-height: 1.15; color: #174F44">{{ms.verdict.title}}</b>
+            <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+              <sc-for list="{{ms.verdict.scale}}" as="vd" hint-placeholder-count="3">
+                <span style="display: flex; flex-direction: column; gap: 6px; text-align: center; font-size: 12.5px; font-weight: 700; color: {{vd.fg}}"><span style="height: 14px; border-radius: 7px; background: {{vd.bar}}"></span>{{vd.t}}</span>
+              </sc-for>
+            </div>
+            <p style="font-size: 15.5px; line-height: 1.5; color: #174F44">{{ms.verdict.desc}}</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ms.hasStats}}" hint-placeholder-val="{{false}}">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <sc-for list="{{ms.stats}}" as="sx" hint-placeholder-count="4">
+              <div style="display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border-radius: 22px; background: #fff">
+                <span style="font-size: 12px; font-weight: 700; color: #4a625c">{{sx.label}}</span>
+                <b class="num" style="font-size: 30px; line-height: 1; color: {{sx.color}}">{{sx.value}}</b>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ms.friends}}" as="fr" hint-placeholder-count="0">
+          <section aria-label="{{fr.titleL}}" style="display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border-radius: 30px; background: #fff; box-shadow: 0 0 0 3px {{fr.tint}}, 0 1px 2px rgba(23,79,68,.06)">
+            <div style="display: flex; align-items: center; gap: 14px">
+              <span aria-hidden="true" style="position: relative; flex: none; width: 68px; height: 68px; border-radius: 50%; background: {{fr.tint}}; box-shadow: inset 0 0 0 4px {{fr.color}}">
+                <span style="position: absolute; top: 36%; left: 28%; width: 12%; height: 16%; border-radius: 50%; background: #174F44"></span>
+                <span style="position: absolute; top: 36%; right: 28%; width: 12%; height: 16%; border-radius: 50%; background: #174F44"></span>
+                <span style="position: absolute; left: 35%; top: {{fr.mTop}}; width: 30%; height: {{fr.mH}}; border-style: solid; border-color: #174F44; border-width: {{fr.mBW}}; border-radius: {{fr.mR}}"></span>
+              </span>
+              <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+                <span style="font-size: 12px; font-weight: 700; color: #4a625c">{{fr.titleL}}</span>
+                <b style="font-size: 19px; color: #174F44">{{fr.name}}</b>
+                <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+                  <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 700; color: #174F44; background: {{fr.moodBg}}">{{fr.mood}}</span>
+                  <span role="img" aria-label="{{fr.heartsL}}" style="display: inline-flex; gap: 2px">
+                    <sc-for list="{{fr.hearts}}" as="ht" hint-placeholder-count="5"><svg width="22" height="20" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21s-9-5.6-9-12A5 5 0 0 1 12 6a5 5 0 0 1 9 3c0 6.4-9 12-9 12z" fill="{{ht.f}}"></path></svg></sc-for>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <p style="padding: 12px 16px; border-radius: 20px; background: #F7F8F2; font-size: 16.5px; font-weight: 600; line-height: 1.45; color: #174F44">{{fr.msg}}</p>
+            <sc-if value="{{fr.needsHelp}}" hint-placeholder-val="{{false}}"><p style="padding: 10px 14px; border-radius: 18px; background: #FFF3D6; font-size: 15px; line-height: 1.45; color: #174F44"><b>{{fr.helpL}}:</b> {{fr.tip}}</p></sc-if>
+          </section>
+        </sc-for>
+
+        <sc-if value="{{ms.end.on}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <button class="btn btn-primary" onClick="{{ms.end.go}}" style="min-height: 54px">{{ms.end.label}} <span class="arr" aria-hidden="true">→</span></button>
+            <button class="btn btn-ghost" onClick="{{ms.exit}}" style="min-height: 54px">{{ms.hubL}}</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+</main>
+
+<footer style="margin-top: 96px; background: #174F44; color: #d9ece4">
+  <div style="max-width: 1320px; margin: 0 auto; padding: 40px clamp(16px,4vw,56px) 32px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between">
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 420px">
+      <span style="font-weight: 800; font-size: 19px; color: #fff; letter-spacing: -.03em">EarthScope · {{tn.tierName}}</span>
+      <p style="color: #c4ddd3; font-size: 13px; line-height: 1.6">{{tn.footNote}}</p>
+    </div>
+    <nav aria-label="{{tn.tierName}}" style="display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: flex-start; max-width: 640px">
+      <sc-for list="{{tn.foot}}" as="fl" hint-placeholder-count="6"><a href="{{fl.href}}" style="display: inline-flex; align-items: center; min-height: 40px; color: #d9ece4; text-decoration: none; font-size: 14px">{{fl.label}}</a></sc-for>
+    </nav>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+/* ===== EarthScope site structure (shared by every page) ===== */
+var ES_TIERS = {
+ kids: { mode: "young", prefix: "Kids", color: "#F2C66D", tint: "#FFF3D6", ring: "#F2C66D", hero: "Home",
+   name: { en: "Junior Detective", ar: "المحقق الناشئ" }, short: { en: "Junior", ar: "ناشئ" },
+   forWho: { en: "Kids · ages 8–13", ar: "أطفال · من 8 إلى 13 عامًا" } },
+ explorer: { mode: "earth", prefix: "Explorer", color: "#70B8A3", tint: "#eef7f2", ring: "#70B8A3", hero: "Map",
+   name: { en: "Earth Explorer", ar: "مستكشف الأرض" }, short: { en: "Explorer", ar: "مستكشف" },
+   forWho: { en: "School students", ar: "طلاب المدارس" } },
+ lab: { mode: "lab", prefix: "Lab", color: "#56A9D2", tint: "#e3f2fa", ring: "#56A9D2", hero: "TrendLab",
+   name: { en: "Earth Expert", ar: "خبير الأرض" }, short: { en: "Expert", ar: "خبير" },
+   forWho: { en: "Experts · university · research", ar: "خبراء · جامعات · باحثون" } }
+};
+var ES_ORDER = ["kids", "explorer", "lab"];
+var ES_ACTOR = {
+ kids: { n: 1, actor: { en: "Kids", ar: "الأطفال" } },
+ explorer: { n: 2, actor: { en: "Students", ar: "الطلاب" } },
+ lab: { n: 3, actor: { en: "Researchers", ar: "الباحثون" } }
+};
+function esActor(id, lang) {
+  var T = ES_TIERS[id], A = ES_ACTOR[id];
+  return { isKids: id === "kids", isStudents: id === "explorer", isResearch: id === "lab",
+    actor: T.name[lang], short: T.short[lang], level: (lang === "ar" ? "المستوى " : "Level ") + A.n, full: T.name[lang], forWho: T.forWho[lang],
+    color: T.color, tint: T.tint };
+}
+function esWith(a, b) { var o = {}, k; for (k in a) o[k] = a[k]; for (k in b) o[k] = b[k]; return o; }
+var ES_MODE_TIER = { young: "kids", earth: "explorer", lab: "lab" };
+var ES_PAGES = ["Home", "Map", "TrendLab", "DataLab", "Sources"];
+/* Junior Detective has its own three worlds */
+var ES_PAGES_BY = { kids: ["Home"], explorer: ES_PAGES, lab: ES_PAGES };
+var ES_PAGE_MAP = {};
+function esMapPage(page, toTier) { return ES_PAGES_BY[toTier].indexOf(page) >= 0 ? page : (ES_PAGE_MAP[page] || "Home"); }
+var ES_LABELS = {
+ en: {
+  kids: { Home: "Missions", Map: "Explore Map", TrendLab: "Trend Lab", DataLab: "Data Lab", Sources: "Data Sources" },
+  explorer: { Home: "Home", Map: "Explore Map", TrendLab: "Trend Lab", DataLab: "Data Lab", Sources: "Data Sources" },
+  lab: { Home: "Overview", Map: "Map Explorer", TrendLab: "Trend Lab", DataLab: "Data Lab", Sources: "Data Catalog" } },
+ ar: {
+  kids: { Home: "المهمات", Map: "استكشف الخريطة", TrendLab: "مختبر الاتجاهات", DataLab: "مختبر البيانات", Sources: "مصادر البيانات" },
+  explorer: { Home: "الرئيسية", Map: "استكشف الخريطة", TrendLab: "مختبر الاتجاهات", DataLab: "مختبر البيانات", Sources: "مصادر البيانات" },
+  lab: { Home: "نظرة عامة", Map: "مستكشف الخرائط", TrendLab: "مختبر الاتجاهات", DataLab: "مختبر البيانات", Sources: "فهرس البيانات" } }
+};
+var ES_DESC = {
+ en: {
+  kids: { Map: "Pick a picture of Earth and visit places on a colorful map.", TrendLab: "Pick a place, make your guess, and see if the line goes up or down.", DataLab: "Look closely at one clue with simple charts.", Sources: "Meet the satellites that watch our planet every day." },
+  explorer: { Map: "Explore NASA layers on an interactive map, play through the years and compare places.", TrendLab: "Build a time series for a place and test whether its trend is significant.", DataLab: "Investigate one variable at a time with guided charts and definitions.", Sources: "Learn what each satellite and model measures, and how." },
+  lab: { Map: "Pin any coordinate or region, set windows and anomalies, then send it to the Trend Lab.", TrendLab: "Full research settings: tests, α, autocorrelation, aggregation, baselines and export.", DataLab: "Series inspection, multi-variable comparison, confidence intervals and data export.", Sources: "Product catalog with resolution, record length, archive and access methods." } },
+ ar: {
+  kids: { Map: "اختر صورة للأرض وزُر الأماكن على خريطة ملوّنة.", TrendLab: "اختر مكانًا، وخمّن، وشاهد هل يصعد الخط أم ينزل.", DataLab: "انظر عن قرب إلى دليل واحد برسوم بسيطة.", Sources: "تعرّف على الأقمار الصناعية التي تراقب كوكبنا كل يوم." },
+  explorer: { Map: "استكشف طبقات ناسا على خريطة تفاعلية، وشغّل السنوات وقارن بين الأماكن.", TrendLab: "ابنِ سلسلة زمنية لمكان ما واختبر هل اتجاهها ذو دلالة إحصائية.", DataLab: "تعمّق في متغيّر واحد في كل مرة مع رسوم وتعريفات موجّهة.", Sources: "تعرّف على ما يقيسه كل قمر صناعي ونموذج، وكيف يقيسه." },
+  lab: { Map: "حدّد أي إحداثية أو منطقة، واضبط النوافذ الزمنية والشذوذ، ثم أرسلها إلى مختبر الاتجاهات.", TrendLab: "إعدادات بحثية كاملة: الاختبارات، α، الارتباط الذاتي، التجميع، فترات الأساس والتصدير.", DataLab: "فحص السلاسل، مقارنة متعددة المتغيرات، فترات الثقة وتصدير البيانات.", Sources: "فهرس المنتجات مع الدقة وطول السجل والأرشيف وطرق الوصول." } }
+};
+var ES_UI = {
+ en: { all: "All journeys", level: "Audience level", other: "العربية", go: "Open", sep: "›",
+   kit: { kids: ["Your missions", "Three worlds to explore"], explorer: ["Your toolkit", "Everything you need to investigate a change"], lab: ["Workspace", "Tools for a full trend analysis"] },
+   foot: "An independent educational project for the NASA Space Apps Challenge. It uses NASA data but is not endorsed by NASA." },
+ ar: { all: "كل الرحلات", level: "مستوى المستخدم", other: "English", go: "افتح", sep: "‹",
+   kit: { kids: ["مهامك", "ثلاثة عوالم لتستكشفها"], explorer: ["أدواتك", "كل ما تحتاجه لتتحقق من التغيّر"], lab: ["مساحة العمل", "أدوات لتحليل اتجاه كامل"] },
+   foot: "مشروع تعليمي مستقل لتحدي ناسا Space Apps. يستخدم بيانات ناسا لكنه غير معتمد منها." }
+};
+function esFile(tier, page) { return ES_TIERS[tier].prefix + "-" + page + ".dc.html"; }
+function esMerge(a, b) {
+  if (!b || typeof b !== "object" || Array.isArray(b)) return b === undefined ? a : b;
+  var o = {}, k;
+  for (k in a) o[k] = a[k];
+  for (k in b) o[k] = (a && typeof a[k] === "object" && !Array.isArray(a[k])) ? esMerge(a[k], b[k]) : b[k];
+  return o;
+}
+function tierNav(tier, page, lang) {
+  var T = ES_TIERS[tier], L = ES_LABELS[lang][tier], U = ES_UI[lang], h = "#l=" + lang, ar = lang === "ar";
+  var href = {};
+  var PG = ES_PAGES_BY[tier];
+  PG.forEach(function (p) { href[p] = esFile(tier, p) + h; });
+  href.hero = href[T.hero]; href.portal = "Main.dc.html" + h;
+  var links = PG.map(function (p) {
+    var on = p === page;
+    return { label: L[p], href: href[p], cur: on ? "page" : "false", bg: on ? "#DDF1E7" : "transparent", fg: on ? "#174F44" : "#4a625c", fw: on ? "700" : "500", line: on ? T.color : "transparent" };
+  });
+  var tiers = ES_ORDER.map(function (id) {
+    var on = id === tier, X = ES_TIERS[id];
+    return esWith(esActor(id, lang), { label: X.short[lang], href: esFile(id, esMapPage(page, id)) + h, cur: on ? "page" : "false",
+      bg: on ? "#fff" : "transparent", shadow: on ? "0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)" : "none" });
+  });
+  var cards = PG.slice(1).map(function (p, i) {
+    return { n: String(i + 1), label: L[p], desc: ES_DESC[lang][tier][p], href: href[p], tint: T.tint, color: T.color, go: U.go };
+  });
+  var foot = PG.map(function (p) { return { label: L[p], href: href[p] }; });
+  foot.unshift({ label: U.all, href: href.portal });
+  return { me: esActor(tier, lang), whoLabel: ar ? "من أنت؟" : "Who are you?", tier: tier, mode: T.mode, links: links, tiers: tiers, href: href, cards: cards, foot: foot,
+    color: T.color, tint: T.tint, ring: T.ring, tierName: T.name[lang], forWho: T.forWho[lang], pageName: L[page], notHome: page !== "Home",
+    allLabel: U.all, levelLabel: U.level, otherLang: U.other, sep: U.sep, footNote: U.foot,
+    kitEyebrow: U.kit[tier][0], kitTitle: U.kit[tier][1],
+    otherFont: ar ? "Inter, sans-serif" : "Cairo, sans-serif" };
+}
+function esLangFromHash(def) {
+  try { var m = /[#&]l=(en|ar)/.exec((typeof window !== "undefined" && window.location && window.location.hash) || ""); if (m) return m[1]; } catch (e) {}
+  return def;
+}
+var ES_LANGS = [
+ { id: "en", endo: "English", en: "English", ar: "الإنجليزية", ok: true }, { id: "ar", endo: "العربية", en: "Arabic", ar: "العربية", ok: true },
+ { id: "fr", endo: "Français", en: "French", ar: "الفرنسية" }, { id: "es", endo: "Español", en: "Spanish", ar: "الإسبانية" },
+ { id: "tr", endo: "Türkçe", en: "Turkish", ar: "التركية" }, { id: "zh", endo: "中文", en: "Chinese", ar: "الصينية" }
+];
+function esLangMenu(self, lang) {
+  var open = !!self.state.langMenu, ar = lang === "ar";
+  return { open: open, label: ar ? "اللغة" : "Language", bg: open ? "#DDF1E7" : "#fff",
+    toggle: function () { self.setState({ langMenu: !self.state.langMenu }); },
+    items: ES_LANGS.map(function (g) {
+      var on = g.id === lang;
+      return { endo: g.endo, sub: g[lang], on: on, off: !g.ok, tag: on ? "✓" : (g.ok ? "" : (ar ? "قريبًا" : "Soon")),
+        bg: on ? "#DDF1E7" : "transparent", fg: g.ok ? "#174F44" : "#6f817c", cursor: g.ok ? "pointer" : "default",
+        font: g.id === "ar" ? "Cairo, sans-serif" : "Inter, sans-serif",
+        pick: function () { if (g.ok) self.setState({ lang: g.id, langMenu: false }); } };
+    }) };
+}
+function extendVals(self, v) {
+  v.tn = tierNav(ES_TIER, ES_PAGE, self.state.lang === "ar" ? "ar" : "en");
+  v.lm = esLangMenu(self, self.state.lang === "ar" ? "ar" : "en");
+  if (typeof pageExtra === "function") pageExtra(self, v);
+  return v;
+}
+
+var ES_TIER = "kids", ES_PAGE = "Home";
+
+/* ===== Junior Detective missions: data, copy and helpers ===== */
+var KIDS;
+// Young Explorer missions — regional annual series 2000–2024.
+// Shapes follow published NASA records (GISTEMP, GPM IMERG, NSIDC, MODIS, sea-level altimetry);
+// values are prototype approximations — production pulls the same products via NASA Earthdata/GIBS.
+(function(){
+  const Y0=2000, Y1=2024;
+  const h=(a,b)=>{const s=Math.sin(a*12.9898+b*78.233)*43758.5453;return s-Math.floor(s)};
+  const VARS={
+    heat:{color:'#EE9177',unit:{en:'°C warmer',ar:'°م أدفأ'},dec:1,img:'assets/kids/v-heat.jpg',src:'NASA GISS GISTEMP v4 · MODIS Land Surface Temperature'},
+    rain:{color:'#56A9D2',unit:{en:'mm of rain',ar:'مم مطر'},dec:0,img:'assets/kids/v-rain.jpg',src:'NASA GPM IMERG (Global Precipitation Measurement)'},
+    ice:{color:'#7fb9d6',unit:{en:'% covered',ar:'% مغطى'},dec:0,img:'assets/kids/v-ice.jpg',src:'NSIDC Sea Ice Index · MODIS Snow Cover (MOD10)'},
+    plants:{color:'#1B7865',unit:{en:'greenness',ar:'درجة الخضرة'},dec:0,img:'assets/kids/v-plants.jpg',src:'MODIS Terra Vegetation Index (MOD13 NDVI)'},
+    sea:{color:'#2f7fa8',unit:{en:'mm higher',ar:'مم أعلى'},dec:0,img:'assets/kids/v-sea.jpg',src:'NASA Sea Level Change · TOPEX/Jason/Sentinel-6'},
+  };
+  const PLACES={
+    arctic:{img:'assets/kids/arctic.jpg',color:'#56A9D2'},
+    amazon:{img:'assets/kids/amazon.jpg',color:'#1B7865'},
+    sahel:{img:'assets/kids/sahel.jpg',color:'#d39b3a'},
+    himalaya:{img:'assets/kids/himalaya.jpg',color:'#7a6fb0'},
+    gbr:{img:'assets/kids/gbr.jpg',color:'#EE9177'},
+    nile:{img:'assets/kids/nile.jpg',color:'#2f7fa8'},
+  };
+  // b = 2000 value, s = change / yr, q = acceleration, n = natural wiggle, ev = known events
+  const SPEC={
+    heat:{arctic:{b:1.6,s:.075,n:.35},amazon:{b:.5,s:.03,n:.16,ev:{2015:.4,2016:.35,2023:.5,2024:.45}},sahel:{b:.7,s:.035,n:.18},himalaya:{b:.8,s:.04,n:.2},gbr:{b:.4,s:.025,n:.14,ev:{2016:.3,2020:.25,2024:.4}},nile:{b:.8,s:.04,n:.16}},
+    rain:{amazon:{b:2250,s:-4,n:55,ev:{2005:-260,2010:-320,2015:-300,2016:-200,2023:-380,2024:-250}},sahel:{b:420,s:4.5,n:32},himalaya:{b:1650,s:-1,n:85},gbr:{b:1500,s:0,n:200,ev:{2011:450,2019:300}},nile:{b:24,s:0,n:5}},
+    ice:{arctic:{b:46,s:-.65,n:2.6,ev:{2007:-7,2012:-11}},himalaya:{b:34,s:-.12,n:2}},
+    plants:{amazon:{b:82,s:-.12,n:.7,ev:{2005:-4,2010:-6,2015:-5,2016:-3,2023:-7,2024:-4}},sahel:{b:28,s:.32,n:1.3},nile:{b:44,s:.18,n:1.1},himalaya:{b:38,s:.15,n:1.2}},
+    sea:{gbr:{b:0,s:3.4,q:.035,n:5},nile:{b:0,s:3.1,q:.04,n:4.5}},
+  };
+  function series(v,p){
+    const S=SPEC[v]&&SPEC[v][p]; if(!S) return null;
+    const vi=Object.keys(VARS).indexOf(v)+1, pi=Object.keys(PLACES).indexOf(p)+1;
+    const pts=[]; for(let y=Y0;y<=Y1;y++){const i=y-Y0;
+      let val=S.b+S.s*i+(S.q||0)*i*i+(h(y*vi,pi*7.3)-.5)*2*S.n+((S.ev&&S.ev[y])||0);
+      if(v==='sea'&&y===Y0) val=0;
+      pts.push({x:y,y:+val.toFixed(VARS[v].dec+1)});}
+    return pts;
+  }
+  const has=(v,p)=>!!(SPEC[v]&&SPEC[v][p]);
+  function trend(pts){
+    const n=pts.length, mx=pts.reduce((a,p)=>a+p.x,0)/n, my=pts.reduce((a,p)=>a+p.y,0)/n;
+    let sxx=0,sxy=0; pts.forEach(p=>{sxx+=(p.x-mx)**2;sxy+=(p.x-mx)*(p.y-my)});
+    const b=sxy/sxx,a=my-b*mx; let sse=0; pts.forEach(p=>{sse+=(p.y-(a+b*p.x))**2});
+    const se=Math.sqrt(sse/(n-2)/sxx), ci=1.96*se;
+    const dir = Math.abs(b)<=ci ? 'flat' : (b>0?'up':'down');
+    const avg=a=>a.reduce((s,p)=>s+p.y,0)/a.length;
+    const start=avg(pts.slice(0,5)), end=avg(pts.slice(-5));
+    let hi=pts[0],lo=pts[0]; pts.forEach(p=>{if(p.y>hi.y)hi=p;if(p.y<lo.y)lo=p});
+    const dips=pts.filter(p=>p.y < a+b*p.x - 1.6*Math.sqrt(sse/(n-2))).map(p=>p.x);
+    return {slope:b,intercept:a,ci,dir,start,end,change:end-start,pct:(end-start)/Math.abs(start||1)*100,hi,lo,dips};
+  }
+  function link(A,B){
+    const n=A.length; const ma=A.reduce((s,p)=>s+p.y,0)/n, mb=B.reduce((s,p)=>s+p.y,0)/n;
+    let c=0,va=0,vb=0; for(let i=0;i<n;i++){const da=A[i].y-ma,db=B[i].y-mb;c+=da*db;va+=da*da;vb+=db*db}
+    return c/Math.sqrt(va*vb);
+  }
+  const MYSTERIES=[
+    {id:'ice',place:'arctic',evidence:'ice',suspects:[{id:'heat',v:'heat',ok:true},{id:'bears',v:null,ok:false},{id:'rain',v:null,ok:false}]},
+    {id:'forest',place:'amazon',evidence:'plants',tapDips:true,suspects:[{id:'snow',v:null,ok:false},{id:'rain',v:'rain',ok:true},{id:'monkeys',v:null,ok:false}]},
+    {id:'green',place:'sahel',evidence:'plants',suspects:[{id:'cold',v:'heat',ok:false},{id:'rain',v:'rain',ok:true},{id:'ice',v:null,ok:false}]},
+  ];
+  KIDS={VARS,PLACES,series,has,trend,link,MYSTERIES,Y0,Y1};
+})();
+
+// ===== Junior Detective additions: Earth friends, friend mood, year-stripe palettes =====
+(function(){
+  const FRIENDS={
+    arctic:{color:'#56A9D2',name:{en:'Nanuk the polar bear',ar:'نانوك الدب القطبي'},short:{en:'Nanuk',ar:'نانوك'},
+      tip:{en:'Save energy: switch off lights and screens you are not using.',ar:'وفّر الطاقة: أطفئ الأضواء والشاشات التي لا تستخدمها.'}},
+    amazon:{color:'#1B7865',name:{en:'Tico the toucan',ar:'تيكو الطوقان'},short:{en:'Tico',ar:'تيكو'},
+      tip:{en:'Use both sides of the paper, so fewer trees are cut down.',ar:'استخدم وجهي الورقة، فتُقطع أشجار أقل.'}},
+    sahel:{color:'#b07a17',name:{en:'Sami the camel',ar:'سامي الجمل'},short:{en:'Sami',ar:'سامي'},
+      tip:{en:'Plant a tree or look after the plants at your school.',ar:'ازرع شجرة أو اعتنِ بنباتات مدرستك.'}},
+    himalaya:{color:'#7a6fb0',name:{en:'Lumi the snow leopard',ar:'لومي نمر الثلوج'},short:{en:'Lumi',ar:'لومي'},
+      tip:{en:'Walk or cycle on short trips instead of going by car.',ar:'امشِ أو اركب الدراجة في المشاوير القصيرة بدل السيارة.'}},
+    gbr:{color:'#EE9177',name:{en:'Coco the sea turtle',ar:'كوكو السلحفاة البحرية'},short:{en:'Coco',ar:'كوكو'},
+      tip:{en:'Say no to plastic bags and bottles — they end up in the sea.',ar:'قل لا للأكياس والقوارير البلاستيكية، فهي تنتهي في البحر.'}},
+    nile:{color:'#2f7fa8',name:{en:'Ibo the ibis',ar:'إيبو طائر أبو منجل'},short:{en:'Ibo',ar:'إيبو'},
+      tip:{en:'Turn off the tap while you brush your teeth.',ar:'أغلق الصنبور وأنت تنظّف أسنانك.'}}
+  };
+  // the direction that is hard on a place's plants and animals
+  const HARM={heat:'up',ice:'down',plants:'down',sea:'up',rain:'down'};
+  const mood=(v,T)=>T.dir==='flat'?'okay':(T.dir===HARM[v]?'help':'happy');
+  // 0 = just a wiggle, 1 = good clue, 2 = strong case (slope compared with its 95% interval)
+  const evidence=T=>T.dir==='flat'?0:(Math.abs(T.slope)/(T.ci||1e-9)<2?1:2);
+  // low -> middle -> high colours for the year stripes
+  const STRIPE={heat:['#2f7fa8','#F7F8F2','#c0563d'],sea:['#2f7fa8','#F7F8F2','#c0563d'],
+    rain:['#b07a17','#F7F8F2','#2f7fa8'],plants:['#b07a17','#F7F8F2','#1B7865'],ice:['#174F44','#cfe3ea','#ffffff']};
+  Object.assign(KIDS,{FRIENDS,HARM,mood,evidence,STRIPE});
+})();
+
+var KIDS_T={
+en:{
+  nav:'Missions',
+  hubHi:'Hi, Explorer!',hubTitle:'Pick a mission',hubSub:'Use real NASA satellite data to discover how our planet is changing.',
+  badges:'My badges',of:'of',start:'Start mission',again:'Play again',done:'Done!',
+  m:{
+    trend:{t:'Find the Trend',d:'Pick a clue and a place. Is it going up, down, or staying the same?',steps:['Clue','Place','Graph','Detect']},
+    compare:{t:'Compare Places',d:'Put two places side by side. Which one changed more?',steps:['Clue','Places','Graph','Decide']},
+    mystery:{t:'Solve the Mystery',d:'Something strange is happening! Use two clues to crack the case.',steps:['Case','Evidence','Suspects','Solved']}},
+  pickVar:'Which clue do you want to look at?',pickPlace:'Where should we look?',pickTwo:'Pick two places to compare',
+  noData:'No NASA data here',selected:'Picked',vs:'VS',
+  v:{heat:'Heat',rain:'Rain',ice:'Ice & Snow',plants:'Plants',sea:'Sea Level'},
+  vq:{heat:'Is it getting hotter?',rain:'Is it raining more or less?',ice:'Is the ice melting?',plants:'Are plants growing or disappearing?',sea:'Is the sea rising?'},
+  p:{arctic:'Arctic',amazon:'Amazon Rainforest',sahel:'The Sahel',himalaya:'Himalaya',gbr:'Great Barrier Reef',nile:'Nile Delta'},
+  pf:{arctic:'Polar bears live here',amazon:'Home to 1 in 10 animal species',sahel:'Between desert and savanna',himalaya:'The tallest mountains on Earth',gbr:'The biggest coral reef',nile:'Egypt’s green farmland'},
+  makeGraph:'Make my graph',drawing:'Drawing 25 years of satellite data…',
+  guessQ:'What do you think the line is doing?',up:'Going up',down:'Going down',flat:'Staying about the same',
+  check:'Check with NASA data',
+  right:'You got it!',notQuite:'Good try! Look again…',
+  result:{up:'It’s going UP',down:'It’s going DOWN',flat:'It’s staying about the SAME'},
+  from:'From',to:'to',change:'Change',highest:'Highest year',lowest:'Lowest year',
+  showTrend:'Show the trend line',trendLine:'Trend line',bumpy:'Real data is bumpy! The dashed trend line shows the big direction.',
+  next:'Next',back:'Back',newPlace:'Try another place',hub:'All missions',
+  whoMore:'Which place changed more?',equal:'About the same',changedMore:'changed more',
+  measured:'measured from space',
+  mys:{
+    ice:{t:'The Case of the Vanishing Ice',s:'Arctic sea ice is disappearing! Polar bears need help. What is melting it?'},
+    forest:{t:'The Case of the Thirsty Forest',s:'In some years the Amazon turns brown instead of green. Find the bad years — then find out why!'},
+    green:{t:'The Case of the Greening Sahel',s:'Satellites see the Sahel getting greener. Good news! But what is causing it?'}},
+  evidence:'Evidence',suspects:'Suspects',test:'Test this suspect',
+  sus:{heat:'It’s getting warmer',bears:'Polar bears are breaking it',rain:'More rain',snow:'Too much snow',monkeys:'Monkeys eat the leaves',cold:'It’s getting colder',ice:'Melting glaciers'},
+  noClue:'NASA has no data that links to this. Try another suspect!',
+  together:'Move together',opposite:'Move opposite',notLinked:'Not linked',
+  tapDips:'Tap the 5 years when the forest was least green',found:'found',
+  caseSolved:'Case solved!',
+  why:{ice:'When the Arctic gets warmer, ice melts. Less white ice means dark ocean soaks up more sunlight — so it gets warmer still!',
+       forest:'The brown years were drought years. When less rain falls, trees get thirsty and their leaves look less green from space.',
+       green:'Rain has slowly been coming back to the Sahel since the big droughts. More rain means more grass and trees!'},
+  link:'Clue link',
+  nova:'Nova',novaRole:'your space guide',ask:'Ask Nova anything…',send:'Ask',
+  novaQuick:['What does this graph mean?','Give me a hint','Why does this happen?'],
+  novaHi:{hub:'Hi! I’m Nova — I fly around Earth taking pictures. Pick a mission and I’ll help you!',
+    pickVar:'A “clue” is something satellites can measure — like heat, rain or ice. Which one sounds fun?',
+    pickPlace:'Grey cards mean my satellites don’t measure that clue there. Try a bright one!',
+    graph:'Each dot is one year. Left is long ago, right is now. Follow the line with your finger!',
+    detect:'Don’t worry about little bumps. Look at where the line starts and where it ends.',
+    result:'Amazing detective work! Scientists do exactly this with NASA data.',
+    pickTwo:'Try two places that are very different — like a cold one and a hot one!',
+    mystery:'Every good detective needs evidence. Let’s look at the satellite data first.',
+    suspects:'Test each suspect. If two lines move together, they might be connected!'},
+  thinking:'Nova is thinking…',
+  source:'NASA data',years:'2000 – 2024'
+},
+ar:{
+  nav:'المهمات',
+  hubHi:'أهلًا أيها المستكشف!',hubTitle:'اختر مهمة',hubSub:'استخدم بيانات أقمار ناسا الحقيقية لتكتشف كيف يتغير كوكبنا.',
+  badges:'أوسمتي',of:'من',start:'ابدأ المهمة',again:'العب مجددًا',done:'تم!',
+  m:{
+    trend:{t:'اكتشف الاتجاه',d:'اختر دليلًا ومكانًا. هل يصعد أم ينزل أم يبقى كما هو؟',steps:['الدليل','المكان','الرسم','اكتشف']},
+    compare:{t:'قارن بين الأماكن',d:'ضع مكانين جنبًا إلى جنب. أيهما تغيّر أكثر؟',steps:['الدليل','الأماكن','الرسم','قرّر']},
+    mystery:{t:'حلّ اللغز',d:'شيء غريب يحدث! استخدم دليلين لحل القضية.',steps:['القضية','الأدلة','المشتبهون','تم الحل']}},
+  pickVar:'أي دليل تريد أن تنظر إليه؟',pickPlace:'أين نبحث؟',pickTwo:'اختر مكانين للمقارنة',
+  noData:'لا توجد بيانات من ناسا هنا',selected:'تم الاختيار',vs:'ضد',
+  v:{heat:'الحرارة',rain:'المطر',ice:'الجليد والثلج',plants:'النباتات',sea:'مستوى البحر'},
+  vq:{heat:'هل يصبح الجو أكثر حرارة؟',rain:'هل يزيد المطر أم يقل؟',ice:'هل يذوب الجليد؟',plants:'هل تنمو النباتات أم تختفي؟',sea:'هل يرتفع البحر؟'},
+  p:{arctic:'القطب الشمالي',amazon:'غابات الأمازون',sahel:'منطقة الساحل',himalaya:'الهيمالايا',gbr:'الحاجز المرجاني العظيم',nile:'دلتا النيل'},
+  pf:{arctic:'هنا تعيش الدببة القطبية',amazon:'موطن نوع من كل 10 أنواع حيوانات',sahel:'بين الصحراء والسافانا',himalaya:'أعلى جبال على الأرض',gbr:'أكبر شعاب مرجانية',nile:'أراضي مصر الزراعية الخضراء'},
+  makeGraph:'ارسم الرسم البياني',drawing:'نرسم 25 عامًا من بيانات الأقمار الصناعية…',
+  guessQ:'ماذا تظن أن الخط يفعل؟',up:'يصعد',down:'ينزل',flat:'يبقى تقريبًا كما هو',
+  check:'تحقّق ببيانات ناسا',
+  right:'أحسنت!',notQuite:'محاولة جيدة! انظر مرة أخرى…',
+  result:{up:'إنه يصعد',down:'إنه ينزل',flat:'إنه يبقى تقريبًا كما هو'},
+  from:'من',to:'إلى',change:'التغيّر',highest:'أعلى سنة',lowest:'أدنى سنة',
+  showTrend:'أظهر خط الاتجاه',trendLine:'خط الاتجاه',bumpy:'البيانات الحقيقية متعرجة! خط الاتجاه المتقطع يوضح الاتجاه العام.',
+  next:'التالي',back:'رجوع',newPlace:'جرّب مكانًا آخر',hub:'كل المهمات',
+  whoMore:'أي مكان تغيّر أكثر؟',equal:'تقريبًا متساويان',changedMore:'تغيّر أكثر',
+  measured:'مقاس من الفضاء',
+  mys:{
+    ice:{t:'قضية الجليد المختفي',s:'جليد القطب الشمالي يختفي! الدببة القطبية تحتاج المساعدة. ما الذي يذيبه؟'},
+    forest:{t:'قضية الغابة العطشى',s:'في بعض السنوات تتحول الأمازون إلى البني بدل الأخضر. ابحث عن السنوات السيئة — ثم اكتشف السبب!'},
+    green:{t:'قضية اخضرار الساحل',s:'ترى الأقمار الصناعية الساحل يزداد اخضرارًا. خبر جيد! لكن ما السبب؟'}},
+  evidence:'الأدلة',suspects:'المشتبهون',test:'اختبر هذا المشتبه',
+  sus:{heat:'الجو يزداد دفئًا',bears:'الدببة القطبية تكسره',rain:'مطر أكثر',snow:'ثلج كثير جدًا',monkeys:'القرود تأكل الأوراق',cold:'الجو يزداد برودة',ice:'ذوبان الأنهار الجليدية'},
+  noClue:'لا توجد بيانات من ناسا تربط بهذا. جرّب مشتبهًا آخر!',
+  together:'يتحركان معًا',opposite:'يتحركان بعكس بعض',notLinked:'غير مرتبطين',
+  tapDips:'اضغط على السنوات الخمس التي كانت فيها الغابة أقل اخضرارًا',found:'وُجدت',
+  caseSolved:'تم حل القضية!',
+  why:{ice:'عندما يدفأ القطب الشمالي يذوب الجليد. جليد أبيض أقل يعني محيطًا داكنًا يمتص ضوء الشمس أكثر — فيزداد الدفء!',
+       forest:'السنوات البنية كانت سنوات جفاف. عندما يقل المطر تعطش الأشجار وتبدو أوراقها أقل اخضرارًا من الفضاء.',
+       green:'المطر يعود ببطء إلى الساحل منذ موجات الجفاف الكبيرة. مطر أكثر يعني عشبًا وأشجارًا أكثر!'},
+  link:'رابط الأدلة',
+  nova:'نوفا',novaRole:'مرشدتك الفضائية',ask:'اسأل نوفا أي شيء…',send:'اسأل',
+  novaQuick:['ماذا يعني هذا الرسم؟','أعطني تلميحًا','لماذا يحدث هذا؟'],
+  novaHi:{hub:'مرحبًا! أنا نوفا — أطير حول الأرض وألتقط الصور. اختر مهمة وسأساعدك!',
+    pickVar:'«الدليل» هو شيء تقيسه الأقمار الصناعية — مثل الحرارة أو المطر أو الجليد. أيها يبدو ممتعًا؟',
+    pickPlace:'البطاقات الرمادية تعني أن أقماري لا تقيس هذا الدليل هناك. جرّب بطاقة مضيئة!',
+    graph:'كل نقطة هي سنة واحدة. اليسار قديم واليمين الآن. تتبّع الخط بإصبعك!',
+    detect:'لا تقلق من التعرجات الصغيرة. انظر أين يبدأ الخط وأين ينتهي.',
+    result:'عمل تحقيق رائع! العلماء يفعلون هذا تمامًا ببيانات ناسا.',
+    pickTwo:'جرّب مكانين مختلفين جدًا — مثل مكان بارد وآخر حار!',
+    mystery:'كل محقق جيد يحتاج أدلة. لننظر أولًا إلى بيانات الأقمار الصناعية.',
+    suspects:'اختبر كل مشتبه. إذا تحرك خطان معًا فقد يكونان مرتبطين!'},
+  thinking:'نوفا تفكر…',
+  source:'بيانات ناسا',years:'2000 – 2024'
+}};
+
+// ===== Junior Detective additions (adopted from the Junior Detective design) =====
+(function(){
+  const en={
+    loop:{eyebrow:'Detective training',title:'Solve an Earth mystery in four steps',steps:[
+      {t:'Wonder',b:'Pick a question, like: is the Arctic ice getting smaller?'},
+      {t:'Choose',b:'Pick a clue and a place you want to visit.'},
+      {t:'Look',b:'Watch the line go up or down over many, many years.'},
+      {t:'Decide',b:'Is it a real change or just a wiggle? Make your detective call!'}]},
+    sureQ:'How sure are you?',sure:{very:'Very sure',fair:'Fairly sure',not:'Not sure yet'},
+    fb:{very:'Your detective instinct was spot on!',fair:'Nice call — your eyes are getting sharper!',not:'You were right! Trust your eyes a little more next time.',
+      wrong:'Even great detectives change their minds when the evidence says so. Look at where the line starts and ends.'},
+    pickFirst:'Pick an answer and how sure you are, then check.',
+    verdict:{label:'Detective verdict',scale:['Just a wiggle','Good clue','Strong case'],
+      t:['Just a wiggle','Real change · good clue','Real change · strong case'],
+      d:['The line bumps up and down, but there is no clear direction. It could be nature’s normal wiggle.',
+         'The line moves one way more than its bumps. It is probably a real change.',
+         'The line moves one way much more than its bumps. This is a real change — case closed!']},
+    stripes:'Year stripes · one stripe for every year',stripesAria:'{n} stripes from {a} to {b}. The colour shows low or high values.',
+    low:'Low',high:'High',runAgain:'Run the line again',
+    friend:{title:'Meet your Earth friend',health:'How is my home?',moods:{happy:'Happy',okay:'A bit worried',help:'Needs your help'},
+      msg:{happy:'Hi, I’m {name}! My home, {home}, is doing well. Thank you for visiting me!',
+           okay:'Hi, I’m {name}. My home, {home}, is changing a little. I’m keeping an eye on it.',
+           help:'Hi, I’m {name}. My home, {home}, is changing a lot. Can you help me?'},
+      help:'How you can help'},
+    album:{title:'My friends album',count:'You met {n} of {all} friends. Solve a mission in each place to fill your album!',
+      done:'Amazing! You met all your Earth friends. You are an Earth Hero!',locked:'Not met yet'},
+    dict:{title:'Picture dictionary',hint:'Tap a picture to learn a detective word.',like:'It’s like…',words:[
+      {id:'trend',w:'Trend',says:'The big direction a line goes over many years.',like:'your height — it goes up year after year, even on days you slouch.'},
+      {id:'wiggle',w:'Wiggle',says:'Small ups and downs from one year to the next.',like:'waves on a beach — they come and go, but the tide is the real change.'},
+      {id:'evidence',w:'Evidence',says:'Facts that help you show an idea is true.',like:'footprints in the sand that show who walked there.'},
+      {id:'satellite',w:'Satellite',says:'A machine flying around Earth that measures it every day.',like:'a camera in the sky that never forgets the class photo.'},
+      {id:'data',w:'Data',says:'Lots of measurements we can count and draw as a graph.',like:'the marks in your notebook that show how much your plant grew each week.'}]}
+  };
+  const ar={
+    loop:{eyebrow:'تدريب المحققين',title:'حُلّ لغزًا عن الأرض في أربع خطوات',steps:[
+      {t:'تساءل',b:'اختر سؤالًا، مثل: هل يصغر جليد القطب الشمالي؟'},
+      {t:'اختر',b:'اختر دليلًا ومكانًا تريد زيارته.'},
+      {t:'انظر',b:'شاهد الخط يصعد أو ينزل عبر سنوات كثيرة جدًا.'},
+      {t:'احكم',b:'هل هو تغيّر حقيقي أم مجرد تمايل؟ أصدر حكمك أيها المحقق!'}]},
+    sureQ:'ما مدى ثقتك؟',sure:{very:'واثق جدًا',fair:'واثق نوعًا ما',not:'لست متأكدًا بعد'},
+    fb:{very:'حدسك كمحقق كان في محله تمامًا!',fair:'إجابة موفقة، عيناك تزدادان حدّة!',not:'كانت إجابتك صحيحة! ثق بعينيك أكثر في المرة القادمة.',
+      wrong:'حتى أمهر المحققين يغيّرون رأيهم عندما تقول الأدلة ذلك. انظر أين يبدأ الخط وأين ينتهي.'},
+    pickFirst:'اختر إجابة ومدى ثقتك، ثم تحقّق.',
+    verdict:{label:'حكم المحقق',scale:['مجرد تمايل','دليل جيد','قضية قوية'],
+      t:['مجرد تمايل','تغيّر حقيقي · دليل جيد','تغيّر حقيقي · قضية قوية'],
+      d:['الخط يصعد وينزل، لكن لا يوجد اتجاه واضح. قد يكون تمايل الطبيعة المعتاد.',
+         'الخط يتحرك في اتجاه واحد أكثر من تعرجاته. غالبًا هذا تغيّر حقيقي.',
+         'الخط يتحرك في اتجاه واحد أكثر بكثير من تعرجاته. هذا تغيّر حقيقي، أُغلقت القضية!']},
+    stripes:'شرائط السنوات · شريط لكل سنة',stripesAria:'{n} شريطًا من {a} إلى {b}. اللون يبيّن القيم المنخفضة أو المرتفعة.',
+    low:'منخفض',high:'مرتفع',runAgain:'شغّل الخط مرة أخرى',
+    friend:{title:'تعرّف على صديقك من الأرض',health:'كيف حال بيتي؟',moods:{happy:'سعيد',okay:'قلق قليلًا',help:'يحتاج مساعدتك'},
+      msg:{happy:'مرحبًا، أنا {name}! بيتي {home} بخير. شكرًا لأنك زرتني!',
+           okay:'مرحبًا، أنا {name}. بيتي {home} يتغيّر قليلًا، وأنا أراقبه.',
+           help:'مرحبًا، أنا {name}. بيتي {home} يتغيّر كثيرًا. هل تساعدني؟'},
+      help:'كيف تساعد'},
+    album:{title:'ألبوم أصدقائي',count:'تعرّفت على {n} من {all} أصدقاء. حُلّ مهمة في كل مكان لتملأ ألبومك!',
+      done:'رائع! تعرّفت على كل أصدقائك من الأرض. أنت بطل الأرض!',locked:'لم تتعرّف عليه بعد'},
+    dict:{title:'قاموس الصور',hint:'اضغط على صورة لتتعلّم كلمة من كلمات المحققين.',like:'إنه مثل…',words:[
+      {id:'trend',w:'الاتجاه',says:'الطريق الكبير الذي يسلكه الخط عبر سنوات كثيرة.',like:'طولك، يزداد سنة بعد سنة حتى في الأيام التي تنحني فيها.'},
+      {id:'wiggle',w:'التمايل',says:'صعود ونزول صغير من سنة إلى أخرى.',like:'أمواج الشاطئ، تأتي وتذهب، لكن المدّ هو التغيّر الحقيقي.'},
+      {id:'evidence',w:'الدليل',says:'حقائق تساعدك على إثبات أن الفكرة صحيحة.',like:'آثار الأقدام على الرمل التي تكشف من مشى هناك.'},
+      {id:'satellite',w:'القمر الصناعي',says:'آلة تدور حول الأرض وتقيسها كل يوم.',like:'كاميرا في السماء لا تنسى أبدًا صورة الصف.'},
+      {id:'data',w:'البيانات',says:'قياسات كثيرة يمكننا عدّها ورسمها في رسم بياني.',like:'العلامات في دفترك التي تبيّن كم نمت نبتتك كل أسبوع.'}]}
+  };
+  KIDS_T.en.dt=en; KIDS_T.ar.dt=ar;
+  // detective framing for the existing hub and Find-the-Trend mission
+  KIDS_T.en.hubHi='Hi, Detective!'; KIDS_T.ar.hubHi='أهلًا أيها المحقق!';
+  KIDS_T.en.m.trend.steps=['Clue','Place','Look','Decide']; KIDS_T.ar.m.trend.steps=['الدليل','المكان','انظر','احكم'];
+})();
+
+var KM = { VARS: ["heat", "rain", "ice", "plants", "sea"], PLACES: ["arctic", "amazon", "sahel", "himalaya", "gbr", "nile"],
+  STYLE: { trend: { c: "#F2C66D", img: "im-heat" }, compare: { c: "#70B8A3", img: "im-amazon" }, mystery: { c: "#56A9D2", img: "im-arctic" } },
+  BADGES: ["trend", "compare", "mystery:ice", "mystery:forest", "mystery:green", "home"], BADGE_C: ["#F2C66D", "#70B8A3", "#56A9D2", "#1B7865", "#EE9177", "#8a6413"],
+  ICON: { trend: "M4 26 L12 18 L18 22 L28 10 M22 10 H28 V16", wiggle: "M3 17c3-6 5-6 8 0s5 6 8 0 5-6 8 0",
+    evidence: "M6 14a8 8 0 1 0 16 0a8 8 0 1 0 -16 0 M20 20 L28 28", satellite: "M12 12h8v8h-8z M4 8 L10 14 M22 18 L28 24 M3 13 L9 7 M23 25 L29 19",
+    data: "M6 27 V17 M13 27 V9 M20 27 V14 M27 27 V5" } };
+var KX = { en: { myHome: "My home", homeFact: "This is where you live!", homeTag: "Home",
+    geo: { cardT: "My home", cardS: "Tap to find your home from space!", askT: "Find my home from space?",
+      ask: "Nova can use your device's location one time to see which part of the world you are in. Ask a grown-up before you say yes.",
+      privacy: "Your location stays on this device. We only keep the big region, never your address.",
+      locate: "Use my location now", manual: "Choose it myself", cancel: "Not now",
+      scanT: "Nova is scanning from space…", scan: "Hold on, Detective. Looking for your part of the world.",
+      foundT: "Found you!", found: "Your home is in {r}. Is that right?", yes: "Yes, that's my home", no: "No, choose myself",
+      failT: "Nova can't see your location here", fail: "That's okay! Tap the picture that shows where you live.",
+      manualT: "Which part of the world is your home?", manualS: "Tap the picture that shows where you live.", change: "Change my home" },
+    hb: { eyebrow: "Home base", ask: "Where is your home, Detective?", askSub: "Pick the part of the world you live in. Then your home joins the game as a place to investigate.",
+      privacy: "We only use a big region. No address, no GPS, nothing to type.", choose: "Choose my home", change: "Change",
+      setTitle: "Your home base", setSub: "Is your part of the world changing too? Investigate it like a real detective.", caseBtn: "Start my home case", cmpBtn: "My home vs another place",
+      pickQ: "Which part of the world is your home?", pickSub: "Tap the picture that shows where you live. Ask a grown-up if you are not sure.", cancel: "Not now",
+      novaHome: "Great choice! Scientists also start with the place they know best: home." },
+    dips: "The 5 least green years are marked in yellow. What happened in those years?", dipsL: "Least green years" },
+           ar: { myHome: "بيتي", homeFact: "هنا تعيش أنت!", homeTag: "البيت",
+    geo: { cardT: "بيتي", cardS: "اضغط لتجد بيتك من الفضاء!", askT: "هل نبحث عن بيتك من الفضاء؟",
+      ask: "تستطيع نوفا استخدام موقع جهازك مرة واحدة لتعرف في أي جزء من العالم أنت. اسأل شخصًا كبيرًا قبل أن توافق.",
+      privacy: "موقعك يبقى على هذا الجهاز. نحتفظ بالمنطقة الكبيرة فقط، وليس بعنوانك أبدًا.",
+      locate: "استخدم موقعي الآن", manual: "أختاره بنفسي", cancel: "ليس الآن",
+      scanT: "نوفا تمسح الأرض من الفضاء…", scan: "انتظر أيها المحقق. نبحث عن الجزء الذي تعيش فيه من العالم.",
+      foundT: "وجدناك!", found: "بيتك في {r}. هل هذا صحيح؟", yes: "نعم، هذا بيتي", no: "لا، أختاره بنفسي",
+      failT: "نوفا لا تستطيع رؤية موقعك هنا", fail: "لا بأس! اضغط على الصورة التي تبيّن أين تعيش.",
+      manualT: "أي جزء من العالم هو بيتك؟", manualS: "اضغط على الصورة التي تبيّن أين تعيش.", change: "تغيير بيتي" },
+    hb: { eyebrow: "قاعدة البيت", ask: "أين بيتك أيها المحقق؟", askSub: "اختر الجزء من العالم الذي تعيش فيه، وسينضم بيتك إلى اللعبة كمكان تحقّق فيه.",
+      privacy: "نستخدم منطقة كبيرة فقط. لا عنوان، ولا تحديد موقع، ولا شيء تكتبه.", choose: "اختر بيتي", change: "تغيير",
+      setTitle: "قاعدة بيتك", setSub: "هل يتغيّر الجزء الذي تعيش فيه من العالم أيضًا؟ حقّق فيه مثل محقق حقيقي.", caseBtn: "ابدأ قضية بيتي", cmpBtn: "بيتي مقابل مكان آخر",
+      pickQ: "أي جزء من العالم هو بيتك؟", pickSub: "اضغط على الصورة التي تبيّن أين تعيش. اسأل شخصًا كبيرًا إن لم تكن متأكدًا.", cancel: "ليس الآن",
+      novaHome: "اختيار رائع! العلماء أيضًا يبدؤون بالمكان الذي يعرفونه أكثر: البيت." },
+    dips: "السنوات الخمس الأقل اخضرارًا معلّمة بالأصفر. ماذا حدث في تلك السنوات؟", dipsL: "السنوات الأقل اخضرارًا" } };
+/* ===== My Home: the child's own part of the world joins the game =====
+   Privacy by design: a big region only, chosen by the child. No GPS, no address, nothing typed. */
+var K_HOMES = [
+ { id: "mena", lat: 29, lon: 42, en: "Middle East", ar: "الشرق الأوسط", heat: [.9, .04, .18], rain: [220, -.8, 30], plants: [18, .05, 1] },
+ { id: "nafrica", lat: 26, lon: 12, en: "North Africa", ar: "شمال أفريقيا", heat: [.8, .038, .18], rain: [150, -.3, 25], plants: [12, .03, .8] },
+ { id: "ssafrica", lat: -4, lon: 22, en: "Africa south of the Sahara", ar: "أفريقيا جنوب الصحراء", heat: [.6, .028, .15], rain: [1050, .5, 70], plants: [55, .1, 1.2] },
+ { id: "europe", lat: 50, lon: 12, en: "Europe", ar: "أوروبا", heat: [.9, .045, .25], rain: [720, .3, 50], plants: [58, .2, 1] },
+ { id: "sasia", lat: 23, lon: 79, en: "South Asia", ar: "جنوب آسيا", heat: [.5, .025, .15], rain: [1150, 1.5, 90], plants: [46, .3, 1.1] },
+ { id: "easia", lat: 28, lon: 112, en: "East and Southeast Asia", ar: "شرق وجنوب شرق آسيا", heat: [.6, .03, .17], rain: [1300, .8, 85], plants: [52, .28, 1] },
+ { id: "namerica", lat: 42, lon: -98, en: "North America", ar: "أمريكا الشمالية", heat: [.7, .032, .24], rain: [760, .6, 55], plants: [50, .12, 1] },
+ { id: "samerica", lat: -14, lon: -58, en: "South America", ar: "أمريكا الجنوبية", heat: [.5, .025, .15], rain: [1500, -1.5, 90], plants: [70, -.1, 1] },
+ { id: "oceania", lat: -25, lon: 135, en: "Australia and the Pacific", ar: "أستراليا والمحيط الهادئ", heat: [.6, .022, .2], rain: [480, -.5, 90], plants: [30, .02, 1.6] }
+];
+var K_HOME = null; /* id of the chosen home region (set on every render) */
+var K_HOME_FRIEND = { color: "#8a6413", name: { en: "Zuzu the house sparrow", ar: "زوزو عصفور الدوري" }, short: { en: "Zuzu", ar: "زوزو" },
+  tip: { en: "Start at home: grow a plant on your balcony or in your garden, and water it wisely.", ar: "ابدأ من بيتك: ازرع نبتة في الشرفة أو الحديقة، واسقها بحكمة." } };
+function kHomeOf(id) { return K_HOMES.filter(function (h) { return h.id === id; })[0] || null; }
+function kRand(a, b) { var x = Math.sin(a * 12.9898 + b * 78.233) * 43758.5453; return x - Math.floor(x); }
+function kHas(v, p) { return p === "home" ? !!(kHomeOf(K_HOME) && kHomeOf(K_HOME)[v]) : KIDS.has(v, p); }
+function kSeries(v, p) {
+  if (p !== "home") return KIDS.series(v, p);
+  var H = kHomeOf(K_HOME), S = H && H[v]; if (!S) return null;
+  var vi = ["heat", "rain", "plants"].indexOf(v) + 1, hi = K_HOMES.indexOf(H) + 11, pts = [];
+  for (var y = KIDS.Y0; y <= KIDS.Y1; y++) { var i = y - KIDS.Y0; pts.push({ x: y, y: +(S[0] + S[1] * i + (kRand(y * vi, hi * 3.7) - .5) * 2 * S[2]).toFixed(KIDS.VARS[v].dec + 1) }); }
+  return pts;
+}
+/* which big region a coordinate falls in; only the region id is ever kept */
+function kRegionAt(lat, lon) {
+  if (lon < -30) return lat >= 13 ? "namerica" : "samerica";
+  if ((lat < -10 && lon >= 110) || (lon >= 150 && lat < 20)) return "oceania";
+  if (lat >= 12 && lat < 42 && lon >= 26 && lon < 63) return "mena";
+  if (lat >= 15 && lat < 38 && lon >= -18 && lon < 26) return "nafrica";
+  if (lat < 15 && lon >= -18 && lon < 52) return "ssafrica";
+  if (lat >= 36 && lon < 63) return "europe";
+  if (lon >= 63 && lon < 97 && lat < 38) return "sasia";
+  return "easia";
+}
+function kFriend(p) { return p === "home" ? K_HOME_FRIEND : KIDS.FRIENDS[p]; }
+function kPlaceColor(p) { return p === "home" ? "#8a6413" : KIDS.PLACES[p].color; }
+function kCrop(lat, lon) { return ((lon + 180) / 360 * 100).toFixed(1) + "% " + ((90 - lat) / 180 * 100).toFixed(1) + "%"; }
+function kImg(p) { var H = p === "home" ? kHomeOf(K_HOME) : null; return H ? { img: "tex", zoom: "560%", pos: kCrop(H.lat, H.lon) } : { img: "im-" + p, zoom: "cover", pos: "center" }; }
+var K_SH1 = "0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)";
+var K_SH2 = "0 1px 2px rgba(23,79,68,.05), 0 18px 40px -18px rgba(23,79,68,.25)";
+
+function kFmt(v, dec) { return Math.abs(v) >= 1000 ? String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : String(+v.toFixed(dec)); }
+function kSigned(v, dec) { return (v > 0 ? "+" : v < 0 ? "−" : "") + kFmt(Math.abs(v), dec); }
+function kAdd(arr, id) { return arr.indexOf(id) >= 0 ? arr : arr.concat([id]); }
+function kMix(a, b, t) {
+  var h = function (x) { return [1, 3, 5].map(function (i) { return parseInt(x.slice(i, i + 2), 16); }); }, A = h(a), B = h(b);
+  return "#" + A.map(function (v, i) { var n = Math.round(v + (B[i] - v) * t).toString(16); return n.length < 2 ? "0" + n : n; }).join("");
+}
+function kScale(pal, t) { t = Math.max(0, Math.min(1, t)); return t < .5 ? kMix(pal[0], pal[1], t * 2) : kMix(pal[1], pal[2], (t - .5) * 2); }
+function kTicks(a, b) {
+  var raw = (b - a) / 4, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), n = raw / p, st = (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10) * p, o = [], v = Math.ceil(a / st) * st;
+  for (; v <= b + 1e-9; v += st) o.push(+v.toFixed(6));
+  return o;
+}
+/* chart geometry for the 780 x 340 mission chart */
+function kChart(series, o) {
+  var W = 780, H = 340, L = 62, R = 150, T = 24, B = 44, all = [];
+  series.forEach(function (s) { all = all.concat(s.pts); });
+  var ys = all.map(function (p) { return p.y; }), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  if (o.zero) { y0 = Math.min(0, y0); y1 = Math.max(0, y1); }
+  var sp = (y1 - y0) || 1; y0 -= sp * .12; y1 += sp * .12;
+  var X = function (x) { return L + (x - KIDS.Y0) / (KIDS.Y1 - KIDS.Y0) * (W - L - R); };
+  var Y = function (y) { return T + (1 - (y - y0) / (y1 - y0)) * (H - T - B); };
+  var ends = series.map(function (s, i) { return { i: i, y: Y(s.pts[s.pts.length - 1].y) }; }).sort(function (a, b) { return a.y - b.y; });
+  for (var k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 34) ends[k].y = ends[k - 1].y + 34;
+  var endY = {}; ends.forEach(function (e) { endY[e.i] = e.y; });
+  return {
+    yt: kTicks(y0, y1).map(function (v) { return { y: Y(v).toFixed(1), top: (Y(v) / H * 100).toFixed(2) + "%", label: kFmt(v, o.dec || 0) }; }),
+    xt: [2000, 2005, 2010, 2015, 2020, 2024].map(function (v) { return { x: X(v).toFixed(1), left: (X(v) / W * 100).toFixed(2) + "%", label: String(v) }; }),
+    hasZero: !!o.zero, zeroY: Y(0).toFixed(1),
+    bands: (o.bands || []).map(function (b) { return { x: (X(b) - 11).toFixed(1) }; }),
+    series: series.map(function (s, i) {
+      var Tn = KIDS.trend(s.pts), last = s.pts[s.pts.length - 1], ly = endY[i];
+      return { color: s.color, ink: "#174F44", anim: o.anim,
+        d: s.pts.map(function (p, j) { return (j ? "L" : "M") + X(p.x).toFixed(1) + " " + Y(p.y).toFixed(1); }).join(""),
+        pts: s.pts.map(function (p) { return { x: X(p.x).toFixed(1), y: Y(p.y).toFixed(1) }; }),
+        hasTrend: !!o.trend, tx1: X(KIDS.Y0).toFixed(1), ty1: Y(Tn.intercept + Tn.slope * KIDS.Y0).toFixed(1), tx2: X(KIDS.Y1).toFixed(1), ty2: Y(Tn.intercept + Tn.slope * KIDS.Y1).toFixed(1),
+        ex: (X(last.x) + 8).toFixed(1), ey: Y(last.y).toFixed(1), ly: ly.toFixed(1), top: (ly / H * 100).toFixed(2) + "%",
+        label: s.label.length > 15 ? s.label.slice(0, 14) + "…" : s.label };
+    })
+  };
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: esLangFromHash("en"), m: null, step: 0, v: null, p: null, sel: [], guess: null, sure: null, checked: false, replay: 0, cid: null, tested: null, badges: [], met: [], word: 0, home: null, picking: false, homeCase: false, geo: null, cand: null };
+  }
+  locate() {
+    var self = this, done = false;
+    var fail = function () { if (done) return; done = true; self.setState({ geo: "fail" }); };
+    this.setState({ geo: "scan" });
+    try {
+      if (typeof navigator === "undefined" || !navigator.geolocation) { setTimeout(fail, 1200); return; }
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        if (done) return; done = true;
+        var id = kRegionAt(pos.coords.latitude, pos.coords.longitude); /* the coordinates are dropped here */
+        setTimeout(function () { self.setState({ geo: "found", cand: id }); }, 1200);
+      }, function () { setTimeout(fail, 800); }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 3600000 });
+      setTimeout(fail, 10000);
+    } catch (e) { setTimeout(fail, 800); }
+  }
+  renderVals() {
+    var self = this, s = this.state, lang = s.lang === "ar" ? "ar" : "en", ar = lang === "ar", kt = KIDS_T[lang], D = kt.dt, XL = KX[lang];
+    var set = function (o) { return function () { self.setState(o); }; };
+    var noop = function () {};
+    var fresh = { step: 0, v: null, p: null, sel: [], guess: null, sure: null, checked: false, cid: null, tested: null, homeCase: false, picking: false, geo: null, cand: null };
+    K_HOME = s.home;
+    var HOME = kHomeOf(s.home), HB = XL.hb, P = {}, PF = {}, pk;
+    for (pk in kt.p) { P[pk] = kt.p[pk]; PF[pk] = kt.pf[pk]; }
+    P.home = XL.myHome + (HOME ? " · " + HOME[lang] : ""); PF.home = XL.homeFact;
+    var ALLP = (HOME ? ["home"] : []).concat(KM.PLACES), ALBUM = KM.PLACES.concat(["home"]);
+    var start = function (m, extra) { return function () { var o = {}, k; for (k in fresh) o[k] = fresh[k]; o.m = m; for (k in (extra || {})) o[k] = extra[k]; self.setState(o); }; };
+    var anim = s.replay % 2 ? "kdrawB" : "kdrawA";
+
+    /* ---------- hub ---------- */
+    var nB = KM.BADGES.filter(function (b) { return s.badges.indexOf(b) >= 0; }).length;
+    var nF = ALBUM.filter(function (p) { return s.met.indexOf(p) >= 0; }).length;
+    var loopBg = ["#DDF1E7", "#e3f2fa", "#FFF3D6", "#fde6de"];
+    var curW = D.dict.words[s.word] || D.dict.words[0];
+    var hi0 = HOME ? kImg("home") : { img: "tex", zoom: "100%", pos: "center" };
+    var hb = { isSet: !!HOME, notSet: !HOME, eyebrow: HB.eyebrow, title: HOME ? HB.setTitle + ": " + HOME[lang] : HB.ask, sub: HOME ? HB.setSub : HB.askSub, privacy: HB.privacy,
+      img: hi0.img, zoom: hi0.zoom, pos: hi0.pos, chooseL: HB.choose, changeL: HB.change, choose: set({ picking: true }),
+      caseL: HB.caseBtn, cmpL: HB.cmpBtn, startCase: start("trend", { homeCase: true, p: "home" }), startCmp: start("compare", { homeCase: true }) };
+    var hp = { on: !s.m && s.picking, q: HB.pickQ, sub: HB.pickSub, privacy: HB.privacy, cancelL: HB.cancel, cancel: set({ picking: false }),
+      list: K_HOMES.map(function (h) { var on = s.home === h.id;
+        return { name: h[lang], zoom: "560%", pos: kCrop(h.lat, h.lon), on: on, ring: on ? "0 0 0 5px #8a6413, " + K_SH2 : K_SH1 + ", inset 0 0 0 2px #edf1ea", pick: set({ home: h.id, picking: false }) }; }) };
+    var hub = { on: !s.m && !s.picking, hb: hb, hi: kt.hubHi, title: kt.hubTitle, sub: kt.hubSub, start: kt.start,
+      badgesL: kt.badges + " · " + nB + " " + kt.of + " " + KM.BADGES.length,
+      badges: KM.BADGES.map(function (b, i) { var on = s.badges.indexOf(b) >= 0, c = KM.BADGE_C[i];
+        return { bg: on ? c : "#F7F8F2", fg: on ? "#174F44" : "#b9cbc2", ring: on ? "0 0 0 3px #fff, 0 0 0 5px " + c : "inset 0 0 0 2px #e6ece4" }; }),
+      missions: ["trend", "compare", "mystery"].map(function (m, i) { var M = kt.m[m];
+        return { n: String(i + 1), title: M.t, desc: M.d, img: KM.STYLE[m].img, color: KM.STYLE[m].c,
+          steps: M.steps.map(function (x, j) { return { n: String(j + 1), label: x }; }),
+          go: start(m) }; }),
+      loop: { eyebrow: D.loop.eyebrow, title: D.loop.title, steps: D.loop.steps.map(function (x, i) { return { n: String(i + 1), t: x.t, b: x.b, bg: loopBg[i] }; }) },
+      album: { title: D.album.title, count: nF + " / " + ALBUM.length,
+        text: nF >= ALBUM.length ? D.album.done : D.album.count.replace("{n}", nF).replace("{all}", ALBUM.length),
+        stickers: ALBUM.map(function (id) { var got = s.met.indexOf(id) >= 0, F = kFriend(id);
+          return { got: got, notGot: !got, color: F.color, tint: kMix(F.color, "#ffffff", .7), name: got ? F.short[lang] : D.album.locked, place: id === "home" ? XL.myHome : kt.p[id], bg: got ? "#FFF6E0" : "#F7F8F2" }; }) },
+      dict: { title: D.dict.title, hint: D.dict.hint, like: D.dict.like, cur: { w: curW.w, says: curW.says, like: curW.like },
+        words: D.dict.words.map(function (w, i) { var on = i === s.word;
+          return { w: w.w, icon: KM.ICON[w.id], on: on, bg: on ? "#174F44" : "#F7F8F2", fg: on ? "#fff" : "#174F44", ring: on ? "none" : "inset 0 0 0 2px #e6ece4", pick: set({ word: i }) }; }) } };
+
+    /* ---------- mission building blocks ---------- */
+    var ms = { on: !!s.m, title: "", hubL: kt.hub, exit: set({ m: null }), steps: [], novaName: kt.nova, nova: "",
+      head: { on: false, q: "", sub: "" }, cards: [], cardsCls: "kg-5", back: { on: false, label: kt.back, go: noop }, make: { on: false, label: "", off: true, opacity: "1", go: noop },
+      showCards: true, homeChange: { on: false, label: '', go: noop }, geo: { on: false, list: [] },
+      work: false, vs: { on: false, items: [] }, charts: [], stripes: { on: false, cells: [] }, kase: { on: false }, q: { on: false, text: "" },
+      choices: { on: false, list: [] }, sure: { on: false, q: D.sureQ, opts: [] }, check: { on: false, label: kt.check, off: true, opacity: "1", hint: "", go: noop },
+      soft: { on: false, text: "" }, link: { on: false }, next: { on: false, label: "", go: noop }, res: { on: false }, verdict: { on: false, scale: [] },
+      hasStats: false, stats: [], friends: [], end: { on: false, label: "", go: noop } };
+    var trail = function (steps, at) { return steps.map(function (label, i) {
+      return { label: label, dot: i < at ? "✓" : String(i + 1), bg: i < at ? "#1B7865" : i === at ? "#F2C66D" : "#fff", fg: i < at ? "#fff" : i === at ? "#174F44" : "#5d726d",
+        ring: i === at ? "0 0 0 6px rgba(242,198,109,.35)" : i < at ? "none" : "inset 0 0 0 2px #dfe6de", lbl: i <= at ? "#174F44" : "#5d726d" }; }); };
+    var card = function (im, title, sub, color, on, ok, tag, pick) {
+      if (typeof im === "string") im = { img: im, zoom: "cover", pos: "center" };
+      return { img: im.img, zoom: im.zoom, pos: im.pos, title: title, sub: sub, on: !!on, off: !ok, hasTag: !!tag, tag: tag || "", cursor: ok ? "pointer" : "not-allowed", opacity: ok ? "1" : ".5", filter: ok ? "none" : "grayscale(1)",
+        ring: on ? "0 0 0 5px " + color + ", " + K_SH2 : K_SH1 + ", inset 0 0 0 2px #edf1ea", pick: ok ? pick : noop }; };
+    var varCards = function (pick) { return KM.VARS.map(function (v) { var ok = !s.homeCase || kHas(v, "home"); return card("im-" + v, kt.v[v], ok ? kt.vq[v] : kt.noData, KIDS.VARS[v].color, s.v === v, ok, "", pick(v)); }); };
+    var G = XL.geo;
+    var placeCards = function (v, selected, multi, pick) { var extra = [];
+      if (!HOME && ["heat", "rain", "plants"].indexOf(v) >= 0) { var lc = card({ img: "tex", zoom: "100%", pos: "center" }, G.cardT, G.cardS, "#8a6413", false, true, XL.homeTag, set({ geo: "ask" }));
+        lc.ring = "0 0 0 3px #F2C66D, " + K_SH2; extra.push(lc); }
+      return extra.concat(ALLP.map(function (p) { var ok = kHas(v, p), si = selected.indexOf(p);
+      return card(kImg(p), P[p], ok ? PF[p] : kt.noData, kPlaceColor(p), si >= 0, ok, multi && si >= 0 ? (si === 0 ? "A" : "B") : (p === "home" ? XL.homeTag : ""), pick(p)); })); };
+    /* GPS flow inside the place step: ask -> scan -> found / fail -> manual */
+    var geoPanel = function (onHome) { if (!s.geo) { ms.homeChange = { on: !!HOME, label: G.change, go: set({ geo: "manual" }) }; return; }
+      var st = s.geo, cand = kHomeOf(s.cand), manual = st === "manual" || st === "fail", view = st === "found" && cand ? cand : HOME;
+      ms.showCards = false; ms.back = { on: false, label: "", go: noop }; ms.make = { on: false, label: "", off: true, opacity: "1", go: noop };
+      ms.geo = { on: true, isAsk: st === "ask", isScan: st === "scan", isFound: st === "found", isManual: manual,
+        zoom: st === "found" && cand ? "560%" : "100%", pos: st === "found" && cand ? kCrop(cand.lat, cand.lon) : "center",
+        title: st === "ask" ? G.askT : st === "scan" ? G.scanT : st === "found" ? G.foundT : st === "fail" ? G.failT : G.manualT,
+        text: st === "ask" ? G.ask : st === "scan" ? G.scan : st === "found" ? G.found.replace("{r}", cand ? cand[lang] : "") : st === "fail" ? G.fail : G.manualS,
+        privacy: G.privacy, locateL: G.locate, manualL: G.manual, cancelL: G.cancel, yesL: G.yes, noL: G.no,
+        locate: function () { self.locate(); }, manual: set({ geo: "manual" }), cancel: set({ geo: null, cand: null }),
+        confirm: function () { if (cand) onHome(cand.id); },
+        list: manual ? K_HOMES.map(function (h) { return { name: h[lang], pos: kCrop(h.lat, h.lon), pick: function () { onHome(h.id); } }; }) : [] };
+      ms.nova = st === "found" ? HB.novaHome : ms.nova; };
+    var choice = function (icon, label, color, on, state, pick) {
+      return { icon: icon, label: label, on: !!on, tint: kMix(color, "#ffffff", .78), ink: "#174F44", pick: pick,
+        bg: state === "right" ? "#DDF1E7" : state === "wrong" ? "#fdeee9" : state === "picked" ? kMix(color, "#ffffff", .9) : "#fff",
+        ring: state === "right" ? "0 0 0 4px #1B7865" : state === "wrong" ? "0 0 0 4px #EE9177" : state === "picked" ? "0 0 0 4px #174F44" : K_SH1 + ", inset 0 0 0 2px #e6ece4" }; };
+    var stateOf = function (k, right) { return s.guess !== k ? "" : !s.checked ? "picked" : k === right ? "right" : "wrong"; };
+    var sureOpts = function () { return ["not", "fair", "very"].map(function (k, i) { var on = s.sure === k, c = function (j) { return j <= i ? "#174F44" : "#cfdcd3"; };
+      return { label: D.sure[k], on: on, bg: on ? "#FFF3D6" : "#F7F8F2", ring: on ? "inset 0 0 0 3px #8a6413" : "inset 0 0 0 2px #e6ece4", b1: c(0), b2: c(1), b3: c(2), pick: set({ sure: k, checked: false }) }; }); };
+    var verdictOf = function (T) { var lvl = KIDS.evidence(T), V = D.verdict, bars = ["#70B8A3", "#F2C66D", "#1B7865"];
+      return { on: true, label: V.label, title: V.t[lvl], desc: V.d[lvl], scale: V.scale.map(function (t, i) { return { t: t, fg: i === lvl ? "#174F44" : "#5d726d", bar: i <= lvl ? bars[i] : "#e6ece4" }; }) }; };
+    var friendOf = function (place, v, T) { var F = kFriend(place), L = D.friend, mood = KIDS.mood(v, T), n = { happy: 5, okay: 3, help: 2 }[mood];
+      var mouth = { happy: ["58%", "14%", "0 3px 3px 3px", "0 0 40px 40px"], okay: ["64%", "0", "3px 0 0 0", "0"], help: ["62%", "14%", "3px 3px 0 3px", "40px 40px 0 0"] }[mood];
+      return { color: F.color, tint: kMix(F.color, "#ffffff", .7), titleL: L.title, name: F.name[lang], mood: L.moods[mood], moodBg: { happy: "#DDF1E7", okay: "#FFF3D6", help: "#fde6de" }[mood],
+        msg: L.msg[mood].replace("{name}", F.short[lang]).replace("{home}", place === "home" ? (HOME ? HOME[lang] : XL.myHome) : kt.p[place]), needsHelp: mood !== "happy", helpL: L.help, tip: F.tip[lang], heartsL: L.health + " " + n + "/5",
+        hearts: [0, 1, 2, 3, 4].map(function (i) { return { f: i < n ? "#EE9177" : "#e2e8df" }; }), mTop: mouth[0], mH: mouth[1], mBW: mouth[2], mR: mouth[3] }; };
+    var chartCard = function (title, sub, v, series, o) { var c = kChart(series, { dec: KIDS.VARS[v].dec, zero: o.zero, trend: o.trend, bands: o.bands, anim: anim });
+      c.title = title; c.sub = sub; c.hasBadge = !!o.badge; c.badge = o.badge || ""; c.badgeBg = o.badgeBg || "#e3f2fa";
+      c.aria = series.map(function (x) { return x.label + ": " + kFmt(x.pts[0].y, 1) + " (" + KIDS.Y0 + ") → " + kFmt(x.pts[x.pts.length - 1].y, 1) + " (" + KIDS.Y1 + ")"; }).join("; ");
+      c.hasLegend = !!o.trend; c.trendL = kt.trendLine; c.hasBands = !!(o.bands && o.bands.length); c.bandL = o.bandL || "";
+      c.src = kt.source + ": " + KIDS.VARS[v].src + " · " + kt.years; c.replayL = D.runAgain; c.replay = function () { self.setState({ replay: self.state.replay + 1 }); };
+      return c; };
+    var askFlow = function (right, onRight) {
+      var ready = !!(s.guess && s.sure);
+      ms.sure = { on: !!s.guess, q: D.sureQ, opts: sureOpts() };
+      ms.check = { on: true, label: kt.check, off: !ready, opacity: ready ? "1" : ".55", hint: ready ? "" : D.pickFirst,
+        go: function () { if (!ready) return; if (s.guess === right) { var o = onRight(); o.checked = true; o.step = 3; self.setState(o); } else self.setState({ checked: true }); } };
+      ms.soft = { on: s.checked && !!s.guess && s.guess !== right, text: kt.notQuite + " " + D.fb.wrong };
+    };
+
+    /* ---------- Mission 1: Find the Trend ---------- */
+    if (s.m === "trend") {
+      ms.title = kt.m.trend.t; ms.steps = trail(kt.m.trend.steps, s.step); ms.nova = kt.novaHi[["pickVar", "pickPlace", "graph", "result"][s.step]];
+      if (s.step === 0) { ms.head = { on: true, q: kt.pickVar, sub: s.homeCase ? P.home : "" }; if (s.homeCase) ms.nova = HB.novaHome;
+        ms.cards = varCards(function (v) { return s.homeCase ? set({ v: v, p: "home", guess: null, sure: null, checked: false, step: 2 }) : set({ v: v, p: null, step: 1 }); }); }
+      else if (s.step === 1) { ms.head = { on: true, q: kt.pickPlace, sub: kt.v[s.v] + " · " + kt.vq[s.v] }; ms.cardsCls = "kg-3";
+        ms.cards = placeCards(s.v, s.p ? [s.p] : [], false, function (p) { return set({ p: p, guess: null, sure: null, checked: false, step: 2 }); });
+        ms.back = { on: true, label: kt.back, go: set({ step: 0 }) };
+        geoPanel(function (id) { K_HOME = id; var ok = kHas(s.v, "home");
+          self.setState(ok ? { home: id, geo: null, cand: null, p: "home", guess: null, sure: null, checked: false, step: 2 } : { home: id, geo: null, cand: null }); }); }
+      else { var V = KIDS.VARS[s.v], pts = kSeries(s.v, s.p), T = KIDS.trend(pts), done = s.step === 3;
+        ms.work = true;
+        ms.charts = [chartCard(kt.v[s.v] + " · " + P[s.p], V.unit[lang] + " · " + kt.measured, s.v, [{ label: s.p === "home" ? XL.myHome : P[s.p], color: V.color, pts: pts }],
+          { zero: s.v === "heat" || s.v === "sea", trend: done, bands: done ? [T.hi.x, T.lo.x] : [], bandL: kt.highest + " / " + kt.lowest })];
+        if (!done) {
+          ms.q = { on: true, text: kt.guessQ };
+          ms.choices = { on: true, list: [["up", "↗", "#EE9177"], ["down", "↘", "#56A9D2"], ["flat", "→", "#70B8A3"]].map(function (c) {
+            return choice(c[1], kt[c[0]], c[2], s.guess === c[0], stateOf(c[0], T.dir), set({ guess: c[0], checked: false })); }) };
+          askFlow(T.dir, function () { var bd = kAdd(s.badges, "trend"); if (s.p === "home") bd = kAdd(bd, "home"); return { badges: bd, met: kAdd(s.met, s.p) }; });
+        } else {
+          ms.res = { on: true, bg: T.dir === "up" ? "#fdeee9" : T.dir === "down" ? "#e3f2fa" : "#DDF1E7", kicker: kt.right,
+            title: (T.dir === "up" ? "↗ " : T.dir === "down" ? "↘ " : "→ ") + kt.result[T.dir], text: (D.fb[s.sure] || "") + " " + kt.bumpy };
+          ms.verdict = verdictOf(T);
+          ms.hasStats = true;
+          ms.stats = [{ label: kt.from + " 2000", value: kFmt(pts[0].y, V.dec), color: "#174F44" }, { label: kt.to + " 2024", value: kFmt(pts[pts.length - 1].y, V.dec), color: "#174F44" },
+            { label: kt.highest, value: String(T.hi.x), color: "#8a6413" }, { label: kt.lowest, value: String(T.lo.x), color: "#8a6413" }];
+          var pal = KIDS.STRIPE[s.v], yy = pts.map(function (p) { return p.y; }), lo = Math.min.apply(null, yy), hi = Math.max.apply(null, yy);
+          ms.stripes = { on: true, label: D.stripes, aria: D.stripesAria.replace("{n}", pts.length).replace("{a}", KIDS.Y0).replace("{b}", KIDS.Y1), a: String(KIDS.Y0), b: String(KIDS.Y1),
+            low: D.low, high: D.high, lowC: pal[0], highC: pal[2], cells: pts.map(function (p) { return { t: p.x + ": " + p.y, bg: kScale(pal, (p.y - lo) / ((hi - lo) || 1)) }; }) };
+          ms.friends = [friendOf(s.p, s.v, T)];
+          ms.end = { on: true, label: kt.newPlace, go: set({ p: null, guess: null, sure: null, checked: false, step: 1, homeCase: false }) };
+        }
+      }
+    }
+
+    /* ---------- Mission 2: Compare Places ---------- */
+    if (s.m === "compare") {
+      ms.title = kt.m.compare.t; ms.steps = trail(kt.m.compare.steps, s.step); ms.nova = kt.novaHi[["pickVar", "pickTwo", "graph", "result"][s.step]];
+      if (s.step === 0) { ms.head = { on: true, q: kt.pickVar, sub: "" };
+        ms.cards = varCards(function (v) { var av = ALLP.filter(function (p) { return kHas(v, p); }); return set({ v: v, sel: av.length === 2 ? av : (s.homeCase ? ["home"] : []), step: 1 }); }); }
+      else if (s.step === 1) { ms.head = { on: true, q: kt.pickTwo, sub: kt.v[s.v] + " · " + kt.vq[s.v] }; ms.cardsCls = "kg-3";
+        ms.cards = placeCards(s.v, s.sel, true, function (p) { return function () { var c = self.state.sel;
+          self.setState({ sel: c.indexOf(p) >= 0 ? c.filter(function (x) { return x !== p; }) : c.length >= 2 ? [c[1], p] : c.concat([p]) }); }; });
+        ms.back = { on: true, label: kt.back, go: set({ step: 0 }) };
+        var two = s.sel.length === 2;
+        ms.make = { on: true, label: kt.makeGraph + " (" + s.sel.length + "/2)", off: !two, opacity: two ? "1" : ".55", go: two ? set({ guess: null, sure: null, checked: false, step: 2 }) : noop };
+        geoPanel(function (id) { K_HOME = id; var c = self.state.sel.filter(function (x) { return x !== "home"; }), ok = kHas(s.v, "home");
+          self.setState({ home: id, geo: null, cand: null, sel: ok ? ["home"].concat(c).slice(0, 2) : c }); }); }
+      else if (s.sel.length === 2) { var CV = KIDS.VARS[s.v], rel = s.v === "rain", cdone = s.step === 3, cols = ["#1B7865", "#EE9177"], inks = ["#125a4c", "#b5452f"];
+        var data = s.sel.map(function (p, i) { var ps = kSeries(s.v, p), Tr = KIDS.trend(ps); return { p: p, pts: ps, T: Tr, amt: rel ? Tr.pct : Tr.change, color: cols[i], ink: inks[i] }; });
+        var a = Math.abs(data[0].amt), b = Math.abs(data[1].amt), winner = Math.max(a, b) < 1e-6 || Math.min(a, b) / Math.max(a, b) > .8 ? "equal" : (a > b ? data[0].p : data[1].p);
+        ms.work = true;
+        ms.vs = { on: true, items: data.map(function (d, i) { var win = cdone && winner === d.p;
+          var im = kImg(d.p);
+          return { img: im.img, zoom: im.zoom, pos: im.pos, name: P[d.p], tag: i ? "B" : "A", color: d.color, ink: d.ink, win: win, winL: kt.changedMore, ring: win ? "0 0 0 5px " + d.color + ", " + K_SH2 : K_SH1,
+            delta: cdone ? (d.T.change > 0 ? "↗ " : "↘ ") + kSigned(rel ? d.T.pct : d.T.change, rel ? 0 : CV.dec) + (rel ? "%" : " " + CV.unit[lang]) : "" }; }) };
+        ms.charts = [chartCard(kt.v[s.v], CV.unit[lang], s.v, data.map(function (d, i) { return { label: (i ? "B · " : "A · ") + (d.p === "home" ? XL.myHome : P[d.p]), color: d.color, pts: d.pts }; }),
+          { zero: s.v === "heat" || s.v === "sea", trend: cdone })];
+        if (!cdone) {
+          ms.q = { on: true, text: kt.whoMore + (rel ? " (%)" : "") };
+          ms.choices = { on: true, list: [s.sel[0], s.sel[1], "equal"].map(function (k, i) {
+            return choice(k === "equal" ? "=" : i ? "B" : "A", k === "equal" ? kt.equal : P[k], k === "equal" ? "#70B8A3" : cols[i], s.guess === k, stateOf(k, winner), set({ guess: k, checked: false })); }) };
+          askFlow(winner, function () { var met = s.met; s.sel.forEach(function (p) { met = kAdd(met, p); }); var bd = kAdd(s.badges, "compare"); if (s.sel.indexOf("home") >= 0) bd = kAdd(bd, "home"); return { badges: bd, met: met }; });
+        } else {
+          ms.res = { on: true, bg: "#DDF1E7", kicker: kt.right, title: winner === "equal" ? kt.equal : P[winner] + " " + kt.changedMore, text: D.fb[s.sure] || "" };
+          ms.friends = data.map(function (d) { return friendOf(d.p, s.v, d.T); });
+          ms.end = { on: true, label: kt.newPlace, go: set({ sel: s.homeCase ? ["home"] : [], guess: null, sure: null, checked: false, step: 1 }) };
+        }
+      }
+    }
+
+    /* ---------- Mission 3: Solve the Mystery ---------- */
+    if (s.m === "mystery") {
+      ms.title = kt.m.mystery.t; ms.steps = trail(kt.m.mystery.steps, s.step); ms.nova = kt.novaHi[["mystery", "mystery", "suspects", "result"][s.step]];
+      var C = s.cid ? KIDS.MYSTERIES.filter(function (m) { return m.id === s.cid; })[0] : null;
+      if (s.step === 0 || !C) { ms.head = { on: true, q: kt.m.mystery.t, sub: kt.m.mystery.d }; ms.cardsCls = "kg-3";
+        ms.cards = KIDS.MYSTERIES.map(function (m) { return card("im-" + m.place, kt.mys[m.id].t, kt.mys[m.id].s, "#56A9D2", false, true, kt.p[m.place], set({ cid: m.id, tested: null, step: 1 })); }); }
+      else { var ev = KIDS.series(C.evidence, C.place), EV = KIDS.VARS[C.evidence], ET = KIDS.trend(ev);
+        var dips = C.tapDips ? ev.slice().sort(function (x, y) { return x.y - y.y; }).slice(0, 5).map(function (p) { return p.x; }) : [];
+        var S = s.tested ? C.suspects.filter(function (x) { return x.id === s.tested; })[0] : null, sp = S && S.v ? KIDS.series(S.v, C.place) : null;
+        ms.work = true;
+        ms.kase = { on: true, img: "im-" + C.place, title: kt.mys[s.cid].t, sub: kt.mys[s.cid].s };
+        ms.charts = [chartCard(kt.v[C.evidence] + " · " + kt.p[C.place], EV.unit[lang], C.evidence, [{ label: kt.v[C.evidence], color: EV.color, pts: ev }],
+          { trend: !C.tapDips, bands: dips, bandL: XL.dipsL, badge: kt.evidence + " 1" })];
+        if (s.step >= 2 && sp) ms.charts.push(chartCard(kt.v[S.v] + " · " + kt.p[C.place], KIDS.VARS[S.v].unit[lang], S.v, [{ label: kt.v[S.v], color: KIDS.VARS[S.v].color, pts: sp }],
+          { trend: !C.tapDips, bands: dips, bandL: XL.dipsL, badge: kt.evidence + " 2", badgeBg: "#FFF3D6" }));
+        if (s.step === 1) {
+          ms.q = { on: true, text: C.tapDips ? XL.dips : kt.result[ET.dir] + (ET.dir === "up" ? " ↗" : " ↘") };
+          ms.next = { on: true, label: kt.suspects, go: set({ step: 2 }) };
+        } else if (s.step === 2) {
+          ms.q = { on: true, text: kt.suspects + ": " + kt.novaHi.suspects };
+          ms.choices = { on: true, list: C.suspects.map(function (x, i) {
+            return choice(String(i + 1), kt.sus[x.id], x.v ? KIDS.VARS[x.v].color : "#9aaba6", s.tested === x.id, s.tested === x.id ? (x.ok ? "right" : "wrong") : "",
+              function () { var o = { tested: x.id }; if (x.ok) { o.badges = kAdd(s.badges, "mystery:" + s.cid); o.met = kAdd(s.met, C.place); } self.setState(o); }); }) };
+          if (S && sp) { var r = KIDS.link(ev, sp);
+            ms.link = { on: true, label: kt.link, pos: ((r + 1) / 2 * 100).toFixed(0) + "%", opp: kt.opposite, none: kt.notLinked, tog: kt.together,
+              verdict: Math.abs(r) < .35 ? kt.notLinked : r > 0 ? kt.together : kt.opposite }; }
+          if (S && !sp) ms.soft = { on: true, text: kt.noClue };
+          if (S && sp && !S.ok) ms.soft = { on: true, text: kt.notQuite };
+          if (S && S.ok) ms.next = { on: true, label: kt.caseSolved, go: set({ step: 3 }) };
+        } else {
+          ms.res = { on: true, bg: "#FFF3D6", kicker: kt.right, title: "★ " + kt.caseSolved, text: kt.why[s.cid] };
+          ms.verdict = verdictOf(ET);
+          ms.friends = [friendOf(C.place, C.evidence, ET)];
+          ms.end = { on: true, label: kt.again, go: set({ step: 0, cid: null, tested: null }) };
+        }
+      }
+    }
+
+    return extendVals(this, { lang: lang, dir: ar ? "rtl" : "ltr", font: ar ? "Cairo, Inter, sans-serif" : "Inter, system-ui, sans-serif",
+      track: ar ? "0" : ".14em", tight: ar ? "0" : "-.025em", hub: hub, hp: hp, ms: ms });
+  }
+}
+
+</script>
+</body>
+</html>
