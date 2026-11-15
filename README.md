@@ -14,9 +14,33 @@
 
 ## About the project
 
-EarthScope is a website we made to look at changes in the environment. It has charts and maps for six topics: temperature, rainfall, carbon dioxide, vegetation, sea surface temperature and sea ice.
+EarthScope is a website we made to look at how the Earth is changing. You choose any place on the map, and the website shows you charts and maps of its temperature, rainfall, sea surface temperature and many other measurements, year by year since 1981.
 
-We made the design of the pages in a canvas project and exported it. The website runs with Streamlit. It can ask for real data from the public services of NASA, NOAA and NSIDC. Sometimes real data is not available for a chart or a place. In this case the page may show the example values that are saved inside the design.
+The data is real. The website takes it live from the NASA POWER API, which gives measurements for any point on Earth. For the global records we also use NASA GISS (global temperature), NOAA (carbon dioxide) and NSIDC (Arctic sea ice). The website runs with Streamlit, and every chart shows the name of its data source.
+
+## The story behind the project
+
+Our idea started from the olive trees.
+
+In Palestine, the olive harvest is the most important income for many families. Every autumn the whole family goes to the land to pick the olives, and the oil of that season has to be enough for the house and for selling. But the harvest is never the same. One year the trees are full of olives, and the next year the same trees give very little. Our farmers have names for this. They call the good year "masiyeh" and the weak year "shaltouneh". In science it is called alternate bearing.
+
+When we asked why this happens, we heard many answers. Some people say it depends on the rain of the winter. Others say it is the humidity, or the heat in spring when the trees are in flower. Everybody has an explanation and everybody is sure of it. To be honest, most of the time nobody really knows why this year the olives are many and the year after they are few. But the result is clear for every family, because a weak year means less income.
+
+This made us think. The weather of our villages has been measured for more than forty years, and NASA gives this data for free. So why do we still guess? We wanted a simple tool where a student or a farmer can choose his own village on the map and see how the rain, the temperature, the humidity and the soil wetness changed there year after year. Then he can compare what the data says with what the people remember.
+
+EarthScope does not solve the olive question, and we do not claim this. It is the first step. It helps to move from "I think" to "the data shows". Also, the same idea works for any place on Earth and for any question about a changing environment, and this is why we built it for kids, for students and for researchers together.
+
+## Best features and added value
+
+- **Real NASA data for any place on Earth.** The user is not limited to a list of cities. Any point on the map can be chosen, and the website asks the NASA POWER API for its record from 1981 until the last full year.
+- **One website for three levels of users.** Junior Detective is for kids (ages 8–13) and teaches with missions, pictures and stickers. Earth Explorer is for school students. Earth Expert is for university students and researchers. The same data is explained in a different way for each level.
+- **It answers the question "is the change real?"** The Trend Lab does not only draw a line. It tests the trend with the Mann-Kendall test and Sen's slope, and it tells the user if the change is significant or if it can be only chance.
+- **More than 30 extra measurements.** In the Trend Lab the user can also study wind, humidity, soil wetness, snow, clouds, solar radiation and UV index, all from NASA POWER.
+- **A world map built from real data.** The Explore Map is made of 1,800 cells that cover the whole planet. The user can play the years and watch how the colours change.
+- **English and Arabic.** Every page works in both languages, and the Arabic pages are written from right to left.
+- **The source is always shown.** Each chart is labelled with the dataset it comes from, so the user learns to ask "where does this number come from?"
+- **Tools for real study.** The expert level gives change-point detection, comparison between variables, and download of the data as a CSV file.
+- **Fast after the first visit.** Data that was downloaded once is saved on the computer, so the same place opens quickly the next time.
 
 ### What we want to learn
 
