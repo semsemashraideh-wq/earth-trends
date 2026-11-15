@@ -109,4 +109,4 @@ The Explore Map uses the file `frontend/map_data.json` for temperature, rainfall
 
 ## Important note
 
-EarthScope is an educational project to look at historical data. It is not a weather forecast, not a scientific publication, and not an emergency warning service. Some layers or places may show example values when the live source is not connected or does not give data.
+EarthScope is an educational project to look at historical data. It is not a weather forecast, not a scientific publication, and not an emergency warning service. 
