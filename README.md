@@ -20,15 +20,11 @@ The data is real. The website takes it live from the NASA POWER API, which gives
 
 ## The story behind the project
 
-Our idea started from the olive trees.
+Our idea started from the olive trees. In Palestine, the olive harvest is the most important income for many families, but one year the trees are full and the next year they give very little. Our farmers call the good year "masiyeh" and the weak year "shaltouneh".
 
-In Palestine, the olive harvest is the most important income for many families. But the harvest is never the same. One year the trees are full of olives, and the next year the same trees give very little. Our farmers call the good year "masiyeh" and the weak year "shaltouneh". In science it is called alternate bearing. For a family, a weak year simply means less income.
+**Everybody knows that the weather is the reason. But nobody knows how, when and where.** Some say it is the rain of the winter, others say the humidity or the heat in spring. To be honest, these are guesses.
 
-**Everybody knows that the weather is the reason. But nobody knows how, when and where.** Is it the rain of the winter? The humidity? The heat in spring, when the trees are in flower? Everyone has an explanation, and everyone is sure of it. To be honest, these are guesses.
-
-This is exactly the question behind EarthScope. The weather of our villages has been measured for more than forty years, and NASA gives this data for free. So we built a simple tool where a student or a farmer can choose his own village on the map and see how the rain, the temperature, the humidity and the soil wetness changed there, year after year. Then he can compare it with what the people remember.
-
-EarthScope does not solve the olive question, and we do not claim this. But when people know the reasons, they can think about the next season in a better way. It is a first step from "I think" to "the data shows", and the same idea works for any place on Earth.
+NASA has measured the weather of our villages for more than forty years, and the data is free. So we built EarthScope, where anyone can choose his own place on the map and see what really changed there, year after year. It does not solve the olive question. But when people know the reasons, they can think about the next season in a better way. It is a first step from "I think" to "the data shows".
 
 ## Best features and added value
 
