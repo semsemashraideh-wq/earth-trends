@@ -22,13 +22,13 @@ The data is real. The website takes it live from the NASA POWER API, which gives
 
 Our idea started from the olive trees.
 
-In Palestine, the olive harvest is the most important income for many families. Every autumn the whole family goes to the land to pick the olives, and the oil of that season has to be enough for the house and for selling. But the harvest is never the same. One year the trees are full of olives, and the next year the same trees give very little. Our farmers have names for this. They call the good year "masiyeh" and the weak year "shaltouneh". In science it is called alternate bearing.
+In Palestine, the olive harvest is the most important income for many families. But the harvest is never the same. One year the trees are full of olives, and the next year the same trees give very little. Our farmers call the good year "masiyeh" and the weak year "shaltouneh". In science it is called alternate bearing. For a family, a weak year simply means less income.
 
-When we asked why this happens, we heard many answers. Some people say it depends on the rain of the winter. Others say it is the humidity, or the heat in spring when the trees are in flower. Everybody has an explanation and everybody is sure of it. To be honest, most of the time nobody really knows why this year the olives are many and the year after they are few. But the result is clear for every family, because a weak year means less income.
+**Everybody knows that the weather is the reason. But nobody knows how, when and where.** Is it the rain of the winter? The humidity? The heat in spring, when the trees are in flower? Everyone has an explanation, and everyone is sure of it. To be honest, these are guesses.
 
-This made us think. The weather of our villages has been measured for more than forty years, and NASA gives this data for free. So why do we still guess? We wanted a simple tool where a student or a farmer can choose his own village on the map and see how the rain, the temperature, the humidity and the soil wetness changed there year after year. Then he can compare what the data says with what the people remember.
+This is exactly the question behind EarthScope. The weather of our villages has been measured for more than forty years, and NASA gives this data for free. So we built a simple tool where a student or a farmer can choose his own village on the map and see how the rain, the temperature, the humidity and the soil wetness changed there, year after year. Then he can compare it with what the people remember.
 
-EarthScope does not solve the olive question, and we do not claim this. It is the first step. It helps to move from "I think" to "the data shows". Also, the same idea works for any place on Earth and for any question about a changing environment, and this is why we built it for kids, for students and for researchers together.
+EarthScope does not solve the olive question, and we do not claim this. But when people know the reasons, they can think about the next season in a better way. It is a first step from "I think" to "the data shows", and the same idea works for any place on Earth.
 
 ## Best features and added value
 
