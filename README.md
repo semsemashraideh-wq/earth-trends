@@ -1,5 +1,7 @@
 # EarthScope: Earth System Trend Detection
 
+## 🌍 Live site: [earth-trends-357zrf5c6geqprqqguahdu.streamlit.app](https://earth-trends-357zrf5c6geqprqqguahdu.streamlit.app/)
+
 **Team:** Nova Mind  
 **Project type:** Student project  
 **Topic:** Looking at how Earth's climate and environment are changing
