@@ -33,11 +33,12 @@ html[lang=ar] .eyebrow{letter-spacing:0}
 .hero h1{font-size:clamp(36px,5.5vw,64px);line-height:1.05;letter-spacing:-.035em;margin:10px 0 16px}
 html[lang=ar] .hero h1{letter-spacing:0;line-height:1.25}
 .hero .lead{font-size:clamp(16px,1.6vw,19px);color:var(--muted);max-width:520px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.place{margin-top:24px;display:flex;align-items:center;gap:12px;font-weight:700;font-size:15px;color:var(--ink)}
+.place::before{content:"";width:32px;height:2px;background:var(--green)}
 .chip{background:#fff;border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:600;box-shadow:inset 0 0 0 1.5px var(--line)}
 
 /* team photo */
-.photo{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(135deg,#DDF1E7,#cfe6f1);box-shadow:0 1px 2px rgba(23,79,68,.06),0 30px 60px -28px rgba(23,79,68,.45)}
+.photo{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:1441/744;background:linear-gradient(135deg,#DDF1E7,#cfe6f1);box-shadow:0 1px 2px rgba(23,79,68,.06),0 30px 60px -28px rgba(23,79,68,.45)}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
 .photo .ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;color:var(--ink)}
 .photo.empty img{display:none}
@@ -98,11 +99,7 @@ footer a{color:#d9ece4}
       <div class="eyebrow" data-t="eyebrow"></div>
       <h1 data-t="title"></h1>
       <p class="lead" data-t="lead"></p>
-      <div class="chips">
-        <span class="chip" data-t="chip1"></span>
-        <span class="chip" data-t="chip2"></span>
-        <span class="chip" data-t="chip3"></span>
-      </div>
+      <p class="place" data-t="place"></p>
     </div>
     <!-- Team photo: save the picture as frontend/assets/team.jpg -->
     <figure class="photo" id="photo">
@@ -157,8 +154,8 @@ var T = {
   en: {
     eyebrow: "About us", title: "We are Nova Minds",
     lead: "A team of students from Palestine who built EarthScope, a website that shows how the Earth is changing, using real NASA data for any place on the map.",
-    chip1: "📍 Palestine", chip2: "👩‍🎓 5 students", chip3: "🛰️ NASA data",
-    team: "Team Nova Minds", photoSoon: "Team photo coming soon", caption: "Team Nova Minds",
+    place: "Palestine",
+    team: "Team Nova Minds", photoSoon: "Team photo coming soon", caption: "Nova Minds · Palestine",
     storyEy: "Our story", storyT: "It started with the olive trees",
     s1t: "A good year, a weak year", s1: "In Palestine, the olive harvest is the most important income for many families. One year the trees are full (masiyeh), and the next year they give very little (shaltouneh).",
     s2t: "Everybody guesses", s2: "Everybody says the weather is the reason, but nobody knows how, when and where. Is it the winter rain, the humidity or the spring heat? These are guesses.",
@@ -171,8 +168,8 @@ var T = {
   ar: {
     eyebrow: "من نحن", title: "نحن فريق Nova Minds",
     lead: "فريق من الطلبة من فلسطين بنى EarthScope، موقعًا يُظهر كيف تتغيّر الأرض، باستخدام بيانات ناسا الحقيقية لأي مكان على الخريطة.",
-    chip1: "📍 فلسطين", chip2: "👩‍🎓 ٥ طلبة", chip3: "🛰️ بيانات ناسا",
-    team: "فريق Nova Minds", photoSoon: "صورة الفريق قريبًا", caption: "فريق Nova Minds",
+    place: "فلسطين",
+    team: "فريق Nova Minds", photoSoon: "صورة الفريق قريبًا", caption: "Nova Minds · فلسطين",
     storyEy: "قصتنا", storyT: "بدأت الفكرة من شجر الزيتون",
     s1t: "سنة ماسية وسنة شلتونة", s1: "في فلسطين، موسم الزيتون هو أهم دخل لكثير من العائلات. سنةً تكون الأشجار مليئة (ماسية)، وفي السنة التالية تعطي القليل (شلتونة).",
     s2t: "الجميع يخمّن", s2: "الجميع يقول إن الطقس هو السبب، لكن لا أحد يعرف كيف ومتى وأين. هل هو مطر الشتاء أم الرطوبة أم حرّ الربيع؟ هذه تخمينات.",
