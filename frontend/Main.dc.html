@@ -315,9 +315,11 @@ button[disabled]{opacity:.4;cursor:default!important}
               <span style="position: absolute; right: 18px; top: 66px; width: 14px; height: 8px; border-radius: 50%; background: #EE9177; opacity: .7"></span>
             </div>
             <div class="cloud" style="width: 70px; height: 20px; top: 30px; left: 30px"></div>
-            <span style="position: absolute; left: 40px; top: 140px; width: 14px; height: 14px; border-radius: 4px; background: #EE9177; transform: rotate(45deg)"></span>
-            <span style="position: absolute; right: 40px; top: 40px; width: 14px; height: 14px; border-radius: 4px; background: #fff; transform: rotate(45deg)"></span>
-            <span style="position: absolute; right: 30px; top: 140px; width: 14px; height: 14px; border-radius: 4px; background: #1B7865; transform: rotate(45deg)"></span>
+            <span class="float" aria-hidden="true" style="position: absolute; left: calc(50% + 34px); top: 84px; font-size: 54px; line-height: 1; filter: drop-shadow(0 4px 5px rgba(23,79,68,.3))">🔍</span>
+            <span class="float2" aria-hidden="true" style="position: absolute; left: 9%; top: 96px; font-size: 44px; line-height: 1">🚀</span>
+            <span class="float" aria-hidden="true" style="position: absolute; right: 9%; top: 20px; font-size: 40px; line-height: 1">🛰️</span>
+            <span class="float2" aria-hidden="true" style="position: absolute; right: 12%; top: 124px; font-size: 34px; line-height: 1">⭐</span>
+            <span class="float" aria-hidden="true" style="position: absolute; left: 26%; top: 18px; font-size: 30px; line-height: 1">🌈</span>
           </sc-if>
           <sc-if value="{{m.isEarth}}" hint-placeholder-val="{{false}}">
             <div class="tex" style="position: absolute; inset: 0; background-size: 240% auto; background-position: 55% 38%; opacity: .85; mix-blend-mode: multiply"></div>
@@ -342,7 +344,18 @@ button[disabled]{opacity:.4;cursor:default!important}
             <span style="display: inline-flex; align-items: center; height: 26px; padding: 0 11px; border-radius: 999px; font-size: 11px; font-weight: 700; color: #174F44; background: {{m.badgeBg}}">{{m.badge}}</span>
           </div>
           <span style="font-size: 13px; font-weight: 700; color: #1B7865">{{m.forWho}}</span>
-          <p style="font-size: 15px; line-height: 1.6; color: #4a625c">{{m.desc}}</p>
+          <sc-if value="{{m.isYoung}}" hint-placeholder-val="{{false}}">
+            <p style="font-size: 19px; font-weight: 800; line-height: 1.3; color: #174F44">{{m.desc}}</p>
+            <span aria-hidden="true" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px">
+              <span style="display: grid; place-items: center; width: 54px; height: 54px; border-radius: 18px; font-size: 28px; background: #FFE9A8">🎯</span>
+              <span style="display: grid; place-items: center; width: 54px; height: 54px; border-radius: 18px; font-size: 28px; background: #C9F0DC">🐧</span>
+              <span style="display: grid; place-items: center; width: 54px; height: 54px; border-radius: 18px; font-size: 28px; background: #CFE9F8">📈</span>
+              <span style="display: grid; place-items: center; width: 54px; height: 54px; border-radius: 18px; font-size: 28px; background: #FDD9CC">🏅</span>
+            </span>
+          </sc-if>
+          <sc-if value="{{m.notYoung}}" hint-placeholder-val="{{true}}">
+            <p style="font-size: 15px; line-height: 1.6; color: #4a625c">{{m.desc}}</p>
+          </sc-if>
         </div>
       </a>
     </sc-for>
@@ -476,7 +489,7 @@ var TXT = {
   modeShort: { young: "Junior", earth: "Explorer", lab: "Expert" },
   modeFor: { young: "Kids · ages 8–13", earth: "School students", lab: "Experts · university · research" },
   modeDesc: {
-   young: "Playful journeys, friendly guides and quick quizzes. Is it going up or down, and is it for real?",
+   young: "Play 3 missions, meet animal friends, win stickers!",
    earth: "Clear maps, plain-language definitions and a guided first trend test on the places you know.",
    lab: "Full variable catalog, regional time series, Sen's slope, Mann-Kendall and t-tests, confidence intervals and CSV export." },
   hero: {
@@ -534,7 +547,7 @@ var TXT = {
   modeShort: { young: "ناشئ", earth: "مستكشف", lab: "خبير" },
   modeFor: { young: "أطفال · من 8 إلى 13 عامًا", earth: "طلاب المدارس", lab: "خبراء · جامعات · باحثون" },
   modeDesc: {
-   young: "رحلات مرحة ومرشدون ودودون واختبارات سريعة. هل يرتفع أم ينخفض، وهل هو حقيقي؟",
+   young: "العب 3 مهمات، وتعرّف على أصدقاء من الحيوانات، واربح الملصقات!",
    earth: "خرائط واضحة وتعريفات بلغة بسيطة وأول اختبار اتجاه موجَّه على أماكن تعرفها.",
    lab: "فهرس كامل للمتغيرات وسلاسل زمنية إقليمية وميل سِن واختباري مان-كندال وt وفترات الثقة وتصدير CSV." },
   hero: {
@@ -856,7 +869,7 @@ class Component extends DCLogic {
       return {
         id: m.id, color: m.color, art: m.art, on: on,
         short: t.modeShort[m.id], name: t.modes[m.id], forWho: t.modeFor[m.id], desc: t.modeDesc[m.id],
-        isYoung: m.id === "young", isEarth: m.id === "earth", isLab: m.id === "lab",
+        isYoung: m.id === "young", notYoung: m.id !== "young", isEarth: m.id === "earth", isLab: m.id === "lab",
         segBg: on ? "#fff" : "transparent",
         segShadow: on ? "0 1px 2px rgba(23,79,68,.06), 0 4px 14px -6px rgba(23,79,68,.12)" : "none",
         cardShadow: on ? "0 0 0 3px " + m.color + ", 0 30px 80px -30px rgba(23,79,68,.35)" : shadowOff,
