@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About us · EarthScope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--ink:#174F44;--green:#1B7865;--mint:#DDF1E7;--paper:#F7F8F2;--line:#cfdcd3;--muted:#4a625c;--sun:#F2C66D;--sky:#56A9D2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,sans-serif;line-height:1.6}
+html[lang=ar] body{font-family:Cairo,sans-serif}
+a{color:var(--green)}
+h1,h2,h3{margin:0;color:var(--ink);text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,56px)}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;border:0;font:inherit;font-weight:600;font-size:14.5px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn-ghost{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px #70B8A3}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+html[lang=ar] .eyebrow{letter-spacing:0}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.03em;color:var(--ink);text-decoration:none}
+.logo i{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#8fd3bf,#1B7865 60%,#174F44);box-shadow:inset -4px -4px 0 rgba(0,0,0,.12)}
+.top nav{display:flex;gap:8px;flex-wrap:wrap}
+
+/* hero */
+.hero{padding:clamp(28px,5vw,64px) 0 clamp(24px,4vw,40px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:center}
+.hero h1{font-size:clamp(36px,5.5vw,64px);line-height:1.05;letter-spacing:-.035em;margin:10px 0 16px}
+html[lang=ar] .hero h1{letter-spacing:0;line-height:1.25}
+.hero .lead{font-size:clamp(16px,1.6vw,19px);color:var(--muted);max-width:520px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{background:#fff;border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:600;box-shadow:inset 0 0 0 1.5px var(--line)}
+
+/* team photo */
+.photo{position:relative;margin:0;border-radius:28px;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(135deg,#DDF1E7,#cfe6f1);box-shadow:0 1px 2px rgba(23,79,68,.06),0 30px 60px -28px rgba(23,79,68,.45)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;color:var(--ink)}
+.photo.empty img{display:none}
+.photo.empty .ph{display:flex}
+.ph .row{display:flex;justify-content:center}
+.ph .row span{width:clamp(48px,7vw,72px);height:clamp(48px,7vw,72px);border-radius:50%;margin:0 -6px;display:grid;place-items:center;font-weight:800;font-size:clamp(15px,2vw,20px);color:#fff;border:3px solid #fff}
+.ph small{font-size:13px;color:var(--muted)}
+.photo figcaption{position:absolute;inset:auto 0 0 0;padding:28px 20px 14px;background:linear-gradient(transparent,rgba(23,79,68,.75));color:#fff;font-weight:600;font-size:14px}
+.photo.empty figcaption{display:none}
+
+/* sections */
+section{padding:clamp(36px,5vw,64px) 0}
+.sec-h{margin-bottom:28px}
+.sec-h h2{font-size:clamp(26px,3.2vw,38px);letter-spacing:-.03em;margin-top:8px}
+html[lang=ar] .sec-h h2{letter-spacing:0}
+
+/* story */
+.story{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px}
+.card{background:#fff;border-radius:22px;padding:26px;box-shadow:0 1px 2px rgba(23,79,68,.05),0 18px 40px -22px rgba(23,79,68,.25)}
+.card .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;margin-bottom:14px}
+.card h3{font-size:18px;margin-bottom:8px}
+.card p{color:var(--muted);font-size:15px}
+.quote{margin-top:28px;background:var(--ink);color:#fff;border-radius:24px;padding:clamp(24px,4vw,40px);font-size:clamp(19px,2.2vw,26px);font-weight:700;line-height:1.4;letter-spacing:-.01em}
+.quote span{color:var(--sun)}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:18px}
+.member{background:#fff;border-radius:22px;padding:24px 20px;text-align:center;box-shadow:0 1px 2px rgba(23,79,68,.05),0 18px 40px -22px rgba(23,79,68,.25);transition:transform .2s}
+.member:hover{transform:translateY(-3px)}
+.av{width:84px;height:84px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:26px;color:#fff;overflow:hidden;box-shadow:0 0 0 5px var(--mint)}
+.av img{width:100%;height:100%;object-fit:cover}
+.member h3{font-size:17px}
+.member .alt{font-size:14px;color:var(--muted);margin-top:2px}
+.member .role{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;background:var(--mint);color:var(--ink);padding:4px 12px;border-radius:999px}
+
+/* footer */
+footer{margin-top:40px;background:var(--ink);color:#d9ece4}
+footer .wrap{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;font-size:13.5px}
+footer a{color:#d9ece4}
+
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.member{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="logo" id="home" href="Main.dc.html"><i aria-hidden="true"></i>EarthScope</a>
+    <nav>
+      <a class="btn btn-ghost" id="back" href="Main.dc.html"></a>
+      <button class="btn btn-ghost" id="lang" type="button"></button>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow" data-t="eyebrow"></div>
+      <h1 data-t="title"></h1>
+      <p class="lead" data-t="lead"></p>
+      <div class="chips">
+        <span class="chip" data-t="chip1"></span>
+        <span class="chip" data-t="chip2"></span>
+        <span class="chip" data-t="chip3"></span>
+      </div>
+    </div>
+    <!-- Team photo: save the picture as frontend/assets/team.jpg -->
+    <figure class="photo" id="photo">
+      <img src="assets/team.jpg" alt="" id="teamImg">
+      <div class="ph" aria-hidden="true">
+        <div class="row" id="phRow"></div>
+        <strong data-t="team"></strong>
+        <small data-t="photoSoon"></small>
+      </div>
+      <figcaption data-t="caption"></figcaption>
+    </figure>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><div class="eyebrow" data-t="storyEy"></div><h2 data-t="storyT"></h2></div>
+    <div class="story">
+      <div class="card"><div class="ic" style="background:#EAF3DA">🌳</div><h3 data-t="s1t"></h3><p data-t="s1"></p></div>
+      <div class="card"><div class="ic" style="background:#FDF1D6">❓</div><h3 data-t="s2t"></h3><p data-t="s2"></p></div>
+      <div class="card"><div class="ic" style="background:#DDEEF7">🛰️</div><h3 data-t="s3t"></h3><p data-t="s3"></p></div>
+    </div>
+    <div class="quote" data-t="quote"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><div class="eyebrow" data-t="teamEy"></div><h2 data-t="teamT"></h2></div>
+    <div class="team" id="team"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span data-t="made"></span>
+    <a id="back2" href="Main.dc.html"></a>
+  </div>
+</footer>
+
+<script>
+var COLORS = ["#1B7865", "#56A9D2", "#E0904A", "#8A6FC4", "#C9568A"];
+// To add a personal photo, put it in frontend/assets and set photo: "assets/name.jpg"
+var MEMBERS = [
+  { en: "Sameera Qais", ar: "سميرة قيس", photo: "" },
+  { en: "Layan Qais", ar: "ليان قيس", photo: "" },
+  { en: "Layan Motaz", ar: "ليان معتز", photo: "" },
+  { en: "Tuleen Thaher", ar: "تولين الظاهر", photo: "" },
+  { en: "Maysam Omran", ar: "ميسم عمران", photo: "" }
+];
+var T = {
+  en: {
+    eyebrow: "About us", title: "We are Nova Minds",
+    lead: "A team of students from Palestine who built EarthScope, a website that shows how the Earth is changing, using real NASA data for any place on the map.",
+    chip1: "📍 Palestine", chip2: "👩‍🎓 5 students", chip3: "🛰️ NASA data",
+    team: "Team Nova Minds", photoSoon: "Team photo coming soon", caption: "Team Nova Minds",
+    storyEy: "Our story", storyT: "It started with the olive trees",
+    s1t: "A good year, a weak year", s1: "In Palestine, the olive harvest is the most important income for many families. One year the trees are full (masiyeh), and the next year they give very little (shaltouneh).",
+    s2t: "Everybody guesses", s2: "Everybody says the weather is the reason, but nobody knows how, when and where. Is it the winter rain, the humidity or the spring heat? These are guesses.",
+    s3t: "So we asked the data", s3: "NASA has measured the weather of our villages for more than forty years, and the data is free. So we built EarthScope, where anyone can choose a place and see what really changed there.",
+    quote: "A first step from <span>“I think”</span> to <span>“the data shows”</span>.",
+    teamEy: "The team", teamT: "Meet the students", role: "Student",
+    back: "← Back to home", lang: "العربية",
+    made: "Made for curious people everywhere · © 2026 EarthScope · Nova Minds"
+  },
+  ar: {
+    eyebrow: "من نحن", title: "نحن فريق Nova Minds",
+    lead: "فريق من الطلبة من فلسطين بنى EarthScope، موقعًا يُظهر كيف تتغيّر الأرض، باستخدام بيانات ناسا الحقيقية لأي مكان على الخريطة.",
+    chip1: "📍 فلسطين", chip2: "👩‍🎓 ٥ طلبة", chip3: "🛰️ بيانات ناسا",
+    team: "فريق Nova Minds", photoSoon: "صورة الفريق قريبًا", caption: "فريق Nova Minds",
+    storyEy: "قصتنا", storyT: "بدأت الفكرة من شجر الزيتون",
+    s1t: "سنة ماسية وسنة شلتونة", s1: "في فلسطين، موسم الزيتون هو أهم دخل لكثير من العائلات. سنةً تكون الأشجار مليئة (ماسية)، وفي السنة التالية تعطي القليل (شلتونة).",
+    s2t: "الجميع يخمّن", s2: "الجميع يقول إن الطقس هو السبب، لكن لا أحد يعرف كيف ومتى وأين. هل هو مطر الشتاء أم الرطوبة أم حرّ الربيع؟ هذه تخمينات.",
+    s3t: "فسألنا البيانات", s3: "قاست ناسا طقس قرانا لأكثر من أربعين سنة، والبيانات مجانية. لذلك بنينا EarthScope، حيث يستطيع أي شخص أن يختار مكانه ويرى ما الذي تغيّر هناك فعلًا.",
+    quote: "خطوة أولى من <span>«أظن»</span> إلى <span>«البيانات تقول»</span>.",
+    teamEy: "الفريق", teamT: "تعرّفوا على الطلبة", role: "طالبة",
+    back: "→ العودة إلى الرئيسية", lang: "English",
+    made: "صُنع لكل فضولي في كل مكان · © 2026 EarthScope · Nova Minds"
+  }
+};
+
+function initials(name) { return name.split(" ").map(function (w) { return w.charAt(0); }).join(""); }
+
+function render(lang) {
+  var t = T[lang], ar = lang === "ar", other = ar ? "en" : "ar";
+  document.documentElement.lang = lang;
+  document.documentElement.dir = ar ? "rtl" : "ltr";
+  document.title = (ar ? "من نحن" : "About us") + " · EarthScope";
+  document.querySelectorAll("[data-t]").forEach(function (el) { el.innerHTML = t[el.getAttribute("data-t")]; });
+  var home = "Main.dc.html#l=" + lang;
+  ["home", "back", "back2"].forEach(function (id) { document.getElementById(id).href = home; });
+  document.getElementById("back").textContent = t.back;
+  document.getElementById("back2").textContent = t.back;
+  var lb = document.getElementById("lang");
+  lb.textContent = t.lang;
+  lb.style.fontFamily = ar ? "Inter, sans-serif" : "Cairo, sans-serif";
+  lb.onclick = function () { history.replaceState(null, "", "#l=" + other); render(other); };
+  document.getElementById("teamImg").alt = t.caption;
+  document.getElementById("phRow").innerHTML = MEMBERS.map(function (m, i) {
+    return '<span style="background:' + COLORS[i % COLORS.length] + '">' + initials(m.en) + "</span>";
+  }).join("");
+  document.getElementById("team").innerHTML = MEMBERS.map(function (m, i) {
+    var name = m[lang], alt = m[other];
+    var av = m.photo ? '<img src="' + m.photo + '" alt="' + name + '">' : initials(m.en);
+    return '<article class="member"><div class="av" style="background:' + COLORS[i % COLORS.length] + '">' + av +
+      '</div><h3>' + name + '</h3><div class="alt" dir="' + (ar ? "ltr" : "rtl") + '">' + alt +
+      '</div><span class="role">' + t.role + "</span></article>";
+  }).join("");
+}
+
+var img = document.getElementById("teamImg"), photo = document.getElementById("photo");
+img.addEventListener("error", function () { photo.classList.add("empty"); });
+if (img.complete && !img.naturalWidth) photo.classList.add("empty");
+
+render(/[#&]l=ar/.test(location.hash) ? "ar" : "en");
+</script>
+</body>
+</html>

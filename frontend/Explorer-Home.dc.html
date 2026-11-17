@@ -395,7 +395,7 @@ button[disabled]{opacity:.4;cursor:default!important}
       <span>MODIS · OMI · AIRS</span><span>GPM IMERG</span><span>MERRA-2 · GLDAS</span><span>GISTEMP v4</span>
     </div>
   </div>
-  <div style="max-width: 1320px; margin: 0 auto; padding: 18px clamp(16px,4vw,56px) 28px; border-top: 1px solid rgba(255,255,255,.12); font-size: 12.5px; color: #a9cfc1"><div style="max-width: 760px; margin-bottom: 16px"><div style="font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #a9cfc1; margin-bottom: 6px">{{t.footer.aboutT}}</div><p style="margin: 0; font-size: 13.5px; line-height: 1.65; color: #d9ece4">{{t.footer.about}}</p></div><div>{{t.footer.made}}</div><div style="margin-top: 6px; color: #d9ece4">{{t.footer.students}}</div></div>
+  <div style="max-width: 1320px; margin: 0 auto; padding: 18px clamp(16px,4vw,56px) 28px; border-top: 1px solid rgba(255,255,255,.12); font-size: 12.5px; color: #a9cfc1"><div style="margin-bottom: 14px"><a href="{{t.footer.aboutHref}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 18px; border-radius: 999px; background: rgba(255,255,255,.1); color: #fff; font-weight: 700; font-size: 14px; text-decoration: none">{{t.footer.aboutT}}</a></div><div>{{t.footer.made}}</div><div style="margin-top: 6px; color: #d9ece4">{{t.footer.students}}</div></div>
 </footer>
 </div>
 </x-dc>
@@ -491,7 +491,7 @@ var TXT = {
   stories: { eyebrow: "Demo cases", title: "Watch a case being solved, step by step", watch: "Watch demo" },
   src: { eyebrow: "Data sources", title: "Built on NASA instruments and models", sat: "Satellite instrument", model: "Model" },
   cta: { title: "Ready to start your investigation?", sub: "Pick a journey, choose a sphere and let the data show you what is changing." },
-  footer: { tag: "A living window on a changing planet.", disc: "An independent educational project for the NASA Space Apps Challenge. It uses NASA data but is not endorsed by NASA.", aboutT: "About us", about: "We are Nova Minds, a team of students from Palestine. Our idea started with the olive trees: one year the harvest is full and the next year it is weak, and everybody says the weather is the reason, but nobody knows exactly how. So we built EarthScope, where anyone can choose a place on the map and see with real NASA data what really changed there, year after year. It is a first step from “I think” to “the data shows”.", made: "Made for curious people everywhere · © 2026 EarthScope · Nova Minds", students: "Student names: Sameera Qais · Layan Qais · Layan Motaz · Tuleen Thaher · Maysam Omran" }
+  footer: { tag: "A living window on a changing planet.", disc: "An independent educational project for the NASA Space Apps Challenge. It uses NASA data but is not endorsed by NASA.", aboutT: "About us →", aboutHref: "About.html", made: "Made for curious people everywhere · © 2026 EarthScope · Nova Minds", students: "Student names: Sameera Qais · Layan Qais · Layan Motaz · Tuleen Thaher · Maysam Omran" }
  },
  ar: {
   brandSub: "رصد اتجاهات نظام الأرض", otherLang: "English",
@@ -549,7 +549,7 @@ var TXT = {
   stories: { eyebrow: "حالات توضيحية", title: "شاهد حلّ قضية خطوة بخطوة", watch: "شاهد العرض" },
   src: { eyebrow: "مصادر البيانات", title: "مبنية على أجهزة ناسا ونماذجها", sat: "جهاز على قمر صناعي", model: "نموذج" },
   cta: { title: "مستعد لبدء تحقيقك؟", sub: "اختر رحلتك، وحدّد غلافًا، ودع البيانات تُريك ما الذي يتغير." },
-  footer: { tag: "نافذة حيّة على كوكب يتغيّر.", disc: "مشروع تعليمي مستقل لتحدي ناسا Space Apps. يستخدم بيانات ناسا لكنه غير معتمد منها.", aboutT: "من نحن", about: "نحن فريق Nova Minds، مجموعة من الطلبة من فلسطين. بدأت فكرتنا من شجر الزيتون: سنةً يكون الموسم ماسية وسنةً يكون شلتونة، والجميع يقول إن الطقس هو السبب، لكن لا أحد يعرف كيف بالضبط. لذلك بنينا EarthScope، حيث يستطيع أي شخص أن يختار مكانًا على الخريطة ويرى ببيانات ناسا الحقيقية ما الذي تغيّر هناك فعلًا، سنة بعد سنة. إنها خطوة أولى من «أظن» إلى «البيانات تقول».", made: "صُنع لكل فضولي في كل مكان · © 2026 EarthScope · Nova Minds", students: "أسماء الطلبة: سميرة قيس · ليان قيس · ليان معتز · تولين الظاهر · ميسم عمران" }
+  footer: { tag: "نافذة حيّة على كوكب يتغيّر.", disc: "مشروع تعليمي مستقل لتحدي ناسا Space Apps. يستخدم بيانات ناسا لكنه غير معتمد منها.", aboutT: "من نحن ←", aboutHref: "About.html#l=ar", made: "صُنع لكل فضولي في كل مكان · © 2026 EarthScope · Nova Minds", students: "أسماء الطلبة: سميرة قيس · ليان قيس · ليان معتز · تولين الظاهر · ميسم عمران" }
  }
 };
 
